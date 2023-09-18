@@ -19,7 +19,9 @@
         "webpackConfig": "apps/lingo-api/webpack.config.js"
       },
       "configurations": {
-        "development": {},
+        "development": {
+          "dependsOn": ["^clear"]
+        },
         "production": {}
       }
     },
@@ -57,6 +59,13 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "clear": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rimraf dist/apps/lingo-api",
+        "parallel": false
       }
     }
   },
