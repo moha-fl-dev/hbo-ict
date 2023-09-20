@@ -2,20 +2,24 @@ import { z } from 'zod';
 
 export const confSchema = z.object({
   PORT: z.number().default(3000),
-  //   DB_HOST: z.string(),
-  //   DB_NAME: z.string().default('postgres'),
-  //   DIRECT_DB_PORT: z.coerce.number().default(5432),
-  //   DATABASE_PORT: z.coerce.number().default(5432),
-  //   DB_USER: z.string(),
-  //   DB_PASSWORD: z.string(),
-  //   DB_DIRECT_URL: z.string(),
-  //   DATABASE_URL: z.string(),
+  SUPABASE_URL: z.string().nonempty(),
+  SUPABASE_ANON_KEY: z.string().nonempty(),
+  SUPABASE_SERVICE_ROLE: z.string().nonempty(),
+  SUPABASE_JWT_SECRET: z.string().nonempty(),
+  DB_DIRECT_URL: z.string().nonempty(),
+  DATABASE_URL: z.string().nonempty(),
 });
 
 export type ConfSchemType = z.infer<typeof confSchema>;
 
 export default (): ConfSchemType => ({
-  PORT: parseInt(process.env.PORT, 10),
+  PORT: parseInt(process.env.PORT as string, 10),
+  SUPABASE_URL: process.env.SUPABASE_URL as string,
+  SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY as string,
+  SUPABASE_SERVICE_ROLE: process.env.SUPABASE_SERVICE_ROLE as string,
+  SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET as string,
+  DB_DIRECT_URL: process.env.DB_DIRECT_URL as string,
+  DATABASE_URL: process.env.DATABASE_URL as string,
 });
 
 export function validate(values: Record<string, unknown>) {

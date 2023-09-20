@@ -7,6 +7,6 @@ export class AppConfigService {
   constructor(private readonly configService: ConfigService<ConfSchemType>) {}
 
   get port(): number {
-    return this.configService.get<number>('PORT');
+    return this.configService.get<number>('PORT') as number;
   }
 }
