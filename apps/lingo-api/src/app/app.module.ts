@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import config, { validate } from '../config/configuration';
+import { config, validate } from '@hbo-ict/lingo-utils';
 import { NesAppConfig } from '@hbo-ict/config';
 @Module({
   imports: [
