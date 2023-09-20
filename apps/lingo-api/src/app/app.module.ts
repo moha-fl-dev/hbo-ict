@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config, { validate } from '../config/configuration';
-import { AppConfigService } from './app.config.service';
+import { NesAppConfig } from '@hbo-ict/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +20,6 @@ import { AppConfigService } from './app.config.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, AppConfigService],
+  providers: [AppService, NesAppConfig],
 })
 export class AppModule {}
