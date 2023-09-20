@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@hbo-ict/config": ["libs/shared/nest-app-config/src/index.ts"],
-      "@hbo-ict/lingo-utils": ["libs/lingo/utils/src/index.ts"]
+      "@hbo-ict/lingo-utils": ["libs/lingo/utils/src/index.ts"],
+      "@hbo-ict/supabase-auth": ["libs/lingo/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

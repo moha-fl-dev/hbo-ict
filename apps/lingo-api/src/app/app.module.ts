@@ -3,7 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { config, validate } from '@hbo-ict/lingo-utils';
-import { NesAppConfig } from '@hbo-ict/config';
+import { NestAppConfig } from '@hbo-ict/config';
+import { SupabaseService } from '@hbo-ict/supabase-auth';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +21,6 @@ import { NesAppConfig } from '@hbo-ict/config';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, NesAppConfig],
+  providers: [AppService, NestAppConfig, SupabaseService],
 })
 export class AppModule {}

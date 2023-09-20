@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class NesAppConfig<confType> {
+export class NestAppConfig<confType> {
   constructor(private readonly confservice: ConfigService) {}
 
   get(key: keyof confType): string {
