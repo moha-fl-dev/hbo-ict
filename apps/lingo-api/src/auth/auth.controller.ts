@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
   SignInSchema,
@@ -7,6 +7,7 @@ import {
   SignUpSchema,
   ZodValidate,
 } from '@hbo-ict/lingo-utils';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -20,13 +21,26 @@ export class AuthController {
   @Post('sign-in')
   @ZodValidate<SignInDto>(SignInSchema)
   async signIn(@Body() payload: SignInDto) {
-    return payload;
+    return this.authService.signIn(payload);
   }
 
   @Post('sign-up')
   @ZodValidate<SignUpDto>(SignUpSchema)
   async SignUp(@Body() payload: SignUpDto) {
-    return payload;
+    return this.authService.SignUp(payload);
+  }
+
+  @Get('me')
+  async getProfile(@Req() request: Request) {
+    const token = request.headers.authorization?.split(' ')[1];
+
+    console.log({ token });
+
+    if (!token) {
+      throw new Error('No authorization token found');
+    }
+
+    return this.authService.me(token);
   }
 
   @Post('sign-out')

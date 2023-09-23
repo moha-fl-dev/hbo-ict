@@ -10,19 +10,20 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SupabaseService {
-  private clientInstance: SupabaseClient | null = null;
+  private anonClientInstance: SupabaseClient | null = null;
+  private adminClientInstance: SupabaseClient | null = null;
 
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     private readonly configService: NestAppConfig<ConfSchemType>
   ) {}
 
-  async getClient() {
-    if (this.clientInstance) {
-      return this.clientInstance;
+  async getAnonClient() {
+    if (this.anonClientInstance) {
+      return this.anonClientInstance;
     }
 
-    this.clientInstance = createClient(
+    this.anonClientInstance = createClient(
       this.configService.get('SUPABASE_URL'),
       this.configService.get('SUPABASE_ANON_KEY'),
       {
@@ -39,6 +40,30 @@ export class SupabaseService {
       }
     );
 
-    return this.clientInstance;
+    return this.anonClientInstance;
+  }
+
+  async getAdminClient() {
+    if (this.adminClientInstance) {
+      return this.adminClientInstance;
+    }
+
+    this.adminClientInstance = createClient(
+      this.configService.get('SUPABASE_URL'),
+      this.configService.get('SUPABASE_SERVICE_ROLE'),
+      {
+        auth: {
+          persistSession: false,
+        },
+        global: {
+          headers: {
+            Authorization: `Bearer ${ExtractJwt.fromAuthHeaderAsBearerToken()(
+              this.request
+            )}`,
+          },
+        },
+      }
+    );
+    return this.adminClientInstance.auth;
   }
 }
