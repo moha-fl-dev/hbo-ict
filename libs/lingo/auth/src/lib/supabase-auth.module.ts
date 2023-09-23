@@ -6,7 +6,7 @@ import { SupabaseService } from './supabase/supabase.service';
 
 @Module({
   controllers: [],
-  providers: [NestAppConfig],
+  providers: [NestAppConfig, SupabaseStrategy, SupabaseGuard, SupabaseService],
   exports: [SupabaseStrategy, SupabaseGuard, SupabaseService],
 })
 export class SupabaseAuthModule {}

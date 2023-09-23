@@ -4,7 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { config, validate } from '@hbo-ict/lingo-utils';
 import { NestAppConfig } from '@hbo-ict/config';
-import { SupabaseService } from '@hbo-ict/supabase-auth';
+import {
+  SupabaseService,
+} from '@hbo-ict/supabase-auth';
+import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +22,7 @@ import { SupabaseService } from '@hbo-ict/supabase-auth';
       cache: true,
       expandVariables: true,
     }),
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService, NestAppConfig, SupabaseService],
