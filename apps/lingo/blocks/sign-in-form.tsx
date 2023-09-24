@@ -11,13 +11,19 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  RedAlertWithNoTitle,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { SignInAction } from '../actions/_actions';
+import { useState } from 'react';
 
 export function SignInForm() {
+  const [serverError, setServerError] = useState<boolean>(false);
+
   const form = useForm<SignInDto>({
+    // @ts-expect-error unexplainable type error. followed the docs to the letter. maybe typescript version mismatch?
     resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
@@ -26,16 +32,21 @@ export function SignInForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: SignInDto) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: SignInDto) {
+    const result = await SignInAction(values);
 
-    console.log(values);
+    if (result.status != 200) {
+      setServerError(() => true);
+      form.reset();
+    }
   }
 
   return (
     <Form {...form}>
+      {serverError && (
+        <RedAlertWithNoTitle description="Invalid login credentials" />
+      )}
+
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4 "

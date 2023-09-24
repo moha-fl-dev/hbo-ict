@@ -10,12 +10,18 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  RedAlertWithNoTitle,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { SignUpAction } from '../actions/_actions';
+import { useState } from 'react';
 
 export function SignUpForm() {
+  const [serverError, setServerError] = useState<boolean>(false);
+
   const form = useForm<SignUpDto>({
+    // @ts-expect-error unexplainable type error. followed the docs to the letter. maybe typescript version mismatch?
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: '',
@@ -24,15 +30,20 @@ export function SignUpForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: SignUpDto) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: SignUpDto) {
+    const result = await SignUpAction(values);
+    if (result.status !== 201) {
+      setServerError(() => true);
+    }
+
+    console.log(result);
   }
 
   return (
     <Form {...form}>
+      {serverError && (
+        <RedAlertWithNoTitle description="Something went wrong, please try again later." />
+      )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4"

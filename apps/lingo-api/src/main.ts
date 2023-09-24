@@ -9,6 +9,12 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(NestAppConfig<ConfSchemType>);
+  app.enableCors({
+    origin: configService.get('NEXT_APP_ORIGIN'),
+    credentials: true,
+    methods: ['GET', 'POST','DELETE'],
+  });
+
   const port = configService.get('PORT');
   await app.listen(port);
 

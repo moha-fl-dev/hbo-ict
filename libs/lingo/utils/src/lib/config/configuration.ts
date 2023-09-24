@@ -8,6 +8,7 @@ export const confSchema = z.object({
   SUPABASE_JWT_SECRET: z.string().nonempty(),
   DB_DIRECT_URL: z.string().nonempty(),
   DATABASE_URL: z.string().nonempty(),
+  NEXT_APP_ORIGIN: z.string().nonempty(),
 });
 
 export type ConfSchemType = z.infer<typeof confSchema>;
@@ -26,6 +27,7 @@ export default (): ConfSchemType => ({
   SUPABASE_JWT_SECRET: env['SUPABASE_JWT_SECRET'] as string,
   DB_DIRECT_URL: env['DB_DIRECT_URL'] as string,
   DATABASE_URL: env['DATABASE_URL'] as string,
+  NEXT_APP_ORIGIN: env['NEXT_APP_ORIGIN'] as string,
 });
 
 export function validate(values: Record<string, unknown>) {

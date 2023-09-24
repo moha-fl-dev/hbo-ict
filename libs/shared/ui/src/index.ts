@@ -30,3 +30,12 @@ export {
 export { Logo } from './lib/components/logo';
 
 export { Checkbox } from './lib/components/check-box';
+
+export { Alert, AlertTitle, AlertDescription } from './lib/components/alert';
+
+export {
+  RedAlertWithNoTitle,
+  RedAlertWithTitle,
+} from './lib/components/red-alert';
+
+// export { setAuthCookies } from './lib/helpers/helpers';
