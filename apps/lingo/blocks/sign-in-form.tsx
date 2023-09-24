@@ -1,5 +1,6 @@
 'use client';
 
+import { SignInSchema, SignInDto } from '@hbo-ict/lingo/types';
 import {
   Button,
   Checkbox,
@@ -15,34 +16,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
-import * as z from 'zod';
-
-const formSchema = z.object({
-  email: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
-  password: z.string().min(8, {
-    message: 'Password must be at least 8 characters.',
-  }),
-  rememberMe: z.boolean().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
 export function SignInForm() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignInDto>({
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
       password: '',
-      rememberMe: false,
+      remember_me: false,
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: FormValues) {
+  function onSubmit(values: SignInDto) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
     console.log(values);
   }
 
@@ -83,7 +71,7 @@ export function SignInForm() {
         <div className="flex flex-row justify-between items-center align-middle">
           <FormField
             control={form.control}
-            name="rememberMe"
+            name="remember_me"
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-row gap-2 align-middle items-center">

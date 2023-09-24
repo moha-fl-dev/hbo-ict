@@ -5,9 +5,9 @@ import {
   SignInDto,
   SignUpDto,
   SignUpSchema,
-  ZodValidate,
-} from '@hbo-ict/lingo-utils';
+} from '@hbo-ict/lingo/types';
 import { Request } from 'express';
+import { ZodValidate } from '@hbo-ict/lingo-utils';
 
 @Controller('auth')
 export class AuthController {

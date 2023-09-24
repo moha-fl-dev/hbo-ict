@@ -1,4 +1,4 @@
-import { SignInDto, SignUpDto } from '@hbo-ict/lingo-utils';
+import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
 import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { Injectable } from '@nestjs/common';
 
