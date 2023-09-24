@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
   AlertDialogHeader,
 } from '@hbo-ict/ui';
+import Link from 'next/link';
 
 export default async function Index() {
   return (
@@ -23,6 +24,12 @@ export default async function Index() {
             <Button variant={'ghost'}>Ghost</Button>
             <Button variant={'link'}>Link</Button>
             <Button variant={'outline'}>Outline</Button>
+            <Button asChild>
+              <Link href="sign-up">Sign up</Link>
+            </Button>
+            <Button asChild variant={'link'}>
+              <Link href="sign-in">Sign in</Link>
+            </Button>
           </div>
           <div className="flex flex-row gap-2">
             <AlertDialog>
