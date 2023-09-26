@@ -1,0 +1,38 @@
+{
+  "name": "lingo-v2-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lingo-v2-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/lingo-v2-e2e/cypress.config.ts",
+        "baseUrl": "http://localhost:3000",
+        "testingType": "e2e",
+        "skipServe": true
+      },
+      "dependsOn": ["dev-server"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/lingo-v2-e2e/**/*.{js,ts}"]
+      }
+    },
+    "dev-server": {
+      "command": "nx serve lingo-v2",
+      "options": {
+        "readyWhen": "Server started"
+      },
+      "configurations": {
+        "production": {
+          "command": "nx serve lingo-v2 --configuration=production"
+        }
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["lingo-v2"]
+}
