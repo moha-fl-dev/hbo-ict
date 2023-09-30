@@ -38,4 +38,6 @@ export {
   RedAlertWithTitle,
 } from './lib/components/red-alert';
 
-// export { setAuthCookies } from './lib/helpers/helpers';
+export { SignUpForm } from './lib/blocks/sign-up-form';
+export { SignInForm } from './lib/blocks/sign-in-form';
+export { ResetPasswordForm } from './lib/blocks/reset-password-form';

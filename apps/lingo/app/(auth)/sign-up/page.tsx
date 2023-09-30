@@ -1,8 +1,17 @@
-import { Button } from '@hbo-ict/ui';
-import { SignUpForm } from '../../../blocks/sign-up-form';
+import { Button, SignUpForm } from '@hbo-ict/ui';
 import Link from 'next/link';
+import { isAuthenticated } from '@hbo-ict/actions';
+import { redirect } from 'next/navigation';
 
-export default function SignUp() {
+export const dynamic = 'force-dynamic';
+
+export default async function SignUp() {
+  const isAuthed = await isAuthenticated();
+
+  if (isAuthed) {
+    redirect('/workspace');
+  }
+
   return (
     <div className=" flex flex-col gap-4 ">
       <p className="font-normal text-slate-500">Welcome. please sign up</p>

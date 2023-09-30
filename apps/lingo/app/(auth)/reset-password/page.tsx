@@ -1,5 +1,4 @@
-import { Button } from '@hbo-ict/ui';
-import { ResetPasswordForm } from '../../../blocks/reset-password-form';
+import { Button, ResetPasswordForm } from '@hbo-ict/ui';
 import Link from 'next/link';
 
 export default function ResetPasswordPage() {

@@ -1,8 +1,17 @@
-import { Button } from '@hbo-ict/ui';
-import { SignInForm } from '../../../blocks/sign-in-form';
+import { isAuthenticated } from '@hbo-ict/actions';
+import { Button, SignInForm } from '@hbo-ict/ui';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-export default function SignIn() {
+export const dynamic = 'force-dynamic';
+
+export default async function SignIn() {
+  const isAuthed = await isAuthenticated();
+
+  if (isAuthed) {
+    redirect('/workspace');
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full">
       <p className="font-normal text-slate-500">Welcome back. please sign in</p>

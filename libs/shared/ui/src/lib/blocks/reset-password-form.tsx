@@ -1,19 +1,19 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+import * as z from 'zod';
 import {
-  Button,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from '@hbo-ict/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-
-import * as z from 'zod';
+} from '../components/form';
+import { Button } from '../components/button';
+import { Input } from '../components/input';
 
 const formSchema = z.object({
   email: z.string().min(2, {

@@ -1,27 +1,27 @@
 'use client';
 
 import { SignUpDto, SignUpSchema } from '@hbo-ict/lingo/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { signUpAction } from '@hbo-ict/actions';
 import {
-  Button,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-  RedAlertWithNoTitle,
-} from '@hbo-ict/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { SignUpAction } from '../actions/_actions';
-import { useState } from 'react';
+} from '../components/form';
+import { Button } from '../components/button';
+import { Input } from '../components/input';
+import { RedAlertWithNoTitle } from '../components/red-alert';
+import { redirect } from 'next/navigation';
 
 export function SignUpForm() {
   const [serverError, setServerError] = useState<boolean>(false);
 
   const form = useForm<SignUpDto>({
-    // @ts-expect-error unexplainable type error. followed the docs to the letter. maybe typescript version mismatch?
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: '',
@@ -31,12 +31,16 @@ export function SignUpForm() {
   });
 
   async function onSubmit(values: SignUpDto) {
-    const result = await SignUpAction(values);
-    if (result.status !== 201) {
-      setServerError(() => true);
+    try {
+      const result = await signUpAction(values);
+      console.log('Result ', result);
+      if (result.status !== 201) {
+        setServerError(() => true);
+        return;
+      }
+    } catch (error) {
+      redirect('/workspace');
     }
-
-    console.log(result);
   }
 
   return (

@@ -1,29 +1,29 @@
 'use client';
 
 import { SignInSchema, SignInDto } from '@hbo-ict/lingo/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { signInAction } from '@hbo-ict/actions';
 import {
-  Button,
-  Checkbox,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-  RedAlertWithNoTitle,
-} from '@hbo-ict/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { SignInAction } from '../actions/_actions';
-import { useState } from 'react';
+} from '../components/form';
+import { Button } from '../components/button';
+import { Input } from '../components/input';
+import { RedAlertWithNoTitle } from '../components/red-alert';
+import { Checkbox } from '../components/check-box';
+import { redirect } from 'next/navigation';
 
 export function SignInForm() {
   const [serverError, setServerError] = useState<boolean>(false);
 
   const form = useForm<SignInDto>({
-    // @ts-expect-error unexplainable type error. followed the docs to the letter. maybe typescript version mismatch?
     resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
@@ -33,11 +33,15 @@ export function SignInForm() {
   });
 
   async function onSubmit(values: SignInDto) {
-    const result = await SignInAction(values);
+    try {
+      const result = await signInAction(values);
 
-    if (result.status != 200) {
-      setServerError(() => true);
-      form.reset();
+      if (result.status !== 202) {
+        setServerError(() => true);
+        return;
+      }
+    } catch (error) {
+      redirect('/workspace');
     }
   }
 

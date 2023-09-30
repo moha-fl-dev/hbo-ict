@@ -19,7 +19,6 @@ export const SignUpSchema = eamilAndPasswordSchema
   .extend({
     confirm_password: z.string().min(8, {
       message: 'Password must be at least 8 characters long',
-      
     }),
   })
   .refine((data) => data.password === data.confirm_password, {
@@ -29,3 +28,17 @@ export const SignUpSchema = eamilAndPasswordSchema
 
 export type SignUpDto = z.infer<typeof SignUpSchema>;
 export type SignInDto = z.infer<typeof SignInSchema>;
+
+export type SuccesfulAuthResponse = {
+  status: number;
+  message: string;
+  access_token: string;
+  expires_in: number;
+};
+
+export type FailedAuthResponse = {
+  status: number;
+  message: string;
+};
+
+export type AuthResponse = SuccesfulAuthResponse | FailedAuthResponse;

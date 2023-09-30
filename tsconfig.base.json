@@ -15,10 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@hbo-ict/actions": ["libs/lingo/actions/src/index.ts"],
       "@hbo-ict/config": ["libs/shared/nest-app-config/src/index.ts"],
       "@hbo-ict/lingo-utils": ["libs/lingo/utils/src/index.ts"],
-      "@hbo-ict/supabase-auth": ["libs/lingo/auth/src/index.ts"],
       "@hbo-ict/lingo/types": ["libs/lingo/types/src/index.ts"],
+      "@hbo-ict/supabase-auth": ["libs/lingo/auth/src/index.ts"],
       "@hbo-ict/ui": ["libs/shared/ui/src/index.ts"],
       "@hbo-ict/ui/server": ["libs/shared/ui/src/server.ts"]
     }

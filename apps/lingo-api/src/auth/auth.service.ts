@@ -1,7 +1,6 @@
 import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
 import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AuthError } from '@supabase/supabase-js';
 
 @Injectable()
 export class AuthService {
@@ -16,10 +15,17 @@ export class AuthService {
     });
 
     if (error) {
-      throw error;
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
-    return user;
+    const { session } = user;
+
+    return {
+      status: HttpStatus.ACCEPTED,
+      message: 'User signed in',
+      access_token: session!.access_token,
+      expires_in: session!.expires_in,
+    };
   }
 
   async SignUp(payload: SignUpDto) {
@@ -39,7 +45,8 @@ export class AuthService {
     return {
       status: HttpStatus.CREATED,
       message: 'User created',
-      session,
+      access_token: session!.access_token,
+      expires_in: session!.expires_in,
     };
   }
 
