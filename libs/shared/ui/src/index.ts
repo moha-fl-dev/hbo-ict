@@ -38,6 +38,4 @@ export {
   RedAlertWithTitle,
 } from './lib/components/red-alert';
 
-export { SignUpForm } from './lib/blocks/sign-up-form';
-export { SignInForm } from './lib/blocks/sign-in-form';
-export { ResetPasswordForm } from './lib/blocks/reset-password-form';
+export { AuthLayout } from './lib/layouts/auth.layout';
