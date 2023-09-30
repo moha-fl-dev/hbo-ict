@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import '../styles/globals.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -11,6 +12,8 @@ export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+const queryClient = new QueryClient();
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,7 +30,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           font-family: ${inter.style.fontFamily};
         }
       `}</style>
-      <main>{getLayout(<Component {...pageProps} />)}</main>
+      <QueryClientProvider client={queryClient}>
+        <main>{getLayout(<Component {...pageProps} />)}</main>
+      </QueryClientProvider>
     </>
   );
 }

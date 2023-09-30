@@ -1,0 +1,16 @@
+{
+  "name": "query-fns",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/lingo/query-fns/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/lingo/query-fns/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

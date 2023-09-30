@@ -14,10 +14,13 @@ import {
 } from '@hbo-ict/ui';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useMutation } from '@tanstack/react-query';
+import type { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import { signInFn } from '@hbo-ict/query-fns';
 
 export async function getServerSideProps({
   req,
@@ -32,6 +35,16 @@ export async function getServerSideProps({
 
 export default function SignIn({ data }: { data: string }) {
   const [serverError, setServerError] = useState<boolean>(false);
+  const router = useRouter();
+  const { mutate } = useMutation({
+    mutationFn: signInFn,
+    onError: (error) => {
+      setServerError(true);
+    },
+    onSuccess: (data) => {
+      router.push('/');
+    },
+  });
 
   const form = useForm<SignInDto>({
     resolver: zodResolver(SignInSchema),
@@ -43,7 +56,7 @@ export default function SignIn({ data }: { data: string }) {
   });
 
   function onSubmit(values: SignInDto) {
-    console.log(values);
+    mutate(values);
   }
 
   return (
