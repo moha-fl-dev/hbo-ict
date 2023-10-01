@@ -1,9 +1,10 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { NestAppConfig } from '@hbo-ict/config';
 import { ConfSchemType } from '@hbo-ict/lingo-utils';
 import { SupabaseService } from '../supabase.service';
+import { Request } from 'express';
 
 @Injectable()
 export class SupabaseStrategy extends PassportStrategy(Strategy) {
@@ -22,12 +23,21 @@ export class SupabaseStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any) {
     const client = await this.supabaseService.getAnonClient();
 
-    const { data: user, error } = await client.auth.getUser(payload.sub);
+    try {
+      const { data: user, error } = await client.auth.getUser(
+        payload.access_token
+      );
 
-    if (error) {
-      throw error;
+      console.log(user, error);
+
+      return payload;
+    } catch (err) {
+      return null;
     }
+  }
 
-    return payload;
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

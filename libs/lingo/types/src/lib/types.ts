@@ -4,10 +4,13 @@ const rememberMeSchema = z.object({
   remember_me: z.boolean().default(false).optional(),
 });
 
-const eamilAndPasswordSchema = z.object({
+export const emailSchema = z.object({
   email: z.string().email({
     message: 'Invalid email address',
   }),
+});
+
+const eamilAndPasswordSchema = emailSchema.extend({
   password: z.string().min(8, {
     message: 'Password must be at least 8 characters long',
   }),
@@ -28,6 +31,7 @@ export const SignUpSchema = eamilAndPasswordSchema
 
 export type SignUpDto = z.infer<typeof SignUpSchema>;
 export type SignInDto = z.infer<typeof SignInSchema>;
+export type ResetPasswordDto = z.infer<typeof emailSchema>;
 
 export type SuccesfulAuthResponse = {
   status: number;

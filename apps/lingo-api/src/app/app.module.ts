@@ -4,8 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { config, validate } from '@hbo-ict/lingo-utils';
 import { NestAppConfig } from '@hbo-ict/config';
-import { SupabaseService } from '@hbo-ict/supabase-auth';
+import { GlobalGuard, SupabaseService } from '@hbo-ict/supabase-auth';
 import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({

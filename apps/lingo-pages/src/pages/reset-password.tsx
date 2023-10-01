@@ -1,14 +1,18 @@
 import {
   type SignInDto,
   SignInSchema,
-  SuccesfulAuthResponse,
+  SignUpDto,
+  SignUpSchema,
+  ResetPasswordDto,
+  emailSchema,
 } from '@hbo-ict/lingo/types';
 import {
   AuthLayout,
   Button,
   Form,
   RedAlertWithNoTitle,
-  SignInForm,
+  ResetPasswordForm,
+  SignUpForm,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +20,7 @@ import type { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { Api, setAxiosToken } from '@hbo-ict/query-fns';
+import { Api } from '@hbo-ict/query-fns';
 import Link from 'next/link';
 
 export async function getServerSideProps({
@@ -30,31 +34,28 @@ export async function getServerSideProps({
   };
 }
 
-export default function SignIn({ data }: { data: string }) {
+export default function ResetPassword() {
   const [serverError, setServerError] = useState<boolean>(false);
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: Api.signIn,
+    mutationFn: Api.forgotPassword,
     onError: (error) => {
       setServerError(true);
     },
-    onSuccess: (data: unknown) => {
-      const res = data as SuccesfulAuthResponse;
-      console.log(res);
+    onSuccess: (data) => {
+      console.log(data);
     },
   });
 
-  const form = useForm<SignInDto>({
-    resolver: zodResolver(SignInSchema),
+  const form = useForm<ResetPasswordDto>({
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       email: '',
-      password: '',
-      remember_me: false,
     },
   });
 
-  function onSubmit(values: SignInDto) {
+  function onSubmit(values: ResetPasswordDto) {
     mutate(values);
   }
 
@@ -64,18 +65,16 @@ export default function SignIn({ data }: { data: string }) {
         <RedAlertWithNoTitle description="Invalid login credentials" />
       )}
 
-      <SignInForm form={form} onSubmit={form.handleSubmit(onSubmit)} />
+      <ResetPasswordForm form={form} onSubmit={form.handleSubmit(onSubmit)} />
     </Form>
   );
 }
 
-SignIn.getLayout = function getLayout(page: JSX.Element) {
+ResetPassword.getLayout = function getLayout(page: JSX.Element) {
   return (
     <AuthLayout>
       <div className="flex flex-col gap-4 w-full">
-        <p className="font-normal text-slate-500">
-          Welcome back. please sign in
-        </p>
+        <p className="font-normal text-slate-500">Please provide your email.</p>
         {page}
         <div className="flex flex-row items-center justify-center">
           <p className="text-slate-500 text-sm">
