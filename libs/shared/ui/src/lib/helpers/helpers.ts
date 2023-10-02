@@ -3,6 +3,9 @@
 import { cookies } from 'next/headers';
 import { Session } from '@supabase/supabase-js';
 
+/**
+ * not in use
+ */
 export async function setAuthCookies({
   access_token,
   expires_in,

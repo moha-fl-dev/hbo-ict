@@ -12,6 +12,11 @@ import { Checkbox } from '../components/check-box';
 import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
 import { MinimalFormProps } from '../types';
 
+/**
+ * reusable form for signing in takes a form and a submit handler.
+ * @param param0
+ * @returns
+ */
 export function SignInForm({ form, onSubmit }: MinimalFormProps<SignInDto>) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 ">

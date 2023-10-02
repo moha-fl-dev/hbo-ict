@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "lingo-app": "pnpm nx run-many -t serve -p lingo-pages lingo-api"
+    "lingo-apps": "pnpm nx run-many -t serve -p lingo-pages lingo-api"
   },
   "private": true,
   "dependencies": {

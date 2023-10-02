@@ -8,6 +8,15 @@ import { ExtractJwt } from 'passport-jwt';
 import { NestAppConfig } from '@hbo-ict/config';
 import { ConfSchemType } from '@hbo-ict/lingo-utils';
 
+/**
+ * A service that provides access to the supabase client.
+ * will be used to access the app later on.
+ * @param request - The request object.
+ * @param configService - The config service.
+ * @returns The supabase client.
+ *
+ */
+
 @Injectable({ scope: Scope.REQUEST })
 export class SupabaseService {
   private anonClientInstance: SupabaseClient | null = null;
@@ -66,6 +75,6 @@ export class SupabaseService {
         },
       }
     );
-    return this.adminClientInstance.auth;
+    return this.adminClientInstance;
   }
 }

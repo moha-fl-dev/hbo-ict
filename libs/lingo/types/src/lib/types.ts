@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+/**
+ * shared zod schema for front-end and back-end
+ * see usage libs/lingo/auth/src/lib/auth.controller.ts
+ * and the auth page in the front-end
+ */
+
 const rememberMeSchema = z.object({
   remember_me: z.boolean().default(false).optional(),
 });
@@ -29,10 +35,22 @@ export const SignUpSchema = eamilAndPasswordSchema
     path: ['confirm_password'],
   });
 
+/**
+ * The DTO for the sign up endpoint.
+ */
 export type SignUpDto = z.infer<typeof SignUpSchema>;
+/**
+ * The DTO for the sign in endpoint.
+ */
 export type SignInDto = z.infer<typeof SignInSchema>;
+/**
+ * The DTO for the reset password endpoint.
+ */
 export type ResetPasswordDto = z.infer<typeof emailSchema>;
 
+/**
+ * The response from the auth endpoint when the user sign in is success.
+ */
 export type SuccesfulAuthResponse = {
   status: number;
   message: string;
@@ -40,9 +58,17 @@ export type SuccesfulAuthResponse = {
   expires_in: number;
 };
 
+/**
+ * The response from the auth endpoint when the user sign in is failure.
+ */
 export type FailedAuthResponse = {
   status: number;
   message: string;
 };
 
+/**
+ * The response from the auth endpoint when the user signs in is either a success or a failure.
+ * This type represents both cases.
+ * aka discriminated union
+ */
 export type AuthResponse = SuccesfulAuthResponse | FailedAuthResponse;

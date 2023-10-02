@@ -4,7 +4,11 @@ import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
 import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AuthError } from '@supabase/supabase-js';
 
+/**
+ * the auth service.
+ */
 @Injectable()
 export class AuthService {
   constructor(
@@ -72,20 +76,26 @@ export class AuthService {
   async refreshToken() {
     const client = await this.supabaseService.getAnonClient();
 
-    const { data: user, error } = await client.auth.refreshSession();
+    const {
+      data: { session },
+      error,
+    } = await client.auth.getSession();
 
     if (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
-    const { session } = user;
+    if (!session) {
+      throw new HttpException('No session found', HttpStatus.BAD_REQUEST);
+    }
+
+    console.log(session);
 
     return {
       status: HttpStatus.ACCEPTED,
-      message: 'Token refreshed',
-      access_token: session!.access_token,
-      expires_in: session!.expires_in,
-      refresh_token: session!.refresh_token,
+      message: 'Token refreshed!!',
+      // access_token: session!.access_token,
+      // expires_in: session!.expires_in,
     };
   }
 }

@@ -2,6 +2,11 @@ import Image from 'next/image';
 import { Logo } from '../components/logo';
 import SideImage from '/public/auth-pages-bg.png';
 
+/**
+ * layout for the auth pages. can also be used for the landing page. returns a grid with 2 columns.
+ * @param param0
+ * @returns
+ */
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="h-screen md:grid md:grid-cols-3">

@@ -6,6 +6,10 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
 import { SupabaseService } from '../supabase.service';
 import { Request } from 'express';
 
+/**
+ * A strategy that checks if the user is authenticated. *
+ */
+
 @Injectable()
 export class SupabaseStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -19,7 +23,12 @@ export class SupabaseStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  /**
+   * Validate the given payload.
+   *
+   * @param payload - The payload to validate.
+   * @returns The payload.
+   */
   async validate(payload: any) {
     const client = await this.supabaseService.getAnonClient();
 

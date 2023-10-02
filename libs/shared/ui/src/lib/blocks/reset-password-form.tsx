@@ -17,6 +17,11 @@ import { Input } from '../components/input';
 import { MinimalFormProps } from '../types';
 import { ResetPasswordDto } from '@hbo-ict/lingo/types';
 
+/**
+ * reusable form for resetting a password.
+ * @param param0
+ * @returns
+ */
 export function ResetPasswordForm({
   form,
   onSubmit,

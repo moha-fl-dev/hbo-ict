@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+/**
+ * not in use
+ */
 export const SignInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),

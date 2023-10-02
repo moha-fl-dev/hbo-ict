@@ -13,6 +13,10 @@ import {
 
 import Link from 'next/link';
 
+/**
+ * home page
+ * @returns the page
+ */
 export function Index() {
   return (
     <div className="flex flex-row justify-center mt-2">

@@ -13,6 +13,11 @@ import { Button } from '../components/button';
 import { Input } from '../components/input';
 import { MinimalFormProps } from '../types';
 
+/**
+ * reusable form for signing up. takes a form and a submit handler.
+ * @param param0
+ * @returns
+ */
 export function SignUpForm({ form, onSubmit }: MinimalFormProps<SignUpDto>) {
   return (
     <form

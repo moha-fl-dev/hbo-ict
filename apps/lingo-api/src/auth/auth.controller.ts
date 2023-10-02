@@ -20,6 +20,9 @@ import { SupabaseGuard } from '@hbo-ict/supabase-auth';
 import { Response } from 'express';
 import { NestAppConfig } from '@hbo-ict/config';
 
+/**
+ * The auth controller.
+ */
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -45,7 +48,7 @@ export class AuthController {
     response.cookie('access_token', access_token, {
       httpOnly: true, // set to true in production
       secure: true, // set to true if your site is served over HTTPS
-      maxAge: 3600000, // 1 hour in ms
+      maxAge: expires_in * 1000, // ?? hour in ms
       sameSite: 'none', // required for cross-domain cookies
       // domain: 'localhost', // replace with your domain
     });
@@ -56,6 +59,7 @@ export class AuthController {
     });
   }
 
+  @Public()
   @Post('sign-up')
   @ZodValidate<SignUpDto>(SignUpSchema)
   async SignUp(@Body() payload: SignUpDto) {
@@ -73,8 +77,16 @@ export class AuthController {
     return 'logout';
   }
 
-  @Post('refresh-token')
-  async refreshToken() {
+  @Public()
+  @Get('refresh-token')
+  async refreshToken(@Req() request: Request) {
+    const token = this.extractTokenFromHeader(request)!;
+
     return this.authService.refreshToken();
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

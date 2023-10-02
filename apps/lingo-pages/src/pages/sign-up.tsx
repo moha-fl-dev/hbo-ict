@@ -26,7 +26,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   return {
     props: {
-      data: 'to hell.',
+      data: '',
     },
   };
 }
@@ -54,14 +54,14 @@ export default function SignUp() {
     },
   });
 
-  function onSubmit(values: SignInDto) {
+  function onSubmit(values: SignUpDto) {
     mutate(values);
   }
 
   return (
     <Form {...form}>
       {serverError && (
-        <RedAlertWithNoTitle description="Invalid login credentials" />
+        <RedAlertWithNoTitle description="Something went wrong, please try again later." />
       )}
 
       <SignUpForm form={form} onSubmit={form.handleSubmit(onSubmit)} />

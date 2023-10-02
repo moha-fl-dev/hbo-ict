@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+/**
+ * Configuration schema for the application.
+ */
 export const confSchema = z.object({
   PORT: z.number().default(3000),
   SUPABASE_URL: z.string().nonempty(),
@@ -19,6 +22,9 @@ if (!env) {
   throw new Error('process.env is undefined'); // wont ever be the case
 }
 
+/**
+ * Configuration for the application.
+ */
 export default (): ConfSchemType => ({
   PORT: parseInt(env['PORT'] as string, 10),
   SUPABASE_URL: env['SUPABASE_URL'] as string,
@@ -30,6 +36,12 @@ export default (): ConfSchemType => ({
   NEXT_APP_ORIGIN: env['NEXT_APP_ORIGIN'] as string,
 });
 
+/**
+ * Validate the configuration values.
+ *
+ * @param values - The values to validate.
+ * @returns The validated configuration values.
+ */
 export function validate(values: Record<string, unknown>) {
   if ('API_PORT' in values) {
     // for aesthetics, i want to use PORT instead of API_PORT in the code
