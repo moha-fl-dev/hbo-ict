@@ -23,6 +23,9 @@ export async function getServerSideProps({
   req,
   res,
 }: GetServerSidePropsContext) {
+  const refresh_token = req.cookies['refresh_token'];
+  const access_token = req.cookies['access_token'];
+
   return {
     props: {
       data: 'to hell.',
@@ -41,7 +44,7 @@ export default function SignIn({ data }: { data: string }) {
     },
     onSuccess: (data: unknown) => {
       const res = data as SuccesfulAuthResponse;
-      console.log(res);
+      router.push('/workspace');
     },
   });
 

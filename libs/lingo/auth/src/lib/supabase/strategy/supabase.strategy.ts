@@ -37,8 +37,6 @@ export class SupabaseStrategy extends PassportStrategy(Strategy) {
         payload.access_token
       );
 
-      console.log(user, error);
-
       return payload;
     } catch (err) {
       return null;

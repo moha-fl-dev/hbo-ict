@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import https from 'https';
-import axios from 'axios';
 import { setAxiosToken } from '@hbo-ict/query-fns';
 
 export default async function handler(
@@ -10,29 +8,13 @@ export default async function handler(
 ) {
   const cookie = req.cookies;
 
-  if (req.method != 'GET') {
+  if (req.method === 'GET') {
     res.status(405).json({ message: 'Method not allowed' });
     return;
   }
 
-  if (!cookie) {
-    res.status(401).json({ message: 'No cookie' });
-    return;
-  }
-
-  const { refresh_token, access_token } = cookie;
-
-  //  refresh token has no expiry date but can only be used once. but it must be present.
-  if (!refresh_token || typeof refresh_token === undefined) {
-    console.log('no refresh token');
-    res.status(401).json({ message: 'No refresh token' });
-    return;
-  }
-
   try {
-    if (!access_token) {
-      throw new JsonWebTokenError('Token expired');
-    }
+    const { access_token } = cookie;
 
     const { header, payload, signature } =
       extractSignedTokenParts(access_token);
@@ -42,42 +24,14 @@ export default async function handler(
     Jwt.verify(token, process.env.SUPABASE_JWT_SECRET as string, {
       algorithms: ['HS256'],
     });
-    console.log('Token has not expired');
 
-    res.setHeader('Authorization', `Bearer ${token}`);
+    setAxiosToken(token);
 
-    res.status(200).json({ message: 'Token has not expired' });
+    res.status(200);
     return;
   } catch (error: unknown) {
-    if (
-      error instanceof TokenExpiredError ||
-      error instanceof JsonWebTokenError
-    ) {
-      try {
-        const httpsAgent = new https.Agent({
-          rejectUnauthorized: false,
-        });
-
-        const result = await axios.get('auth/refresh-token', {
-          baseURL: process.env.NEXT_PUBLIC_API_URL,
-          headers: {
-            cookie: `refresh_token=${refresh_token}`,
-          },
-          withCredentials: true,
-          httpsAgent,
-        });
-
-        res.setHeader('Authorization', `Bearer ${result.data.access_token}`);
-        console.log('Token refreshed', { newToken: result.data.access_token });
-        res.status(result.status).json({ message: result.data.message });
-        return;
-      } catch (error: unknown) {
-        res.status(400).json({ message: 'Token invalid', error });
-        return;
-      }
-    }
-
-    res.status(401).json({ message: 'Token invalid!!!', error });
+    console.log(error);
+    res.status(401).json({ message: 'Token invalid', error });
     return;
   }
 }

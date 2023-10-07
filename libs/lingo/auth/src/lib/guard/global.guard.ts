@@ -40,7 +40,10 @@ export class GlobalGuard implements CanActivate {
       return true;
     }
 
+    console.log(context.getHandler());
+
     const request = context.switchToHttp().getRequest();
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();

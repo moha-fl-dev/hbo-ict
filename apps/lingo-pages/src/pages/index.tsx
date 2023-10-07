@@ -34,6 +34,9 @@ export function Index() {
           <Button asChild variant={'link'}>
             <Link href="sign-in">Sign in</Link>
           </Button>
+          <Button asChild variant={'link'}>
+            <Link href="/workspace">Workspace</Link>
+          </Button>
         </div>
         <div className="flex flex-row gap-2">
           <AlertDialog>

@@ -3,7 +3,6 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
 import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
 import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { AuthError } from '@supabase/supabase-js';
 
 /**
@@ -34,8 +33,8 @@ export class AuthService {
       status: HttpStatus.ACCEPTED,
       message: 'User signed in',
       access_token: session!.access_token,
-      expires_in: session!.expires_in,
       refresh_token: session!.refresh_token,
+      expires_in: session!.expires_in,
     };
   }
 
@@ -57,6 +56,7 @@ export class AuthService {
       status: HttpStatus.CREATED,
       message: 'User created',
       access_token: session!.access_token,
+      refresh_token: session!.refresh_token,
       expires_in: session!.expires_in,
     };
   }
@@ -73,29 +73,23 @@ export class AuthService {
     return null;
   }
 
-  async refreshToken() {
+  async refreshSession({ refresh_token }: { refresh_token: string }) {
     const client = await this.supabaseService.getAnonClient();
 
-    const {
-      data: { session },
-      error,
-    } = await client.auth.getSession();
+    const { data, error } = await client.auth.refreshSession({ refresh_token });
 
-    if (error) {
+    if (error instanceof AuthError) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
-    if (!session) {
-      throw new HttpException('No session found', HttpStatus.BAD_REQUEST);
-    }
-
-    console.log(session);
+    const { session } = data;
 
     return {
       status: HttpStatus.ACCEPTED,
-      message: 'Token refreshed!!',
-      // access_token: session!.access_token,
-      // expires_in: session!.expires_in,
+      message: 'Session refreshed',
+      access_token: session!.access_token,
+      refresh_token: session!.refresh_token,
+      expires_in: session!.expires_in,
     };
   }
 }

@@ -7,6 +7,7 @@ import { NestAppConfig } from '@hbo-ict/config';
 import { GlobalGuard, SupabaseService } from '@hbo-ict/supabase-auth';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
+import { WorkspaceModule } from '../workspace/workspace.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import { APP_GUARD } from '@nestjs/core';
       expandVariables: true,
     }),
     AuthModule,
+    WorkspaceModule,
   ],
   controllers: [AppController],
   providers: [AppService, NestAppConfig, SupabaseService],

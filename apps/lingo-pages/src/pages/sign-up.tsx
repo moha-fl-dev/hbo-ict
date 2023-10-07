@@ -24,9 +24,12 @@ export async function getServerSideProps({
   req,
   res,
 }: GetServerSidePropsContext) {
+  const refresh_token = req.cookies['refresh_token'];
+  const access_token = req.cookies['access_token'];
+
   return {
     props: {
-      data: '',
+      data: 'to hell.',
     },
   };
 }

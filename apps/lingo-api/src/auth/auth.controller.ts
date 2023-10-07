@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Post,
   Req,
   Res,
@@ -14,11 +15,9 @@ import {
   SignUpDto,
   SignUpSchema,
 } from '@hbo-ict/lingo/types';
-import { Request } from 'express';
-import { ConfSchemType, Public, ZodValidate } from '@hbo-ict/lingo-utils';
-import { SupabaseGuard } from '@hbo-ict/supabase-auth';
-import { Response } from 'express';
-import { NestAppConfig } from '@hbo-ict/config';
+import { Request, Response } from 'express';
+import { Public, ZodValidate } from '@hbo-ict/lingo-utils';
+import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
 
 /**
  * The auth controller.
@@ -47,10 +46,20 @@ export class AuthController {
 
     response.cookie('access_token', access_token, {
       httpOnly: true, // set to true in production
-      secure: true, // set to true if your site is served over HTTPS
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
       maxAge: expires_in * 1000, // ?? hour in ms
       sameSite: 'none', // required for cross-domain cookies
-      // domain: 'localhost', // replace with your domain
+      domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+    });
+
+    response.cookie('refresh_token', refresh_token, {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
     });
 
     response.status(200).send({
@@ -62,11 +71,37 @@ export class AuthController {
   @Public()
   @Post('sign-up')
   @ZodValidate<SignUpDto>(SignUpSchema)
-  async SignUp(@Body() payload: SignUpDto) {
-    return this.authService.SignUp(payload);
+  async SignUp(
+    @Body() payload: SignUpDto,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const { access_token, expires_in, refresh_token } =
+      await this.authService.SignUp(payload);
+
+    response.cookie('access_token', access_token, {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+    });
+
+    response.cookie('refresh_token', refresh_token, {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+    });
+
+    response.status(201).send({
+      status: 201,
+      message: 'User created',
+    });
   }
 
-  @UseGuards(SupabaseGuard)
   @Get('me')
   async getProfile(@Req() request: Request) {
     return this.authService.me();
@@ -78,15 +113,46 @@ export class AuthController {
   }
 
   @Public()
+  // @UseGuards(TokensGuard)
   @Get('refresh-token')
-  async refreshToken(@Req() request: Request) {
-    const token = this.extractTokenFromHeader(request)!;
+  async refreshToken(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const _refresh_token = request.signedCookies.refresh_token;
 
-    return this.authService.refreshToken();
-  }
+    // console.log({ _refresh_token });
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const { access_token, expires_in, refresh_token } =
+      await this.authService.refreshSession({
+        refresh_token: _refresh_token,
+      });
+
+    console.log({ access_token, expires_in, refresh_token });
+
+    response.cookie('access_token', access_token, {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+
+    response.cookie('refresh_token', refresh_token, {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+
+    response.status(HttpStatus.CREATED).send({
+      message: 'Token refreshed!',
+      access_token,
+    });
   }
 }

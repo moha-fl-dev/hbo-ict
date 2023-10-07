@@ -17,11 +17,10 @@ async function signIn(payload: SignInDto): Promise<AuthResponse> {
     payload,
     {
       headers: {
-        NoAuth: true,
+        noAuth: true,
       },
     }
   );
-
   return result.data;
 }
 
@@ -36,7 +35,7 @@ async function signUp(payload: SignUpDto): Promise<AuthResponse> {
     payload,
     {
       headers: {
-        NoAuth: true,
+        noAuth: true,
       },
     }
   );
@@ -78,7 +77,15 @@ async function refresh(): Promise<AuthResponse> {
  * @returns promise of void
  */
 async function forgotPassword(payload: ResetPasswordDto): Promise<void> {
-  await axionInstance.post('auth/forgot-password', payload);
+  const result = await axionInstance.post('auth/forgot-password', payload);
+
+  return result.data;
+}
+
+async function workspaceRoot() {
+  const res = await axionInstance.get('workspace');
+
+  return res.data;
 }
 
 const Api = {
@@ -88,6 +95,7 @@ const Api = {
   signOut,
   refresh,
   forgotPassword,
+  workspaceRoot,
 };
 
 export { Api };

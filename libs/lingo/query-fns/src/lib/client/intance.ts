@@ -12,29 +12,50 @@ export const axionInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+
   withCredentials: true,
 });
 
-// Add a request interceptor
-axionInstance.interceptors.request.use(async (config) => {
-  if (!config.headers['noAuth']) {
-    // skip refresh token if noAuth header is present. This is used for sign in and sign up where we don't have a token yet
-    return config;
+/**
+ * Add a request interceptor
+ * will run whenever a request is sent to the backend.
+ * this is used to refresh the token if it is expired.
+ * will also skip the refresh token if the noAuth header is present.
+ */
+axionInstance.interceptors.request.use(async (request) => {
+  if (request.headers['noAuth'] && request.headers['noAuth'] !== true) {
+    console.log('no auth header found');
+    return request;
   }
 
   try {
-    const response = await axios.post('/api/refresh-token', {
+    const response = await axios.get('/api/refresh-token', {
       baseURL: process.env['NEXT_PUBLIC_SITE_URL'],
+      withCredentials: true,
     });
-    console.log(response.data);
+    const authHeader = (request.headers.Authorization =
+      response.headers['authorization']);
 
-    return config;
+    console.log({ authHeader });
+
+    return request;
   } catch (error) {
-    console.error(error);
-    // Optionally, you might want to reject the original request if the POST fails
-    // return Promise.reject(error);
-    return config; // Or continue with the original request configuration
+    return Promise.reject(error);
   }
+});
+
+/**
+ * Add a response interceptor
+ * will run whenever a response is received from the backend.
+ * no use for this yet.
+ */
+axionInstance.interceptors.response.use(async (response) => {
+  if (response.headers['authorization']) {
+    response.headers['authorization'] =
+      response.request.headers['authorization'];
+  }
+
+  return response;
 });
 
 /**
@@ -42,7 +63,7 @@ axionInstance.interceptors.request.use(async (config) => {
  * @param token string
  */
 export const setAxiosToken = (token: string) => {
-  axionInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axionInstance.defaults.headers.common['Authorization'] = `${token}`;
 };
 
 /**

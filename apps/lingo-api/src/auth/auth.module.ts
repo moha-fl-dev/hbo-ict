@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfSchemType } from '@hbo-ict/lingo-utils';
+import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
     ConfigModule,
     AuthService,
     NestAppConfig,
+    TokensGuard,
     {
       provide: APP_GUARD,
       useClass: GlobalGuard,
