@@ -61,16 +61,21 @@ export class AuthService {
     };
   }
 
-  async me() {
+  async me(token: string) {
     const client = await this.supabaseService.getAnonClient();
 
-    const { data: user, error } = await client.auth.getUser();
+    const { data: user, error } = await client.auth.getUser(token);
 
     if (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
-    return null;
+    const { user: currentUser } = user;
+
+    return {
+      status: HttpStatus.ACCEPTED,
+      email: currentUser.email,
+    };
   }
 
   async refreshSession({ refresh_token }: { refresh_token: string }) {

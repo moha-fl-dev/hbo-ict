@@ -49,7 +49,7 @@ export class AuthController {
       secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
       maxAge: expires_in * 1000, // ?? hour in ms
       sameSite: 'none', // required for cross-domain cookies
-      domain: 'localhost', // replace with your domain
+      // domain: 'localhost', // replace with your domain
       signed: true, //process.env.NODE_ENV === 'production',
     });
 
@@ -58,11 +58,11 @@ export class AuthController {
       secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
       // maxAge: expires_in * 1000, // ?? hour in ms
       sameSite: 'none', // required for cross-domain cookies
-      domain: 'localhost', // replace with your domain
+      // domain: 'localhost', // replace with your domain
       signed: true, //process.env.NODE_ENV === 'production',
     });
 
-    response.status(200).send({
+    response.status(HttpStatus.ACCEPTED).send({
       status: 200,
       message: 'User signed in',
     });
@@ -103,8 +103,17 @@ export class AuthController {
   }
 
   @Get('me')
-  async getProfile(@Req() request: Request) {
-    return this.authService.me();
+  async getProfile(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const { email, status } = await this.authService.me(
+      request.signedCookies.access_token
+    );
+
+    response.status(status).send({
+      email,
+    });
   }
 
   @Post('sign-out')
@@ -113,15 +122,16 @@ export class AuthController {
   }
 
   @Public()
-  // @UseGuards(TokensGuard)
+  @UseGuards(TokensGuard)
   @Get('refresh-token')
   async refreshToken(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response
   ) {
     const _refresh_token = request.signedCookies.refresh_token;
+    const _access_token = request.signedCookies.access_token;
 
-    // console.log({ _refresh_token });
+    console.log({ _refresh_token, _access_token });
 
     const { access_token, expires_in, refresh_token } =
       await this.authService.refreshSession({
@@ -152,7 +162,6 @@ export class AuthController {
 
     response.status(HttpStatus.CREATED).send({
       message: 'Token refreshed!',
-      access_token,
     });
   }
 }

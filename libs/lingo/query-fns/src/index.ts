@@ -1,6 +1,6 @@
 export * from './lib/query-fns';
 export {
   setAxiosToken,
-  axionInstance,
+  axiosInstance as axionInstance,
   clearAxiosToken,
 } from './lib/client/intance';

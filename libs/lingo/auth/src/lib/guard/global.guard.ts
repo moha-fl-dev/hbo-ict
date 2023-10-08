@@ -44,8 +44,9 @@ export class GlobalGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
 
-    const token = this.extractTokenFromHeader(request);
-    if (!token) {
+    const { access_token, refresh_token } =
+      this.extractTokenFromCookie(request);
+    if (!access_token || !refresh_token) {
       throw new UnauthorizedException();
     }
     try {
@@ -53,7 +54,7 @@ export class GlobalGuard implements CanActivate {
 
       const {
         data: { user },
-      } = await client.auth.getUser(token);
+      } = await client.auth.getUser(access_token);
 
       if (!user) {
         throw new UnauthorizedException();
@@ -67,5 +68,12 @@ export class GlobalGuard implements CanActivate {
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+
+  private extractTokenFromCookie(request: Request) {
+    return {
+      refresh_token: request.signedCookies['refresh_token'],
+      access_token: request.signedCookies['access_token'],
+    };
   }
 }

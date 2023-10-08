@@ -5,6 +5,7 @@
     "next/core-web-vitals",
     "../../.eslintrc.json"
   ],
+  "plugins": ["esbenp.prettier-vscode"],
   "ignorePatterns": ["!**/*", ".next/**/*"],
   "overrides": [
     {

@@ -4,7 +4,7 @@ import type {
   SignInDto,
   SignUpDto,
 } from '@hbo-ict/lingo/types';
-import { axionInstance } from './client/intance';
+import { axiosInstance } from './client/intance';
 
 /**
  *  signs in the user
@@ -12,7 +12,7 @@ import { axionInstance } from './client/intance';
  * @returns promise of AuthResponse
  */
 async function signIn(payload: SignInDto): Promise<AuthResponse> {
-  const result = await axionInstance.post<AuthResponse>(
+  const result = await axiosInstance.post<AuthResponse>(
     'auth/sign-in',
     payload,
     {
@@ -30,7 +30,7 @@ async function signIn(payload: SignInDto): Promise<AuthResponse> {
  * @returns
  */
 async function signUp(payload: SignUpDto): Promise<AuthResponse> {
-  const result = await axionInstance.post<AuthResponse>(
+  const result = await axiosInstance.post<AuthResponse>(
     'auth/sign-up',
     payload,
     {
@@ -48,7 +48,7 @@ async function signUp(payload: SignUpDto): Promise<AuthResponse> {
  * @returns promise of AuthResponse
  */
 async function me(): Promise<AuthResponse> {
-  const result = await axionInstance.get<AuthResponse>('auth/me');
+  const result = await axiosInstance.get<AuthResponse>('auth/me');
 
   return result.data;
 }
@@ -58,7 +58,7 @@ async function me(): Promise<AuthResponse> {
  * @returns promise of void
  */
 async function signOut(): Promise<void> {
-  await axionInstance.post('auth/sign-out');
+  await axiosInstance.post('auth/sign-out');
 }
 
 /**
@@ -66,7 +66,7 @@ async function signOut(): Promise<void> {
  * @returns promise of AuthResponse
  */
 async function refresh(): Promise<AuthResponse> {
-  const result = await axionInstance.post<AuthResponse>('auth/refresh');
+  const result = await axiosInstance.post<AuthResponse>('auth/refresh');
 
   return result.data;
 }
@@ -77,13 +77,13 @@ async function refresh(): Promise<AuthResponse> {
  * @returns promise of void
  */
 async function forgotPassword(payload: ResetPasswordDto): Promise<void> {
-  const result = await axionInstance.post('auth/forgot-password', payload);
+  const result = await axiosInstance.post('auth/forgot-password', payload);
 
   return result.data;
 }
 
 async function workspaceRoot() {
-  const res = await axionInstance.get('workspace');
+  const res = await axiosInstance.get('workspace');
 
   return res.data;
 }

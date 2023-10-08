@@ -16,7 +16,7 @@ import type { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { Api, setAxiosToken } from '@hbo-ict/query-fns';
+import { Api } from '@hbo-ict/query-fns';
 import Link from 'next/link';
 
 export async function getServerSideProps({

@@ -10,14 +10,28 @@ export default function Workspace() {
     retry: false,
   });
 
-  if (error) {
+  const userQuery = useQuery({
+    queryKey: ['user'],
+    queryFn: Api.me,
+    retry: false,
+  });
+
+  if (error || userQuery.error) {
     router.push('/sign-in');
   }
 
   return (
     <div>
       <div>
-        {isLoading ? <div>Loading...</div> : <div>{JSON.stringify(data)}</div>}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <div>
+            {JSON.stringify(data)}
+
+            {JSON.stringify(userQuery.data)}
+          </div>
+        )}
       </div>
     </div>
   );

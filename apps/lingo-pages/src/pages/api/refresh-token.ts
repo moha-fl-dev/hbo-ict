@@ -45,39 +45,40 @@ export default async function handler(
     console.log('Token has not expired');
 
     res.setHeader('Authorization', `Bearer ${token}`);
+    res.setHeader('refresh_token', refresh_token);
 
     res.status(200).json({ message: 'Token has not expired' });
     return;
   } catch (error: unknown) {
-    if (
-      error instanceof TokenExpiredError ||
-      error instanceof JsonWebTokenError
-    ) {
-      try {
-        const httpsAgent = new https.Agent({
-          rejectUnauthorized: false,
-        });
+    // if (
+    //   error instanceof TokenExpiredError ||
+    //   error instanceof JsonWebTokenError
+    // ) {
+    //   try {
+    //     const httpsAgent = new https.Agent({
+    //       rejectUnauthorized: false,
+    //     });
 
-        const result = await axios.get('auth/refresh-token', {
-          baseURL: process.env.NEXT_PUBLIC_API_URL,
-          headers: {
-            cookie: `refresh_token=${refresh_token}`,
-          },
-          withCredentials: true,
-          httpsAgent,
-        });
+    //     const result = await axios.get('auth/refresh-token', {
+    //       baseURL: process.env.NEXT_PUBLIC_API_URL,
+    //       headers: {
+    //         cookie: `refresh_token=${refresh_token}`,
+    //       },
+    //       withCredentials: true,
+    //       httpsAgent,
+    //     });
 
-        res.setHeader('Authorization', `Bearer ${result.data.access_token}`);
-        console.log('Token refreshed', { newToken: result.data.access_token });
-        res.status(result.status).json({ message: result.data.message });
-        return;
-      } catch (error: unknown) {
-        res.status(400).json({ message: 'Token invalid', error });
-        return;
-      }
-    }
+    //     res.setHeader('Authorization', `Bearer ${result.data.access_token}`);
+    //     console.log('Token refreshed', { newToken: result.data.access_token });
+    //     res.status(result.status).json({ message: result.data.message });
+    //     return;
+    //   } catch (error: unknown) {
+    //     res.status(400).json({ message: 'Token invalid', error });
+    //     return;
+    //   }
+    // }
 
-    res.status(401).json({ message: 'Token invalid!!!', error });
+    res.status(401).json({ message: 'Token Expired', error });
     return;
   }
 }
