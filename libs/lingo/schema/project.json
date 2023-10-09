@@ -1,0 +1,52 @@
+{
+  "name": "lingo-schema",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/lingo/schema/src",
+  "projectType": "library",
+  "targets": {
+    "init": {
+      "command": "prisma init",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate dev --name init",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "pull": {
+      "command": "prisma db pull",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "reset": {
+      "command": "prisma migrate reset --force",
+      "options": {
+        "cwd": "libs/lingo/schema"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/lingo/schama/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
