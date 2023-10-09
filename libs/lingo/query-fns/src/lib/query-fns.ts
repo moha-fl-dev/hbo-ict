@@ -5,6 +5,7 @@ import type {
   SignUpDto,
 } from '@hbo-ict/lingo/types';
 import { axiosInstance } from './client/intance';
+import axios from 'axios';
 
 /**
  *  signs in the user
@@ -86,6 +87,16 @@ async function workspaceRoot() {
   const res = await axiosInstance.get('workspace');
 
   return res.data;
+}
+
+export async function refreshToken() {
+  return axios.get('auth/refresh-token', {
+    baseURL: process.env['NEXT_PUBLIC_API_URL'] as string,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+  });
 }
 
 const Api = {

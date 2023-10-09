@@ -45,3 +45,5 @@ export { ResetPasswordForm } from './lib/blocks/reset-password-form';
 export { AuthLayout } from './lib/layouts/auth.layout';
 
 export { MinimalFormProps } from './lib/types';
+
+export { QueryLoader } from './lib/layouts/loader';

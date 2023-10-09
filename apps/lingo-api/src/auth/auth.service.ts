@@ -67,7 +67,7 @@ export class AuthService {
     const { data: user, error } = await client.auth.getUser(token);
 
     if (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
 
     const { user: currentUser } = user;
@@ -84,7 +84,7 @@ export class AuthService {
     const { data, error } = await client.auth.refreshSession({ refresh_token });
 
     if (error instanceof AuthError) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
 
     const { session } = data;

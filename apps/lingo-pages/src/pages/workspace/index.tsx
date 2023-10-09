@@ -7,18 +7,12 @@ export default function Workspace() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['todos'],
     queryFn: Api.workspaceRoot,
-    retry: false,
   });
 
   const userQuery = useQuery({
     queryKey: ['user'],
     queryFn: Api.me,
-    retry: false,
   });
-
-  if (error || userQuery.error) {
-    router.push('/sign-in');
-  }
 
   return (
     <div>

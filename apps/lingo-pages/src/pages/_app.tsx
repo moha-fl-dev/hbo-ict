@@ -1,9 +1,11 @@
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import { NextPage } from 'next';
-import { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import '../styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Router from 'next/router';
+import { AxiosError } from 'axios';
 
 /**
  * @see
@@ -21,7 +23,29 @@ type AppPropsWithLayout = AppProps & {
  * create a new query client for the app
  *
  */
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        console.log({
+          queryClientError: error,
+        });
+        const err = error as AxiosError;
+        /**
+         * if the error is a 404, don't retry
+         * if the error is a 401, don't retry. token refresh failed
+         */
+
+        if (err.response?.status === 404 || err.response?.status === 401) {
+          Router.replace('/sign-in');
+          return false;
+        }
+        // retry 2 times, then fail
+        return failureCount < 2;
+      },
+    },
+  },
+});
 
 /**
  * font

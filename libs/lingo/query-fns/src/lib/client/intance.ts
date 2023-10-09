@@ -1,4 +1,11 @@
-import axios from 'axios';
+import axios, {
+  InternalAxiosRequestConfig,
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios';
+
+import { refreshToken } from '../query-fns';
 
 /**
  * This is the axios instance that is used for all requests to the backend.
@@ -17,84 +24,111 @@ export const axiosInstance = axios.create({
 });
 
 /**
+ * This is the type for the original request config.
+ * It is used to mark the request as retried or not to prevent infinite loops.
+ *
+ */
+interface OriginalRequestConfig<D = any> extends InternalAxiosRequestConfig<D> {
+  _retry?: boolean;
+}
+
+/**
+ * This is the queue for requests that failed due to an expired token.
+ * It is used to prevent multiple requests from refreshing the token at the same time.
+ */
+interface RequestQueueItem {
+  resolve: (
+    value?: AxiosRequestConfig | PromiseLike<AxiosRequestConfig> | undefined
+  ) => void;
+  reject: (reason?: any) => void;
+}
+
+/**
+ * indicates if the token is currently being refreshed or not.
+ */
+let isRefreshing = false;
+
+/**
+ * failed queue for requests that failed due to an expired token.
+ */
+let failedQueue: RequestQueueItem[] = [];
+
+/**
+ * Process the queue for requests that failed due to an expired token.
+ * @param error the error that caused the token to expire.
+ * @param requestConfig the request config that was used to make the request.
+ */
+function processQueue(
+  error: any,
+  requestConfig: AxiosRequestConfig | null = null
+) {
+  failedQueue.forEach(({ resolve, reject }) =>
+    error ? reject(error) : resolve(requestConfig!)
+  );
+  failedQueue = [];
+}
+
+/**
  * Add a request interceptor
  * will run whenever a request is sent to the backend.
  * this is used to refresh the token if it is expired.
  * will also skip the refresh token if the noAuth header is present.
  */
 axiosInstance.interceptors.response.use(
-  (response) => {
-    console.log({ response });
+  (response: AxiosResponse) => {
     return response;
   },
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config! as OriginalRequestConfig;
 
-    console.log({
-      originalRequest,
-    });
+    // Prevent infinite loops or retrying requests that have no recoverable errors
+    if (
+      !error.response ||
+      error.response?.status !== 401 ||
+      originalRequest._retry
+    ) {
+      return Promise.reject(error);
+    }
 
-    // Check if we should refresh the token
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Marking request as retried
+    originalRequest._retry = true; // Marking request as retried
 
+    if (isRefreshing) {
+      // If refreshing, add this request to the queue to be executed once refresh is done
       try {
-        // Refresh the token
-        await axios.get('auth/refresh-token', {
-          baseURL: process.env['NEXT_PUBLIC_API_URL'] as string,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+        const requestConfig = await new Promise((resolve, reject) => {
+          // Add this request to the queue to be executed once refresh is done
+          failedQueue.push({ resolve, reject });
         });
 
-        // Retry the original request with the new token
-        return await axiosInstance(originalRequest);
-      } catch (refreshError) {
-        // Handle error on token refresh, for instance, redirect to login page
-        console.error(refreshError);
-        // Optionally, handle the error, e.g., navigate to the login screen, show error to the user, etc.
-        return Promise.reject(refreshError);
+        // Retry the original request
+        return await axiosInstance(requestConfig as AxiosRequestConfig);
+      } catch (error) {
+        // If refresh fails, reject the promise
+        // send the user to the login page. redirect happens at page/component level
+        return Promise.reject(error);
       }
     }
 
-    // If error is due to other reasons, reject the promise
-    return Promise.reject(error);
+    isRefreshing = true;
+
+    try {
+      // Refresh the token
+      await refreshToken();
+
+      // If successful, resolve all requests in the failedQueue using the new token
+      processQueue(null, originalRequest);
+
+      // Retry the original request with the new token
+      return await axiosInstance(originalRequest);
+    } catch (refreshError) {
+      // If refresh fails, reject all requests in the failedQueue
+      processQueue(refreshError, null);
+
+      // send the user to the login page. redirect happens at page/component level
+      return Promise.reject(refreshError);
+    } finally {
+      // Reset the refresh flag so subsequent requests can trigger refresh if needed
+      isRefreshing = false;
+    }
   }
 );
-
-/**
- * Add a response interceptor
- * will run whenever a response is received from the backend.
- * no use for this yet.
- */
-
-/**
- * sets the token in the axios instance
- * @param token string
- */
-export const setAxiosToken = (token: string) => {
-  axiosInstance.defaults.headers.common['Authorization'] = `${token}`;
-};
-
-/**
- * clears the token in the axios instance
- */
-export const clearAxiosToken = () => {
-  delete axiosInstance.defaults.headers.common['Authorization'];
-};
-
-/**
- * sets the token in the axios instance from a cookie
- * @param cookie string
- */
-export const setAxiosTokenFromCookie = (cookie: string) => {
-  setAxiosToken(cookie);
-};
-
-/**
- * clears the token in the axios instance
- */
-export const clearAxiosTokenFromCookie = () => {
-  clearAxiosToken();
-};

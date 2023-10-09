@@ -11,33 +11,19 @@ import {
   SignInForm,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import type { GetServerSidePropsContext } from 'next';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { Api } from '@hbo-ict/query-fns';
 import Link from 'next/link';
 
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
-  const refresh_token = req.cookies['refresh_token'];
-  const access_token = req.cookies['access_token'];
-
-  return {
-    props: {
-      data: 'to hell.',
-    },
-  };
-}
-
-export default function SignIn({ data }: { data: string }) {
+export default function SignIn() {
   const [serverError, setServerError] = useState<boolean>(false);
   const router = useRouter();
 
   const { mutate } = useMutation({
+    mutationKey: ['auth'],
     mutationFn: Api.signIn,
     onError: (error) => {
       setServerError(true);

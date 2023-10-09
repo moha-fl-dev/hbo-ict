@@ -20,20 +20,6 @@ import { useRouter } from 'next/router';
 import { Api } from '@hbo-ict/query-fns';
 import Link from 'next/link';
 
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
-  const refresh_token = req.cookies['refresh_token'];
-  const access_token = req.cookies['access_token'];
-
-  return {
-    props: {
-      data: 'to hell.',
-    },
-  };
-}
-
 export default function SignUp() {
   const [serverError, setServerError] = useState<boolean>(false);
   const router = useRouter();
