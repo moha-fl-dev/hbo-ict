@@ -12,10 +12,132 @@ datasource db {
   directUrl = env("DB_DIRECT_URL")
 }
 
-model User {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
-  email     String   @unique
-  name      String?
+enum TicketStatusEnum {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  CLOSED
+}
+
+enum SeverityEnum {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketActionTypeEnum {
+  STATUS_CHANGE
+  DESCRIPTION_UPDATE
+  ASSIGNMENT_CHANGE
+  COMMENT_ADDED
+  PRIORITY_CHANGE
+}
+
+model Department {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  teams Team[]
+}
+
+model Team {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members      User[]
+  Department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?
+
+  components Component[]
+  Tickets    Ticket[]
+}
+
+model Component {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Team      Team?    @relation(fields: [teamId], references: [id])
+  teamId    String?
+}
+
+model Ticket {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String
+
+  status   TicketStatusEnum @default(OPEN)
+  severity SeverityEnum     @default(LOW)
+
+  callerId String
+  caller   User   @relation(name: "TicketCaller", fields: [callerId], references: [id])
+
+  assigneeId String?
+  assignee   User?   @relation(name: "TicketAssignee", fields: [assigneeId], references: [id])
+
+  team           Team?            @relation(fields: [teamId], references: [id])
+  teamId         String?
+  Comment        Comment[]
+  TicketHistory  TicketHistory[]
+  TicketFollower TicketFollower[]
+}
+
+model Comment {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content String
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+}
+
+model TicketHistory {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  createdAt DateTime @default(now())
+
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  actionType TicketActionTypeEnum
+  oldValue   String?
+  newValue   String?
+}
+
+model TicketFollower {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()"))
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id              String           @unique
+  email           String           @unique
+  name            String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  Team            Team?            @relation(fields: [teamId], references: [id])
+  teamId          String?
+  createdTickets  Ticket[]         @relation(name: "TicketCaller")
+  assignedTickets Ticket[]         @relation(name: "TicketAssignee")
+  Comment         Comment[]
+  TicketHistory   TicketHistory[]
+  TicketFollower  TicketFollower[]
 }
