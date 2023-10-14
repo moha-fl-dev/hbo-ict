@@ -11,7 +11,7 @@ datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
   directUrl  = env("DB_DIRECT_URL")
-  extensions = [pgcrypto]
+  extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
 enum TicketStatusEnum {
@@ -36,7 +36,7 @@ enum TicketActionTypeEnum {
 }
 
 model Department {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -45,7 +45,7 @@ model Department {
 }
 
 model Team {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,7 +59,7 @@ model Team {
 }
 
 model Component {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,7 +68,7 @@ model Component {
 }
 
 model Ticket {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -94,7 +94,7 @@ model Ticket {
 }
 
 model Comment {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -108,7 +108,7 @@ model Comment {
 }
 
 model TicketHistory {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt DateTime @default(now())
 
   ticketId String @db.Uuid
@@ -123,7 +123,7 @@ model TicketHistory {
 }
 
 model TicketFollower {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   userId    String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
   ticketId  String   @db.Uuid

@@ -1,3 +1,6 @@
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- CreateEnum
 CREATE TYPE "TicketStatusEnum" AS ENUM ('OPEN', 'IN_PROGRESS', 'ON_HOLD', 'CLOSED');
 
@@ -9,7 +12,7 @@ CREATE TYPE "TicketActionTypeEnum" AS ENUM ('STATUS_CHANGE', 'DESCRIPTION_UPDATE
 
 -- CreateTable
 CREATE TABLE "Department" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -19,60 +22,61 @@ CREATE TABLE "Department" (
 
 -- CreateTable
 CREATE TABLE "Team" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "departmentId" TEXT,
+    "departmentId" UUID,
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Component" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "teamId" TEXT,
+    "teamId" UUID,
 
     CONSTRAINT "Component_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Ticket" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "status" "TicketStatusEnum" NOT NULL DEFAULT 'OPEN',
     "severity" "SeverityEnum" NOT NULL DEFAULT 'LOW',
-    "callerId" TEXT NOT NULL,
-    "assigneeId" TEXT,
-    "teamId" TEXT,
+    "callerId" UUID NOT NULL,
+    "assigneeId" UUID,
+    "teamId" UUID,
+    "ticketNumber" TEXT NOT NULL,
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "content" TEXT NOT NULL,
-    "authorId" TEXT NOT NULL,
-    "ticketId" TEXT NOT NULL,
+    "authorId" UUID NOT NULL,
+    "ticketId" UUID NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TicketHistory" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "ticketId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "ticketId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "actionType" "TicketActionTypeEnum" NOT NULL,
     "oldValue" TEXT,
     "newValue" TEXT,
@@ -82,9 +86,9 @@ CREATE TABLE "TicketHistory" (
 
 -- CreateTable
 CREATE TABLE "TicketFollower" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
-    "userId" TEXT NOT NULL,
-    "ticketId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "userId" UUID NOT NULL,
+    "ticketId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "TicketFollower_pkey" PRIMARY KEY ("id")
@@ -92,12 +96,19 @@ CREATE TABLE "TicketFollower" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "teamId" TEXT
+    "teamId" UUID,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TicketNumber" (
+    "currentNumber" TEXT NOT NULL
 );
 
 -- CreateIndex
@@ -113,6 +124,9 @@ CREATE UNIQUE INDEX "Component_id_key" ON "Component"("id");
 CREATE UNIQUE INDEX "Ticket_id_key" ON "Ticket"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Ticket_ticketNumber_key" ON "Ticket"("ticketNumber");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Comment_id_key" ON "Comment"("id");
 
 -- CreateIndex
@@ -126,6 +140,9 @@ CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TicketNumber_currentNumber_key" ON "TicketNumber"("currentNumber");
 
 -- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE SET NULL ON UPDATE CASCADE;
