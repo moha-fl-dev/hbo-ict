@@ -8,7 +8,7 @@ export function WorkspaceMenu() {
   const router = useRouter();
 
   return (
-    <ul className="flex flex-col gap-2 items-start w-full justify-start content-start">
+    <ul className="flex flex-col gap-2 items-start justify-start content-start">
       {WORKSPACE_MENU.map((menuItem, i) => {
         return (
           <MenuItem
@@ -25,11 +25,8 @@ export function WorkspaceMenu() {
 function MenuItem({ active, icon, name, path }: WorkspaceMenu) {
   return (
     <Link href={path} className="w-full">
-      <ListItem
-        variant={active === true ? 'active' : 'default'}
-        className="w-full"
-      >
-        <div className="flex flex-row gap-2 items-center align-middle">
+      <ListItem variant={active === true ? 'active' : 'default'}>
+        <div className="flex flex-row gap-2 items-center align-middle w-full">
           {icon}
           <span>{name}</span>
         </div>

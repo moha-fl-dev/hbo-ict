@@ -82,3 +82,5 @@ export {
   SheetTitle,
   SheetDescription,
 } from './lib/components/sheet';
+
+export { Separator } from './lib/components/seperator';

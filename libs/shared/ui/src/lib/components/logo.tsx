@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { cn } from '../utils';
 import Link from 'next/link';
 
-const LogoVariants = cva('text-slate-700 uppercase inline', {
+const LogoVariants = cva('text-slate-700 uppercase inline-flex', {
   variants: {
     variant: {
       default: 'text-2xl font-bold',
@@ -12,6 +12,7 @@ const LogoVariants = cva('text-slate-700 uppercase inline', {
     size: {
       default: 'text-2xl',
       small: 'text-xl ',
+      extraSmall: 'text-sm',
     },
   },
   defaultVariants: {
@@ -24,6 +25,7 @@ interface LogoProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof LogoVariants> {
   asLink?: boolean;
+  path?: string;
 }
 
 const Logo: FC<LogoProps> = ({
@@ -31,11 +33,12 @@ const Logo: FC<LogoProps> = ({
   variant,
   size,
   asLink,
+  path,
   ...props
 }) => {
   if (asLink) {
     return (
-      <Link href="/">
+      <Link href={path || '/'}>
         <h1
           className={cn(LogoVariants({ variant, size, className }))}
           {...props}

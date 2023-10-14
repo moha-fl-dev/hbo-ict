@@ -3,13 +3,14 @@ import { cn } from '../utils';
 import React from 'react';
 
 const ListItemVariants = cva(
-  'inline-flex items-center justify-center text-sm font-medium ',
+  'text-sm font-medium w-full  border-transparent transition-colors border-r-2',
   {
     variants: {
       variant: {
-        default: 'text-secondary-foreground hover:text-workspace-foreground',
+        default: 'text-secondary-foreground hover:text-workspace-foreground ',
 
-        active: 'bg-workspace-secondary  text-workspace-foreground ',
+        active:
+          'bg-workspace-secondary  text-workspace-foreground border-workspace-foreground',
       },
       size: {
         default: 'h-9 px-4 py-2',
