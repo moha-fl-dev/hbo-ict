@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 /**
@@ -11,4 +12,11 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 export type MinimalFormProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
   onSubmit: () => void;
+};
+
+export type WorkspaceMenu = {
+  name: string;
+  path: string;
+  icon: ReactElement;
+  active: boolean;
 };

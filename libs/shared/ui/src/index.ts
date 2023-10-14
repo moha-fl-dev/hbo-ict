@@ -47,3 +47,38 @@ export { AuthLayout } from './lib/layouts/auth.layout';
 export { MinimalFormProps } from './lib/types';
 
 export { QueryLoader } from './lib/layouts/loader';
+
+export { WorkspaceRootLayout } from './lib/layouts/workspace.root.layout';
+
+export { Avatar, AvatarImage, AvatarFallback } from './lib/components/avatar';
+
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+} from './lib/components/dropdown.menu';
+
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from './lib/components/sheet';

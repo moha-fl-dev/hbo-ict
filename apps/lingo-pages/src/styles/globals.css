@@ -24,17 +24,18 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+    --workspace-primary: 228, 54%, 56%;
+    --workspace-secondary: 234, 53%, 89%;
+    --workspace-foreground: 236, 68%, 59%;
   }
-
 }
 
 @layer base {
   * {
     @apply border-border;
-
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
