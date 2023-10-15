@@ -84,3 +84,5 @@ export {
 } from './lib/components/sheet';
 
 export { Separator } from './lib/components/seperator';
+
+export { ScrollArea, ScrollBar } from './lib/components/scroll-area';

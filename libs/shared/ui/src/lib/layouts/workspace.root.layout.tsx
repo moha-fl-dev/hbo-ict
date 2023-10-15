@@ -28,9 +28,9 @@ export function WorkspaceRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen flex min-h-full">
-      <aside className="w-[12%] min-w-[200px] hidden md:block border-r h-full">
-        <div className="flex flex-col gap-2 w-full mt-5">
+    <div className="flex h-full min-h-screen">
+      <aside className="w-[12%] min-w-[200px] hidden md:block border-r">
+        <div className="flex flex-col gap-2 w-full mt-5 ">
           <Logo
             variant={'small'}
             size={'small'}
@@ -61,7 +61,7 @@ export function WorkspaceRootLayout({
           </Button>
         </div>
       </aside>
-      <main className="flex-1">
+      <main className="flex-1 h-full ">
         <div className="border-b shadow-sm flex flex-col h-[57px] justify-evenly ">
           <div className="flex flex-row p-5 justify-between align-middle items-center">
             <MobileSideNav />
@@ -69,7 +69,7 @@ export function WorkspaceRootLayout({
             <UserDropDown />
           </div>
         </div>
-        <div className="container mt-5">{children}</div>
+        <div className="mt-2 ">{children}</div>
       </main>
     </div>
   );

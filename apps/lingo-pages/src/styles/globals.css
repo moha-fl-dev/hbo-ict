@@ -39,3 +39,13 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
+
+/* styles.css or wherever your Tailwind styles are */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}

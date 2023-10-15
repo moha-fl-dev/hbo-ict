@@ -1,5 +1,10 @@
 import { Api } from '@hbo-ict/query-fns';
-import { WorkspaceRootLayout } from '@hbo-ict/ui';
+import {
+  ScrollArea,
+  ScrollBar,
+  Separator,
+  WorkspaceRootLayout,
+} from '@hbo-ict/ui';
 import {
   QueryKey,
   useIsFetching,
@@ -35,9 +40,9 @@ export default function Workspace() {
   if (isFetching > 0) {
     return (
       <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
-        {/* <div className="w-20 h-20 border-4 border-gray-200 rounded-full animate-spin"></div> */}
+        {/* <div className="w-20 h-20 border-4 border-gray-15 rounded-full animate-spin"></div> */}
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="http://www.w3.org/150/svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -62,13 +67,38 @@ export default function Workspace() {
   }
 
   return (
-    <div>
-      <div>
-        <div>
-          {JSON.stringify(workspaceRootQuery.data)}
-
-          {JSON.stringify(userQuery.data)}
-        </div>
+    <div className="container px-4 ">
+      <div className="grid grid-cols-2 gap-4 grid-flow-row ">
+        <ScrollArea className="h-[400px] border rounded-sm p-4 col-span-2 lg:col-span-1 shadow-sm">
+          <div>
+            {Array.from({ length: 15 }, (_, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <p>Here come my tickets {i}</p>
+                <Separator />
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+        <ScrollArea className="h-[400px] border rounded-sm p-4 col-span-2 lg:col-span-1 shadow-sm">
+          <div>
+            {Array.from({ length: 15 }, (_, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <p>Here come unassigned tickets {i}</p>
+                <Separator />
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+        <ScrollArea className="h-[400px] border rounded-sm p-4 col-span-2 shadow-sm">
+          <div>
+            {Array.from({ length: 15 }, (_, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <p>Here come all tickets from all departments {i}</p>
+                <Separator />
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );
