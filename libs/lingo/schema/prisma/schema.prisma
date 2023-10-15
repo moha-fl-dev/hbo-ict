@@ -37,7 +37,7 @@ enum TicketActionTypeEnum {
 
 model Department {
   id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -46,11 +46,11 @@ model Department {
 
 model Team {
   id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members      User[]
+  members      Employee[]
   Department   Department? @relation(fields: [departmentId], references: [id])
   departmentId String?     @db.Uuid
 
@@ -60,7 +60,7 @@ model Team {
 
 model Component {
   id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Team      Team?    @relation(fields: [teamId], references: [id])
@@ -72,17 +72,17 @@ model Ticket {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
+  title       String @unique
   description String
 
   status   TicketStatusEnum @default(OPEN)
   severity SeverityEnum     @default(LOW)
 
-  callerId String @db.Uuid
-  caller   User   @relation(name: "TicketCaller", fields: [callerId], references: [id])
+  callerId String   @db.Uuid
+  caller   Employee @relation(name: "TicketCaller", fields: [callerId], references: [id])
 
-  assigneeId String? @db.Uuid
-  assignee   User?   @relation(name: "TicketAssignee", fields: [assigneeId], references: [id])
+  assigneeId String?   @db.Uuid
+  assignee   Employee? @relation(name: "TicketAssignee", fields: [assigneeId], references: [id])
 
   team           Team?            @relation(fields: [teamId], references: [id])
   teamId         String?          @db.Uuid
@@ -100,8 +100,8 @@ model Comment {
 
   content String
 
-  authorId String @db.Uuid
-  author   User   @relation(fields: [authorId], references: [id])
+  authorId String   @db.Uuid
+  author   Employee @relation(fields: [authorId], references: [id])
 
   ticketId String @db.Uuid
   ticket   Ticket @relation(fields: [ticketId], references: [id])
@@ -114,8 +114,8 @@ model TicketHistory {
   ticketId String @db.Uuid
   ticket   Ticket @relation(fields: [ticketId], references: [id])
 
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
+  employeeId String   @db.Uuid
+  employee   Employee @relation(fields: [employeeId], references: [id])
 
   actionType TicketActionTypeEnum
   oldValue   String?
@@ -123,15 +123,15 @@ model TicketHistory {
 }
 
 model TicketFollower {
-  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  ticketId  String   @db.Uuid
-  ticket    Ticket   @relation(fields: [ticketId], references: [id])
-  createdAt DateTime @default(now())
+  id         String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  employeeId String   @db.Uuid
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  ticketId   String   @db.Uuid
+  ticket     Ticket   @relation(fields: [ticketId], references: [id])
+  createdAt  DateTime @default(now())
 }
 
-model User {
+model Employee {
   id              String           @id @unique @db.Uuid
   email           String           @unique
   name            String?
@@ -147,5 +147,5 @@ model User {
 }
 
 model TicketNumber {
-  currentNumber String @unique
+  currentNumber Int @unique @default(1000000000)
 }

@@ -1,4 +1,14 @@
 export * from './lib/lingo-prisma-client.module';
 
 export * from './lib/prisma.service';
-export { User, Prisma } from '@prisma/client/lingo';
+export {
+  Employee,
+  Prisma,
+  TicketNumber,
+  Department,
+  Team,
+  TicketFollower,
+  TicketHistory,
+  Comment,
+  Component,
+} from '@prisma/client/lingo';
