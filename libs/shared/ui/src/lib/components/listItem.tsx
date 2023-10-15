@@ -2,29 +2,25 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { cn } from '../utils';
 import React from 'react';
 
-const ListItemVariants = cva(
-  'text-sm font-medium w-full  border-transparent transition-colors border-r-2',
-  {
-    variants: {
-      variant: {
-        default: 'text-secondary-foreground hover:text-workspace-foreground ',
+const ListItemVariants = cva('text-sm font-medium w-full  transition-colors ', {
+  variants: {
+    variant: {
+      default: 'text-secondary-foreground hover:text-workspace-foreground ',
 
-        active:
-          'bg-workspace-secondary  text-workspace-foreground border-workspace-foreground',
-      },
-      size: {
-        default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-10 rounded-md px-8',
-        icon: 'h-9 w-9',
-      },
+      active: 'bg-workspace-secondary  text-workspace-foreground',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
+    size: {
+      default: 'h-9 px-4 py-2',
+      sm: 'h-8 rounded-md px-3 text-xs',
+      lg: 'h-10 rounded-md px-8',
+      icon: 'h-9 w-9',
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
 interface ListItemProps
   extends React.LiHTMLAttributes<HTMLLIElement>,

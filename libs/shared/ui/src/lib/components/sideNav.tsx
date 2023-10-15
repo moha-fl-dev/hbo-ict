@@ -1,4 +1,5 @@
 import {
+  Cross2Icon,
   DotsVerticalIcon,
   HamburgerMenuIcon,
   PlusIcon,
@@ -23,9 +24,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
+  SheetFooter,
+  SheetOverlay,
 } from './sheet';
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import React from 'react';
+import { useWindowDimensions } from '../hooks/useWindowDimensions';
+import { Logo } from './logo';
 
 export function SideNav() {
   return (
@@ -83,15 +89,47 @@ function UserDropDown() {
 }
 
 export function MobileSideNav() {
+  const router = useRouter();
+  const [open, setOpen] = React.useState<boolean>(false);
+  const { width } = useWindowDimensions();
+
+  React.useEffect(() => {
+    // md breakpoint
+    if (width && width > 768) {
+      setOpen(() => false);
+    }
+    // close sheet on route change
+    router.events.on('routeChangeComplete', () => {
+      setOpen(() => false);
+    });
+  }, [width]);
+
+  function openSheet() {
+    setOpen(() => true);
+  }
+
   return (
     <div className="block md:hidden">
-      <Sheet>
+      <Sheet open={open}>
         <SheetTrigger asChild>
-          <HamburgerMenuIcon className="text-primary font-bold cursor-pointer" />
+          <HamburgerMenuIcon
+            className="text-primary font-bold cursor-pointer h-4 w-4"
+            onClick={() => openSheet()}
+          />
         </SheetTrigger>
         <SheetContent side={'left'}>
-          <WorkspaceMenu />
+          <SheetClose className="absolute  right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+            <Cross2Icon
+              className="h-4 w-4"
+              onClick={() => setOpen(() => false)}
+            />
+            <span className="sr-only">Close</span>
+          </SheetClose>
+          <div className="mt-5">
+            <WorkspaceMenu />
+          </div>
         </SheetContent>
+        <SheetOverlay onClick={() => setOpen(() => false)} />
       </Sheet>
     </div>
   );
