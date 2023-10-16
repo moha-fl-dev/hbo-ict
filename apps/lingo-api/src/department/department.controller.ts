@@ -13,11 +13,12 @@ export class DepartmentController {
   @Post('/create')
   @ZodValidate<SingleNameFieldDto>(SingleNameFieldSchema)
   async create(@Req() req: { body: SingleNameFieldDto }) {
+    console.log(req.body);
     return this.departmentService.create(req.body);
   }
 
   @Get()
   async get() {
-    return 'Departments';
+    return this.departmentService.all();
   }
 }

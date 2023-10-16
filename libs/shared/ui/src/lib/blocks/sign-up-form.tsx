@@ -1,5 +1,3 @@
-'use client';
-
 import { SignUpDto } from '@hbo-ict/lingo/types';
 
 import {

@@ -1,5 +1,5 @@
 export * from './lib/ui';
-export { Button, type buttonVariants } from './lib/components/button';
+export { Button, buttonVariants } from './lib/components/button';
 export {
   AlertDialog,
   AlertDialogTrigger,
