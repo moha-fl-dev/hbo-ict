@@ -1,8 +1,12 @@
 import { SingleNameFieldDto } from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
+import { Department } from '@prisma/client/lingo';
 
 async function create(payload: SingleNameFieldDto) {
-  const res = await axiosInstance.post('department/create', payload);
+  const res = await axiosInstance.post<Department>(
+    'department/create',
+    payload
+  );
 
   return res.data;
 }

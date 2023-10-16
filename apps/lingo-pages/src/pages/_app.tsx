@@ -6,6 +6,7 @@ import '../styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Router from 'next/router';
 import { AxiosError } from 'axios';
+import { Toaster } from '@hbo-ict/ui';
 
 /**
  * @see
@@ -75,7 +76,10 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }
       `}</style>
       <QueryClientProvider client={queryClient}>
-        <main>{getLayout(<Component {...pageProps} />)}</main>
+        <main>
+          {<Toaster />}
+          {getLayout(<Component {...pageProps} />)}
+        </main>
       </QueryClientProvider>
     </>
   );

@@ -86,3 +86,30 @@ export {
 export { Separator } from './lib/components/seperator';
 
 export { ScrollArea, ScrollBar } from './lib/components/scroll-area';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from './lib/components/table';
+
+export {
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+} from './lib/components/toast';
+
+export { Toaster } from './lib/components/toaster';
+
+export { useToast, toast } from './lib/hooks/use-toast';
