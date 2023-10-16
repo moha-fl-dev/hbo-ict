@@ -24,7 +24,7 @@ export default function SignIn() {
 
   const { mutate } = useMutation({
     mutationKey: ['auth'],
-    mutationFn: Api.signIn,
+    mutationFn: Api.auth.signIn,
     onError: (error) => {
       setServerError(true);
     },

@@ -25,7 +25,7 @@ export default function SignUp() {
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: Api.signUp,
+    mutationFn: Api.auth.signUp,
     onError: (error) => {
       setServerError(true);
     },

@@ -8,6 +8,11 @@ import { GlobalGuard, SupabaseService } from '@hbo-ict/supabase-auth';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { WorkspaceModule } from '../workspace/workspace.module';
+import { DepartmentModule } from '../department/department.module';
+import {
+  LingoPrismaClientModule,
+  PrismaService,
+} from '@hbo-ict/lingo-prisma-client';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +29,8 @@ import { WorkspaceModule } from '../workspace/workspace.module';
     }),
     AuthModule,
     WorkspaceModule,
+    DepartmentModule,
+    LingoPrismaClientModule,
   ],
   controllers: [AppController],
   providers: [AppService, NestAppConfig, SupabaseService],

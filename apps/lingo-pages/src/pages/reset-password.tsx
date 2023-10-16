@@ -39,7 +39,7 @@ export default function ResetPassword() {
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: Api.forgotPassword,
+    mutationFn: Api.auth.forgotPassword,
     onError: (error) => {
       setServerError(true);
     },

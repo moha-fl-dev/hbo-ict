@@ -6,6 +6,7 @@ import {
   GearIcon,
   GroupIcon,
   MixIcon,
+  DiscIcon,
 } from '@radix-ui/react-icons';
 
 export const WORKSPACE_MENU: WorkspaceMenu[] = [
@@ -19,6 +20,12 @@ export const WORKSPACE_MENU: WorkspaceMenu[] = [
     name: 'Tickets',
     path: '/workspace/tickets',
     icon: <ListBulletIcon />,
+    active: false,
+  },
+  {
+    name: 'Departments',
+    path: '/workspace/manage/departments',
+    icon: <DiscIcon />,
     active: false,
   },
   {

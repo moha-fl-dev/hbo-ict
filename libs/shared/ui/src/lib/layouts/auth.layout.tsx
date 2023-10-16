@@ -13,7 +13,7 @@ import Router from 'next/router';
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   const { data: authData, isLoading } = useQuery({
     queryKey: ['isAuthenticated'],
-    queryFn: Api.me,
+    queryFn: Api.auth.me,
     retry: false,
   });
 

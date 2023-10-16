@@ -69,7 +69,7 @@ export function WorkspaceRootLayout({
             <UserDropDown />
           </div>
         </div>
-        <div className="mt-2 ">{children}</div>
+        <div className="mt-2 container px-4">{children}</div>
       </main>
     </div>
   );

@@ -1,10 +1,10 @@
-import { LingoPrismaClientModule } from '@hbo-ict/lingo-prisma-client';
 import { Module } from '@nestjs/common';
+import { DepartmentService as DepService } from './department.service';
 
 @Module({
   controllers: [],
-  providers: [],
-  exports: [],
-  imports: [LingoPrismaClientModule],
+  providers: [DepService],
+  exports: [DepService],
+  imports: [],
 })
 export class DataAccessModule {}

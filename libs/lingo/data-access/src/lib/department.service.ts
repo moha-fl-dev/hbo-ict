@@ -1,9 +1,10 @@
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, Prisma, Department, Team } from '@prisma/client/lingo';
+import { Prisma, Department } from '@prisma/client/lingo';
 
 @Injectable()
 export class DepartmentService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: Prisma.DepartmentCreateWithoutTeamsInput) {
     const department = await this.prisma.department.create({

@@ -72,3 +72,11 @@ export type FailedAuthResponse = {
  * aka discriminated union
  */
 export type AuthResponse = SuccesfulAuthResponse | FailedAuthResponse;
+
+export const SingleNameFieldSchema = z.object({
+  name: z.string().min(3, {
+    message: 'Name must be at least 3 characters long',
+  }),
+});
+
+export type SingleNameFieldDto = z.infer<typeof SingleNameFieldSchema>;
