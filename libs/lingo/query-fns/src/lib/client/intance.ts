@@ -5,7 +5,7 @@ import axios, {
   type AxiosResponse,
 } from 'axios';
 
-import { refreshToken } from '../query-fns';
+import { Api } from '../query-fns';
 
 /**
  * This is the axios instance that is used for all requests to the backend.
@@ -113,7 +113,7 @@ axiosInstance.interceptors.response.use(
 
     try {
       // Refresh the token
-      await refreshToken();
+      await Api.auth.refreshToken();
 
       // If successful, resolve all requests in the failedQueue using the new token
       processQueue(null, originalRequest);

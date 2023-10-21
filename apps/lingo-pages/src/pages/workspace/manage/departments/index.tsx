@@ -1,78 +1,112 @@
+import { DepartmentsLayout, WorkspaceRootLayout } from '@hbo-ict/ui';
+import { useIsFetching } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import {
-  SingleNameFieldDto,
-  SingleNameFieldSchema,
-} from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
-import {
-  Button,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Separator,
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetOverlay,
-  SheetTitle,
-  SheetTrigger,
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  WorkspaceRootLayout,
-  useToast,
-} from '@hbo-ict/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
-import {
-  useIsFetching,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { Department } from '@prisma/client/lingo';
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+
+const data = [
+  {
+    name: 'Jan',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Feb',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Mar',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Apr',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'May',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Jun',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Jul',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Aug',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Sep',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Oct',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Nov',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+  {
+    name: 'Dec',
+    total: Math.floor(Math.random() * 5000) + 1000,
+    uv: Math.floor(Math.random() * 5000) + 1000,
+    pv: Math.floor(Math.random() * 5000) + 1000,
+  },
+];
 
 export default function ManageDepartments() {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const [barData, setBarData] = React.useState(data);
   const isFetching = useIsFetching();
+  const router = useRouter();
 
-  const form = useForm<SingleNameFieldDto>({
-    resolver: zodResolver(SingleNameFieldSchema),
-    defaultValues: {
-      name: '',
-    },
-  });
-
-  const { data: departments } = useQuery({
-    queryKey: ['departments'],
-    queryFn: Api.department.getAll,
-  });
-
-  const { mutate } = useMutation({
-    mutationKey: ['create-department'],
-    mutationFn: Api.department.create,
-    onSuccess(data) {
-      queryClient.invalidateQueries(['departments']);
-      toast({
-        description: `${data?.name} department has been created.`,
-      });
-    },
-  });
-
-  function onSubmit(values: SingleNameFieldDto) {
-    mutate(values);
-  }
+  useEffect(() => {
+    setBarData(
+      data.map((item) => {
+        return {
+          ...item,
+          total: Math.floor(Math.random() * 5000) + 1000,
+          uv: Math.floor(Math.random() * 5000) + 1000,
+          pv: Math.floor(Math.random() * 5000) + 1000,
+        };
+      })
+    );
+  }, [router.query.department]);
 
   if (isFetching > 0) {
     return (
@@ -103,88 +137,42 @@ export default function ManageDepartments() {
     );
   }
 
+  if (!router.query.department) {
+    return <div className="col-span-4 bg-slate-50/50">No data to display</div>;
+  }
+
   return (
-    <div className="flex flex-col gap-4 ">
-      <div className="flex flex-row justify-end content-end items-end  align-middle">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant={'workspace'}>
-              <div className="flex flex-row gap-2 items-center">
-                <PlusIcon fontSize={10} />
-                <span>Add Department</span>
-              </div>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side={'right'} className="p-0 md:max-w-2xl sm:max-w-xl">
-            <SheetHeader>
-              <SheetTitle className="p-4">Add new Department</SheetTitle>
-              <Separator />
-            </SheetHeader>
-            <div className="flex flex-col justify-between ">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="flex flex-col gap-4 p-4"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Department name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} type="text" />
-                        </FormControl>
-                        <FormDescription>
-                          This is the public display name for the department.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button variant={'workspace'} type="submit">
-                    Save
-                  </Button>
-                </form>
-              </Form>
-              <div>
-                <Separator />
-                <div className="flex flex-row gap-2 content-end items-end justify-end p-4">
-                  <SheetClose asChild>
-                    <Button variant={'outline'}>Cancel</Button>
-                  </SheetClose>
-                </div>
-              </div>
-            </div>
-          </SheetContent>
-          <SheetOverlay />
-        </Sheet>
-      </div>
-      <div>
-        <Table>
-          <TableCaption>A list of Departments.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Department</TableHead>
-            </TableRow>
-          </TableHeader>
-          {
-            <TableBody>
-              {departments?.map((department: Department, i: number) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium">
-                    {department.name}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          }
-        </Table>
-      </div>
+    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-evenly items-center gap-2">
+      <h1 className="font-bold text-3xl text-slate-400">
+        {router.query.department}
+      </h1>
+      {router.query.department && (
+        <ResponsiveContainer height={350} width={'100%'}>
+          <LineChart data={barData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="name"
+              stroke="#888888"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
     </div>
   );
 }
 
 ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
-  return <WorkspaceRootLayout>{page}</WorkspaceRootLayout>;
+  return (
+    <WorkspaceRootLayout>
+      <DepartmentsLayout>{page}</DepartmentsLayout>
+    </WorkspaceRootLayout>
+  );
 };

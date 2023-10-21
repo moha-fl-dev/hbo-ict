@@ -113,3 +113,16 @@ export {
 export { Toaster } from './lib/components/toaster';
 
 export { useToast, toast } from './lib/hooks/use-toast';
+
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from './lib/components/select';
+
+export { DepartmentsLayout } from './lib/layouts/departments.layout';
