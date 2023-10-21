@@ -126,3 +126,6 @@ export {
 } from './lib/components/select';
 
 export { DepartmentsLayout } from './lib/layouts/departments.layout';
+export { TeamsLayout } from './lib/layouts/teams.layout';
+
+export { SummaryLink } from './lib/components/summaryLink';

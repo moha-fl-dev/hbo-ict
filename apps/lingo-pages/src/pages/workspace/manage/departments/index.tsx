@@ -1,4 +1,8 @@
-import { DepartmentsLayout, WorkspaceRootLayout } from '@hbo-ict/ui';
+import {
+  DepartmentsLayout,
+  SummaryLink,
+  WorkspaceRootLayout,
+} from '@hbo-ict/ui';
 import {
   Link1Icon,
   LinkNone1Icon,
@@ -156,6 +160,8 @@ export default function ManageDepartments() {
       </h1>
       <div className="grid grid-cols-2 gap-2">
         <SummaryLink
+          max={100}
+          min={10}
           icon={<LockOpen1Icon />}
           label={'Total open'}
           query={`department=${encodeURIComponent(
@@ -164,6 +170,8 @@ export default function ManageDepartments() {
         />
 
         <SummaryLink
+          max={100}
+          min={10}
           icon={<LockClosedIcon />}
           label={'Total closed'}
           query={`department=${encodeURIComponent(
@@ -171,6 +179,8 @@ export default function ManageDepartments() {
           )}&state=closed`}
         />
         <SummaryLink
+          max={100}
+          min={10}
           icon={<Link1Icon />}
           label={'Total assigned'}
           query={`department=${encodeURIComponent(
@@ -178,6 +188,8 @@ export default function ManageDepartments() {
           )}&state=assigned`}
         />
         <SummaryLink
+          max={100}
+          min={10}
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
           query={`department=${encodeURIComponent(
@@ -219,35 +231,3 @@ ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
     </WorkspaceRootLayout>
   );
 };
-
-interface SummaryLinksProps extends Omit<LinkProps, 'href'> {
-  icon: React.ReactElement;
-  label: string;
-  query: string;
-}
-
-function SummaryLink({ icon, label, query, ...rest }: SummaryLinksProps) {
-  const styledIcon = React.cloneElement(icon as React.ReactElement, {
-    className: 'text-black group-hover:text-white',
-    fontSize: 10,
-  });
-  return (
-    <Link
-      href={`/workspace/tickets?${query}`}
-      className="bg-workspace-secondary transition-colors rounded-sm p-2 hover:bg-workspace-primary group"
-      {...rest}
-    >
-      <div className="flex flex-row align-middle items-center justify-center gap-2 ">
-        {styledIcon}
-        <div className="flex flex-col gap-1">
-          <span className="text-black text-xs group-hover:text-white">
-            {Math.floor(Math.random() * 5000) + 1000}
-          </span>
-          <span className="text-black text-xs group-hover:text-white">
-            {label}
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
