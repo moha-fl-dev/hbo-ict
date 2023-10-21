@@ -1,10 +1,15 @@
 import { DepartmentsLayout, WorkspaceRootLayout } from '@hbo-ict/ui';
+import {
+  Link1Icon,
+  LinkNone1Icon,
+  LockClosedIcon,
+  LockOpen1Icon,
+} from '@radix-ui/react-icons';
 import { useIsFetching } from '@tanstack/react-query';
+import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
   Legend,
   Line,
@@ -111,7 +116,6 @@ export default function ManageDepartments() {
   if (isFetching > 0) {
     return (
       <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
-        {/* <div className="w-20 h-20 border-4 border-gray-15 rounded-full animate-spin"></div> */}
         <svg
           xmlns="http://www.w3.org/150/svg"
           width="24"
@@ -138,16 +142,55 @@ export default function ManageDepartments() {
   }
 
   if (!router.query.department) {
-    return <div className="col-span-4 bg-slate-50/50">No data to display</div>;
+    return (
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Select a department</span>
+      </div>
+    );
   }
 
   return (
-    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-evenly items-center gap-2">
+    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-evenly items-center gap-2 p-4">
       <h1 className="font-bold text-3xl text-slate-400">
         {router.query.department}
       </h1>
+      <div className="grid grid-cols-2 gap-2">
+        <SummaryLink
+          icon={<LockOpen1Icon />}
+          label={'Total open'}
+          query={`department=${encodeURIComponent(
+            router.query.department as string
+          )}&state=open`}
+        />
+
+        <SummaryLink
+          icon={<LockClosedIcon />}
+          label={'Total closed'}
+          query={`department=${encodeURIComponent(
+            router.query.department as string
+          )}&state=closed`}
+        />
+        <SummaryLink
+          icon={<Link1Icon />}
+          label={'Total assigned'}
+          query={`department=${encodeURIComponent(
+            router.query.department as string
+          )}&state=assigned`}
+        />
+        <SummaryLink
+          icon={<LinkNone1Icon />}
+          label={'Total unassigned'}
+          query={`department=${encodeURIComponent(
+            router.query.department as string
+          )}&state=unassigned`}
+        />
+      </div>
       {router.query.department && (
-        <ResponsiveContainer height={350} width={'100%'}>
+        <ResponsiveContainer
+          height={350}
+          width={'100%'}
+          className="lg:block hidden"
+        >
           <LineChart data={barData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
@@ -176,3 +219,35 @@ ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
     </WorkspaceRootLayout>
   );
 };
+
+interface SummaryLinksProps extends Omit<LinkProps, 'href'> {
+  icon: React.ReactElement;
+  label: string;
+  query: string;
+}
+
+function SummaryLink({ icon, label, query, ...rest }: SummaryLinksProps) {
+  const styledIcon = React.cloneElement(icon as React.ReactElement, {
+    className: 'text-black group-hover:text-white',
+    fontSize: 10,
+  });
+  return (
+    <Link
+      href={`/workspace/tickets?${query}`}
+      className="bg-workspace-secondary transition-colors rounded-sm p-2 hover:bg-workspace-primary group"
+      {...rest}
+    >
+      <div className="flex flex-row align-middle items-center justify-center gap-2 ">
+        {styledIcon}
+        <div className="flex flex-col gap-1">
+          <span className="text-black text-xs group-hover:text-white">
+            {Math.floor(Math.random() * 5000) + 1000}
+          </span>
+          <span className="text-black text-xs group-hover:text-white">
+            {label}
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
