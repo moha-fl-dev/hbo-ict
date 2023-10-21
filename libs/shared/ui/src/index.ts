@@ -127,5 +127,5 @@ export {
 
 export { DepartmentsLayout } from './lib/layouts/departments.layout';
 export { TeamsLayout } from './lib/layouts/teams.layout';
-
+export { ComponentsLayout } from './lib/layouts/components.layout';
 export { SummaryLink } from './lib/components/summaryLink';

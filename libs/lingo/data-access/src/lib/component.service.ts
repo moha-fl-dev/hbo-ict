@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client/lingo';
+import { Prisma } from '@prisma/client/lingo';
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 
 @Injectable()
 export class ComponentService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create({ data }: Prisma.ComponentCreateArgs) {
+  async create(data: Prisma.ComponentCreateInput) {
     const component = await this.prisma.component.create({
       data,
     });
@@ -22,11 +23,8 @@ export class ComponentService {
     return components;
   }
 
-  async all({ where, include }: Prisma.ComponentFindManyArgs) {
-    const components = await this.prisma.component.findMany({
-      where,
-      include,
-    });
+  async all() {
+    const components = await this.prisma.component.findMany();
 
     return components;
   }

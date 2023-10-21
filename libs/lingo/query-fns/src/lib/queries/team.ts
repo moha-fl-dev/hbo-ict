@@ -1,4 +1,4 @@
-import { SingleNameFieldDto } from '@hbo-ict/lingo/types';
+import { SingleNameFieldDto, TeamWithDepartment } from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
 import { Team } from '@prisma/client/lingo';
 
@@ -14,9 +14,16 @@ async function getAll() {
   return res.data;
 }
 
+async function getById(id: string): Promise<TeamWithDepartment> {
+  const res = await axiosInstance.get<TeamWithDepartment>(`team/${id}`);
+
+  return res.data as TeamWithDepartment;
+}
+
 const team = {
   create,
   getAll,
+  getById,
 };
 
 export { team };

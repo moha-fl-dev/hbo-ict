@@ -40,7 +40,10 @@ export class GlobalGuard implements CanActivate {
       return true;
     }
 
-    console.log(context.getHandler());
+    console.log({
+      controller: context.getClass(),
+      hanlder: context.getHandler(),
+    });
 
     const request = context.switchToHttp().getRequest();
 

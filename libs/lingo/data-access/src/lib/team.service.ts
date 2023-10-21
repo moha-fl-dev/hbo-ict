@@ -15,4 +15,13 @@ export class TeamService {
   all(): Promise<Team[]> {
     return this.prisma.team.findMany();
   }
+
+  async get({ where, include }: Prisma.TeamFindUniqueArgs): Promise<Team> {
+    const team = await this.prisma.team.findFirstOrThrow({
+      where,
+      include,
+    });
+
+    return team;
+  }
 }

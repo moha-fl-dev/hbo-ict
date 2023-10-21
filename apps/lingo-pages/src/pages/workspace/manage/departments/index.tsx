@@ -164,7 +164,7 @@ export default function ManageDepartments() {
           min={10}
           icon={<LockOpen1Icon />}
           label={'Total open'}
-          query={`department=${encodeURIComponent(
+          href={`department=${encodeURIComponent(
             router.query.department as string
           )}&state=open`}
         />
@@ -174,7 +174,7 @@ export default function ManageDepartments() {
           min={10}
           icon={<LockClosedIcon />}
           label={'Total closed'}
-          query={`department=${encodeURIComponent(
+          href={`department=${encodeURIComponent(
             router.query.department as string
           )}&state=closed`}
         />
@@ -183,7 +183,7 @@ export default function ManageDepartments() {
           min={10}
           icon={<Link1Icon />}
           label={'Total assigned'}
-          query={`department=${encodeURIComponent(
+          href={`department=${encodeURIComponent(
             router.query.department as string
           )}&state=assigned`}
         />
@@ -192,7 +192,7 @@ export default function ManageDepartments() {
           min={10}
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
-          query={`department=${encodeURIComponent(
+          href={`department=${encodeURIComponent(
             router.query.department as string
           )}&state=unassigned`}
         />

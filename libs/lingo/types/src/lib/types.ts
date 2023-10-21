@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Prisma } from '@prisma/client/lingo';
 
 /**
  * shared zod schema for front-end and back-end
@@ -80,3 +81,26 @@ export const SingleNameFieldSchema = z.object({
 });
 
 export type SingleNameFieldDto = z.infer<typeof SingleNameFieldSchema>;
+
+export const createComponentSchema = SingleNameFieldSchema.extend({
+  team: z.object({
+    id: z.string().uuid({
+      message: 'You must provide a valid team',
+    }),
+  }),
+});
+
+export type CreateComponentDto = z.infer<typeof createComponentSchema>;
+
+export const createTeamSchema = SingleNameFieldSchema.extend({
+  department: z.object({
+    id: z.string().uuid({
+      message: 'You must provide a valid team',
+    }),
+  }),
+});
+
+export type CreateTeamDto = z.infer<typeof createTeamSchema>;
+
+export type TeamWithDepartment = Prisma.TeamCreateInput &
+  Prisma.DepartmentCreateInput;

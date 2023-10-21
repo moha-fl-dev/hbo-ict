@@ -13,6 +13,7 @@ import {
   PrismaService,
 } from '@hbo-ict/lingo-prisma-client';
 import { TeamModule } from '../team/team.module';
+import { ComponentModule } from '../component/component.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +32,7 @@ import { TeamModule } from '../team/team.module';
     WorkspaceModule,
     DepartmentModule,
     TeamModule,
+    ComponentModule,
     LingoPrismaClientModule,
   ],
   controllers: [AppController],

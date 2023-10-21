@@ -1,11 +1,6 @@
 import { Api } from '@hbo-ict/query-fns';
 import { Department, Team } from '@prisma/client/lingo';
-import {
-  useIsFetching,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import router from 'next/router';
 import {
@@ -20,7 +15,12 @@ import {
 import { ScrollArea } from '../components/scroll-area';
 import { Button } from '../components/button';
 import { useForm } from 'react-hook-form';
-import { createTeamSchema, CreateTeamDto } from '@hbo-ict/lingo/types';
+import {
+  CreateComponentDto,
+  SingleNameFieldDto,
+  SingleNameFieldSchema,
+  createComponentSchema,
+} from '@hbo-ict/lingo/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '../hooks/use-toast';
 import {
@@ -45,6 +45,7 @@ import {
 import { Input } from '../components/input';
 import { Separator } from '../components/seperator';
 import { useState } from 'react';
+import { z } from 'zod';
 import {
   Select,
   SelectContent,
@@ -53,71 +54,44 @@ import {
   SelectValue,
 } from '../components/select';
 
-export function TeamsLayout({ children }: { children: React.ReactNode }) {
-  const isFetching = useIsFetching();
+export function ComponentsLayout({ children }: { children: React.ReactNode }) {
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const form = useForm<CreateTeamDto>({
-    resolver: zodResolver(createTeamSchema),
+
+  const form = useForm<CreateComponentDto>({
+    resolver: zodResolver(createComponentSchema),
     defaultValues: {
       name: '',
-      department: {
+      team: {
         id: '',
       },
     },
+  });
+
+  const { data: components } = useQuery<Department[]>({
+    queryKey: ['components'],
+    queryFn: Api.component.getAll,
   });
   const { data: teams } = useQuery<Team[]>({
     queryKey: ['teams'],
     queryFn: Api.team.getAll,
   });
-  const { data: departments } = useQuery<Department[]>({
-    queryKey: ['department'],
-    queryFn: Api.department.getAll,
-  });
 
   const { mutate } = useMutation({
-    mutationKey: ['create-team'],
-    mutationFn: Api.team.create,
+    mutationKey: ['create-component'],
+    mutationFn: Api.component.create,
     onSuccess(data) {
-      queryClient.invalidateQueries(['teams']);
+      queryClient.invalidateQueries(['components']);
       toast({
-        description: `${data.name} team has been created.`,
+        description: `${data.name} component has been created.`,
       });
       setSheetOpen(() => false);
-      router.push(`/workspace/manage/teams/?team=${data.name}`);
+      router.push(`/workspace/manage/components/?id=${data.id}`);
     },
   });
 
-  function onSubmit(values: CreateTeamDto) {
+  function onSubmit(values: CreateComponentDto) {
     mutate(values);
-  }
-
-  if (isFetching > 0) {
-    return (
-      <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
-        <svg
-          xmlns="http://www.w3.org/150/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="animate-spin"
-        >
-          <line x1="12" x2="12" y1="2" y2="6" />
-          <line x1="12" x2="12" y1="18" y2="22" />
-          <line x1="4.93" x2="7.76" y1="4.93" y2="7.76" />
-          <line x1="16.24" x2="19.07" y1="16.24" y2="19.07" />
-          <line x1="2" x2="6" y1="12" y2="12" />
-          <line x1="18" x2="22" y1="12" y2="12" />
-          <line x1="4.93" x2="7.76" y1="19.07" y2="16.24" />
-          <line x1="16.24" x2="19.07" y1="7.76" y2="4.93" />
-        </svg>
-      </div>
-    );
   }
 
   return (
@@ -125,12 +99,12 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
       <div className="col-span-1">
         <ScrollArea className="max-h-[80vh] h-[80vh] min-h[80vh]">
           <Table>
-            <TableCaption>End of teams list</TableCaption>
+            <TableCaption>End of components list</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="">
                   <div className="flex flex-row justify-between items-center">
-                    <span>Teams</span>
+                    <span>Components</span>
                     <Sheet open={sheetOpen}>
                       <SheetTrigger asChild>
                         <Button
@@ -150,7 +124,9 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                         className="p-0 md:max-w-xl sm:max-w-xl"
                       >
                         <SheetHeader>
-                          <SheetTitle className="p-4">Add new team</SheetTitle>
+                          <SheetTitle className="p-4">
+                            Add new Component
+                          </SheetTitle>
                           <Separator />
                         </SheetHeader>
                         <div className="flex flex-col justify-between ">
@@ -164,17 +140,17 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                                 name="name"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>Team name</FormLabel>
+                                    <FormLabel>Component name</FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder="Engineering"
+                                        placeholder="CMS"
                                         {...field}
                                         type="text"
                                       />
                                     </FormControl>
                                     <FormDescription>
                                       This is the public display name for the
-                                      team.
+                                      component.
                                     </FormDescription>
                                     <FormMessage />
                                   </FormItem>
@@ -182,10 +158,10 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                               />
                               <FormField
                                 control={form.control}
-                                name="department.id"
+                                name="team.id"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>Department</FormLabel>
+                                    <FormLabel>Team</FormLabel>
                                     <Select
                                       onValueChange={field.onChange}
                                       defaultValue={field.value}
@@ -196,26 +172,20 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                                         </SelectTrigger>
                                       </FormControl>
                                       <SelectContent>
-                                        <ScrollArea className="h-[400px]">
-                                          {departments?.map((department) => (
-                                            <SelectItem
-                                              className={`hover:bg-slate-50 transition-colors ${
-                                                field.value === department.id &&
-                                                'bg-slate-100'
-                                              }`}
-                                              key={department.id}
-                                              value={department.id}
-                                            >
-                                              {department.name}
-                                            </SelectItem>
-                                          ))}
-                                        </ScrollArea>
+                                        {teams?.map((team) => (
+                                          <SelectItem
+                                            key={team.id}
+                                            value={team.id}
+                                          >
+                                            {team.name}
+                                          </SelectItem>
+                                        ))}
                                       </SelectContent>
                                     </Select>
                                     <FormDescription>
-                                      You can manage departments in{' '}
-                                      <Link href="/workspace/manage/departments">
-                                        department settings
+                                      You can manage teams in{' '}
+                                      <Link href="/workspace/manage/teams">
+                                        team setting
                                       </Link>
                                       .
                                     </FormDescription>
@@ -224,7 +194,7 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                                 )}
                               />
                               <Button variant={'workspace'} type="submit">
-                                Create team
+                                Create component
                               </Button>
                             </form>
                           </Form>
@@ -250,22 +220,22 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {teams?.map((team, i) => (
+              {components?.map((component, i) => (
                 <TableRow key={i} className="">
                   <TableCell
                     className={`${
-                      router.query.team === team.name &&
+                      router.query.component === component.name &&
                       'bg-slate-100 hover:bg-slate-100'
                     } transition-colors hover:bg-slate-50`}
                     key={i}
                   >
                     <Link
-                      href={`/workspace/manage/teams/?team=${encodeURIComponent(
-                        team.name
+                      href={`/workspace/manage/components/?id=${encodeURIComponent(
+                        component.id
                       )}`}
                       className="w-full block"
                     >
-                      <span>{team.name}</span>
+                      <span>{component.name}</span>
                     </Link>
                   </TableCell>
                 </TableRow>
@@ -274,7 +244,6 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
           </Table>
         </ScrollArea>
       </div>
-
       {children}
     </div>
   );
