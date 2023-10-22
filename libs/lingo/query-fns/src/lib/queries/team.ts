@@ -23,10 +23,17 @@ async function getById(id: string): Promise<StrictTeamWithDepartment> {
   return res.data as StrictTeamWithDepartment;
 }
 
+async function getTeamsByDepartmentId(departmentId: string) {
+  const res = await axiosInstance.get(`team/${departmentId}/teams`);
+
+  return res.data;
+}
+
 const team = {
   create,
   getAll,
   getById,
+  getTeamsByDepartmentId,
 };
 
 export { team };

@@ -1,5 +1,6 @@
 import {
   DepartmentsLayout,
+  Separator,
   SummaryLink,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
@@ -9,7 +10,7 @@ import {
   LockClosedIcon,
   LockOpen1Icon,
 } from '@radix-ui/react-icons';
-import { useIsFetching } from '@tanstack/react-query';
+import { useIsFetching, useQueries, useQuery } from '@tanstack/react-query';
 import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -24,7 +25,9 @@ import {
   YAxis,
 } from 'recharts';
 
-import { ticketStatusEnum } from '@hbo-ict/lingo/types';
+import { Team, ticketStatusEnum } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
+import { Department } from '@prisma/client/lingo';
 
 const data = [
   {
@@ -103,8 +106,25 @@ const data = [
 
 export default function ManageDepartments() {
   const [barData, setBarData] = React.useState(data);
-  const isFetching = useIsFetching();
   const router = useRouter();
+
+  const departmentId = router.query.department as string;
+
+  const { data: department, isLoading } = useQuery<Department>(
+    ['department', departmentId],
+    () => Api.department.getById(departmentId),
+    {
+      enabled: !!departmentId,
+    }
+  );
+
+  const { data: teams } = useQuery<Array<Pick<Team, 'departmentId' | 'name'>>>(
+    ['teams', departmentId],
+    () => Api.team.getTeamsByDepartmentId(departmentId),
+    { enabled: !!department?.id }
+  );
+
+  console.log(teams);
 
   useEffect(() => {
     setBarData(
@@ -117,37 +137,17 @@ export default function ManageDepartments() {
         };
       })
     );
-  }, [router.query.department]);
+  }, [departmentId]);
 
-  if (isFetching > 0) {
+  if (isLoading) {
     return (
-      <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
-        <svg
-          xmlns="http://www.w3.org/150/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="animate-spin"
-        >
-          <line x1="12" x2="12" y1="2" y2="6" />
-          <line x1="12" x2="12" y1="18" y2="22" />
-          <line x1="4.93" x2="7.76" y1="4.93" y2="7.76" />
-          <line x1="16.24" x2="19.07" y1="16.24" y2="19.07" />
-          <line x1="2" x2="6" y1="12" y2="12" />
-          <line x1="18" x2="22" y1="12" y2="12" />
-          <line x1="4.93" x2="7.76" y1="19.07" y2="16.24" />
-          <line x1="16.24" x2="19.07" y1="7.76" y2="4.93" />
-        </svg>
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Loading department...</span>
       </div>
     );
   }
 
-  if (!router.query.department) {
+  if (!departmentId) {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
         <span className="text-slate-200">Select a department</span>
@@ -155,73 +155,95 @@ export default function ManageDepartments() {
     );
   }
 
-  return (
-    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-evenly items-center gap-2 p-4">
-      <h1 className="font-bold text-3xl text-slate-400">
-        {router.query.department}
-      </h1>
-      <div className="grid grid-cols-2 gap-2">
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LockOpen1Icon />}
-          label={'Total open'}
-          href={`/workspace/tickets?department=${encodeURIComponent(
-            router.query.department as string
-          )}&ticket_state=${ticketStatusEnum.OPEN}`}
-        />
-
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LockClosedIcon />}
-          label={'Total closed'}
-          href={`/workspace/tickets?department=${encodeURIComponent(
-            router.query.department as string
-          )}&ticket_state=${ticketStatusEnum.CLOSED}`}
-        />
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<Link1Icon />}
-          label={'Total assigned'}
-          href={`/workspace/tickets?department=${encodeURIComponent(
-            router.query.department as string
-          )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
-        />
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LinkNone1Icon />}
-          label={'Total unassigned'}
-          href={`/workspace/tickets?department=${encodeURIComponent(
-            router.query.department as string
-          )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
-        />
+  if (!department) {
+    return (
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Department not found</span>
       </div>
-      {router.query.department && (
-        <ResponsiveContainer
-          height={350}
-          width={'100%'}
-          className="lg:block hidden"
-        >
-          <LineChart data={barData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="name"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
-      )}
+    );
+  }
+
+  return (
+    <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-between gap-2 ">
+      <h1 className="font-bold text-3xl text-slate-400">{department.name}</h1>
+      <div className="flex flex-row gap-2 content-center">
+        {teams && (
+          <div className="flex flex-row gap-2">
+            {teams.map((team) => {
+              return (
+                <Link
+                  key={team.name}
+                  href={`/workspace/manage/departments/${department.id}/teams/${team.name}`}
+                >
+                  <span className="text-slate-200 hover:text-slate-100">
+                    {team.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+        <div className="grid grid-cols-2 gap-2">
+          <SummaryLink
+            max={100}
+            min={10}
+            icon={<LockOpen1Icon />}
+            label={'Total open'}
+            href={`/workspace/tickets?department=${encodeURIComponent(
+              department.id
+            )}&ticket_state=${ticketStatusEnum.OPEN}`}
+          />
+
+          <SummaryLink
+            max={100}
+            min={10}
+            icon={<LockClosedIcon />}
+            label={'Total closed'}
+            href={`/workspace/tickets?department=${encodeURIComponent(
+              department.id
+            )}&ticket_state=${ticketStatusEnum.CLOSED}`}
+          />
+          <SummaryLink
+            max={100}
+            min={10}
+            icon={<Link1Icon />}
+            label={'Total assigned'}
+            href={`/workspace/tickets?department=${encodeURIComponent(
+              department.id
+            )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
+          />
+          <SummaryLink
+            max={100}
+            min={10}
+            icon={<LinkNone1Icon />}
+            label={'Total unassigned'}
+            href={`/workspace/tickets?department=${encodeURIComponent(
+              department.id
+            )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
+          />
+        </div>
+      </div>
+      <ResponsiveContainer
+        height={350}
+        width={'100%'}
+        className="lg:block hidden"
+      >
+        <LineChart data={barData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="name"
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

@@ -174,7 +174,7 @@ export default function ManageComponents() {
         >
           <Link
             href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              team.Department.name as string
+              team.Department.id as string
             )}`}
           >
             {team.Department.name}
@@ -186,7 +186,7 @@ export default function ManageComponents() {
           variant={'link'}
           className="font-bold text-3xl text-slate-400"
         >
-          <Link href={`/workspace/manage/teams/?team=${team.name}`}>
+          <Link href={`/workspace/manage/teams/?team=${team.id}`}>
             {team.name}
           </Link>
         </Button>

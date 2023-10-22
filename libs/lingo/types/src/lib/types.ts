@@ -6,6 +6,8 @@ import {
   TicketStatusEnum,
 } from '@prisma/client/lingo';
 
+export type { Team } from '@prisma/client/lingo';
+
 /**
  * shared zod schema for front-end and back-end
  * see usage libs/lingo/auth/src/lib/auth.controller.ts

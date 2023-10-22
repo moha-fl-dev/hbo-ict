@@ -67,7 +67,7 @@ export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
         description: `${data?.name} department has been created.`,
       });
       setSheetOpen(() => false);
-      router.push(`/workspace/manage/departments/?department=${data.name}`);
+      router.push(`/workspace/manage/departments/?department=${data.id}`);
     },
   });
 
@@ -175,7 +175,7 @@ export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
                   >
                     <Link
                       href={`/workspace/manage/departments/?department=${encodeURIComponent(
-                        department.name
+                        department.id
                       )}`}
                       className="w-full block"
                     >

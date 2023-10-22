@@ -24,4 +24,22 @@ export class TeamService {
 
     return team;
   }
+
+  async getTeamsByDepartmentId({
+    departmentId,
+  }: Prisma.TeamWhereInput): Promise<
+    Array<Pick<Team, 'departmentId' | 'name'>>
+  > {
+    const res = await this.prisma.team.findMany({
+      where: {
+        departmentId,
+      },
+      select: {
+        departmentId: true,
+        name: true,
+      },
+    });
+
+    return res;
+  }
 }

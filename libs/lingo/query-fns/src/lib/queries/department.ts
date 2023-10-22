@@ -17,9 +17,16 @@ async function getAll() {
   return res.data;
 }
 
+async function getById(id: string) {
+  const res = await axiosInstance.get(`department/${id}`);
+
+  return res.data;
+}
+
 const department = {
   create,
   getAll,
+  getById,
 };
 
 export { department };

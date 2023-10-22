@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import {
   SingleNameFieldDto,
@@ -17,8 +17,17 @@ export class DepartmentController {
     return this.departmentService.create(req.body);
   }
 
+  @Get(':id')
+  async getOne(@Param('id') id: string) {
+    return this.departmentService.get({
+      where: {
+        id,
+      },
+    });
+  }
+
   @Get()
-  async get() {
+  async getAll() {
     return this.departmentService.all();
   }
 }

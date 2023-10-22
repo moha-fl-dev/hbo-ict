@@ -1,10 +1,20 @@
-import { SummaryLink, TeamsLayout, WorkspaceRootLayout } from '@hbo-ict/ui';
+import { Api } from '@hbo-ict/query-fns';
+import {
+  Button,
+  Separator,
+  SummaryLink,
+  TeamsLayout,
+  WorkspaceRootLayout,
+} from '@hbo-ict/ui';
+import { Team } from '@prisma/client/lingo';
 import {
   LockOpen1Icon,
   LockClosedIcon,
   Link1Icon,
   LinkNone1Icon,
 } from '@radix-ui/react-icons';
+import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -96,6 +106,27 @@ const data = [
 export default function ManageTeams() {
   const router = useRouter();
   const [chartData, setChartData] = useState(data);
+
+  const teamId = router.query.team as string;
+
+  const { data: team, isLoading } = useQuery<Team>(
+    ['team', teamId],
+    () => Api.team.getById(teamId),
+    {
+      enabled: !!teamId,
+    }
+  );
+
+  const departmentId = team?.departmentId;
+
+  const { data: department } = useQuery<Team>(
+    ['department', departmentId],
+    () => Api.department.getById(departmentId as string),
+    {
+      enabled: !!departmentId,
+    }
+  );
+
   useEffect(() => {
     setChartData(
       data.map((item) => {
@@ -107,9 +138,9 @@ export default function ManageTeams() {
         };
       })
     );
-  }, [router.query.team]);
+  }, [teamId]);
 
-  if (!router.query.team) {
+  if (!teamId) {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
         <span className="text-slate-200">Select a team</span>
@@ -117,10 +148,43 @@ export default function ManageTeams() {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Loading...</span>
+      </div>
+    );
+  }
+
+  if (!team || !department) {
+    return (
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Team not found</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-evenly items-center gap-2 p-4">
-      <h1 className="font-bold text-3xl text-slate-400">{router.query.team}</h1>
-      <div className="grid grid-cols-2 gap-2">
+    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-around items-center gap-2 p-4">
+      <div className="flex flex-col items-center">
+        <Button
+          asChild
+          variant={'link'}
+          className="font-bold text-3xl text-slate-400"
+        >
+          <Link
+            href={`/workspace/manage/departments/?department=${encodeURIComponent(
+              department.name
+            )}`}
+          >
+            {department.name}
+          </Link>
+        </Button>
+        <Separator orientation="vertical" />
+        <span className="font-bold text-3xl text-slate-400">{team.name}</span>
+        <Separator orientation="vertical" />
+      </div>
+      <div className="grid grid-cols-2 gap-2 mt-10">
         <SummaryLink
           max={100}
           min={10}

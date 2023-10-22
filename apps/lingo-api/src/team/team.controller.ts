@@ -34,13 +34,19 @@ export class TeamController {
         Department: {
           select: {
             name: true,
+            id: true,
           },
         },
       },
     });
 
-    console.log(res);
-
     return res;
+  }
+
+  @Get(':departmentId/teams')
+  async getTeamsByDepartment(@Param('departmentId') departmentId: string) {
+    return this.teamService.getTeamsByDepartmentId({
+      departmentId,
+    });
   }
 }

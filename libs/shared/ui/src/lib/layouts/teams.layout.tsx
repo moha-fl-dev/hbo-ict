@@ -54,9 +54,10 @@ import {
 } from '../components/select';
 
 export function TeamsLayout({ children }: { children: React.ReactNode }) {
-  const isFetching = useIsFetching();
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
+
   const queryClient = useQueryClient();
+
   const form = useForm<CreateTeamDto>({
     resolver: zodResolver(createTeamSchema),
     defaultValues: {
@@ -66,10 +67,12 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
       },
     },
   });
+
   const { data: teams } = useQuery<Team[]>({
     queryKey: ['teams'],
     queryFn: Api.team.getAll,
   });
+
   const { data: departments } = useQuery<Department[]>({
     queryKey: ['department'],
     queryFn: Api.department.getAll,
@@ -84,40 +87,13 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
         description: `${data.name} team has been created.`,
       });
       setSheetOpen(() => false);
-      router.push(`/workspace/manage/teams/?team=${data.name}`);
+      form.reset();
+      router.push(`/workspace/manage/teams/?team=${data.id}`);
     },
   });
 
   function onSubmit(values: CreateTeamDto) {
     mutate(values);
-  }
-
-  if (isFetching > 0) {
-    return (
-      <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
-        <svg
-          xmlns="http://www.w3.org/150/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="animate-spin"
-        >
-          <line x1="12" x2="12" y1="2" y2="6" />
-          <line x1="12" x2="12" y1="18" y2="22" />
-          <line x1="4.93" x2="7.76" y1="4.93" y2="7.76" />
-          <line x1="16.24" x2="19.07" y1="16.24" y2="19.07" />
-          <line x1="2" x2="6" y1="12" y2="12" />
-          <line x1="18" x2="22" y1="12" y2="12" />
-          <line x1="4.93" x2="7.76" y1="19.07" y2="16.24" />
-          <line x1="16.24" x2="19.07" y1="7.76" y2="4.93" />
-        </svg>
-      </div>
-    );
   }
 
   return (
@@ -215,7 +191,7 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                                     <FormDescription>
                                       You can manage departments in{' '}
                                       <Link href="/workspace/manage/departments">
-                                        department settings
+                                        <em>department settings</em>
                                       </Link>
                                       .
                                     </FormDescription>
@@ -254,14 +230,14 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                 <TableRow key={i} className="">
                   <TableCell
                     className={`${
-                      router.query.team === team.name &&
+                      router.query.team === team.id &&
                       'bg-slate-100 hover:bg-slate-100'
                     } transition-colors hover:bg-slate-50`}
                     key={i}
                   >
                     <Link
                       href={`/workspace/manage/teams/?team=${encodeURIComponent(
-                        team.name
+                        team.id
                       )}`}
                       className="w-full block"
                     >
