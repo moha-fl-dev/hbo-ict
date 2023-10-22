@@ -168,14 +168,20 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
                                         </SelectTrigger>
                                       </FormControl>
                                       <SelectContent>
-                                        {teams?.map((team) => (
-                                          <SelectItem
-                                            key={team.id}
-                                            value={team.id}
-                                          >
-                                            {team.name}
-                                          </SelectItem>
-                                        ))}
+                                        <ScrollArea className="max-h-[400px]">
+                                          {teams?.map((team) => (
+                                            <SelectItem
+                                              className={`hover:bg-slate-50 transition-colors ${
+                                                field.value === team.id &&
+                                                'bg-slate-100'
+                                              }`}
+                                              key={team.id}
+                                              value={team.id}
+                                            >
+                                              {team.name}
+                                            </SelectItem>
+                                          ))}
+                                        </ScrollArea>
                                       </SelectContent>
                                     </Select>
                                     <FormDescription>
