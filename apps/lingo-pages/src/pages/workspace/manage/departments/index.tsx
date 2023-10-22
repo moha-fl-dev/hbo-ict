@@ -1,7 +1,15 @@
 import {
   DepartmentsLayout,
+  ScrollArea,
   Separator,
   SummaryLink,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
 import {
@@ -109,7 +117,7 @@ export default function ManageDepartments() {
   const router = useRouter();
 
   const departmentId = router.query.department as string;
-
+  const teamId = router.query.team as string;
   const { data: department, isLoading } = useQuery<Department>(
     ['department', departmentId],
     () => Api.department.getById(departmentId),
@@ -118,7 +126,9 @@ export default function ManageDepartments() {
     }
   );
 
-  const { data: teams } = useQuery<Array<Pick<Team, 'departmentId' | 'name'>>>(
+  const { data: teams } = useQuery<
+    Array<Pick<Team, 'departmentId' | 'name' | 'id'>>
+  >(
     ['teams', departmentId],
     () => Api.team.getTeamsByDepartmentId(departmentId),
     { enabled: !!department?.id }
@@ -139,18 +149,18 @@ export default function ManageDepartments() {
     );
   }, [departmentId]);
 
-  if (isLoading) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Loading department...</span>
-      </div>
-    );
-  }
-
   if (!departmentId) {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
         <span className="text-slate-200">Select a department</span>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
+        <span className="text-slate-200">Loading department...</span>
       </div>
     );
   }
@@ -164,7 +174,116 @@ export default function ManageDepartments() {
   }
 
   return (
-    <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-between gap-2 ">
+    <div className="col-span-4 h-full">
+      <div className="grid grid-flow-col gap-4  grid-cols-3">
+        <div className="bg-slate-50 col-span-1">
+          <ScrollArea className="max-h-[80vh] h-[80vh] min-h[80vh]">
+            <Table>
+              <TableCaption>End of teams list</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="">
+                    <span>Teams</span>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {teams?.map((team, i) => (
+                  <TableRow key={i} className="">
+                    <TableCell key={i}>
+                      <Link
+                        href={`/workspace/manage/teams/?team=${encodeURIComponent(
+                          team.id
+                        )}`}
+                        className="w-full block"
+                      >
+                        <span>{team.name}</span>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </div>
+        <div className="col-span-2">
+          <div className="flex flex-col justify-between items-center h-full">
+            <h1 className="font-bold text-3xl text-slate-400">
+              {department.name}
+            </h1>
+            <div className="grid grid-cols-2 gap-2">
+              <SummaryLink
+                max={100}
+                min={10}
+                icon={<LockOpen1Icon />}
+                label={'Total open'}
+                href={`/workspace/tickets?department=${encodeURIComponent(
+                  department.id
+                )}&ticket_state=${ticketStatusEnum.OPEN}`}
+              />
+
+              <SummaryLink
+                max={100}
+                min={10}
+                icon={<LockClosedIcon />}
+                label={'Total closed'}
+                href={`/workspace/tickets?department=${encodeURIComponent(
+                  department.id
+                )}&ticket_state=${ticketStatusEnum.CLOSED}`}
+              />
+              <SummaryLink
+                max={100}
+                min={10}
+                icon={<Link1Icon />}
+                label={'Total assigned'}
+                href={`/workspace/tickets?department=${encodeURIComponent(
+                  department.id
+                )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
+              />
+              <SummaryLink
+                max={100}
+                min={10}
+                icon={<LinkNone1Icon />}
+                label={'Total unassigned'}
+                href={`/workspace/tickets?department=${encodeURIComponent(
+                  department.id
+                )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
+              />
+            </div>
+            <ResponsiveContainer height={350} width={'100%'}>
+              <LineChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="name"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
+  return (
+    <WorkspaceRootLayout>
+      <DepartmentsLayout>{page}</DepartmentsLayout>
+    </WorkspaceRootLayout>
+  );
+};
+
+{
+  /* <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-between gap-2 ">
       <h1 className="font-bold text-3xl text-slate-400">{department.name}</h1>
       <div className="flex flex-row gap-2 content-center">
         {teams && (
@@ -244,14 +363,5 @@ export default function ManageDepartments() {
           <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  );
+    </div> */
 }
-
-ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
-  return (
-    <WorkspaceRootLayout>
-      <DepartmentsLayout>{page}</DepartmentsLayout>
-    </WorkspaceRootLayout>
-  );
-};

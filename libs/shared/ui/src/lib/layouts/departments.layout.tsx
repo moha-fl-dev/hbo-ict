@@ -168,7 +168,7 @@ export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
                 <TableRow key={i} className="">
                   <TableCell
                     className={`${
-                      router.query.department === department.name &&
+                      router.query.department === department.id &&
                       'bg-slate-100 hover:bg-slate-100'
                     } transition-colors hover:bg-slate-50`}
                     key={i}
