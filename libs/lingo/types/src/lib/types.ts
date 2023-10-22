@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { Prisma } from '@prisma/client/lingo';
+import {
+  Prisma,
+  SeverityEnum,
+  TicketActionTypeEnum,
+  TicketStatusEnum,
+} from '@prisma/client/lingo';
 
 /**
  * shared zod schema for front-end and back-end
@@ -102,5 +107,11 @@ export const createTeamSchema = SingleNameFieldSchema.extend({
 
 export type CreateTeamDto = z.infer<typeof createTeamSchema>;
 
-export type TeamWithDepartment = Prisma.TeamCreateInput &
-  Prisma.DepartmentCreateInput;
+export type TicketStatus_ENUM = TicketStatusEnum;
+export const ticketStatusEnum = TicketStatusEnum;
+export type TicketSeverity_ENUM = SeverityEnum;
+export type TicketActionType_Enum = TicketActionTypeEnum;
+
+export type StrictTeamWithDepartment = Prisma.TeamGetPayload<{
+  include: { Department: true };
+}>;

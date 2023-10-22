@@ -1,4 +1,4 @@
-import { TeamWithDepartment } from '@hbo-ict/lingo/types';
+import { StrictTeamWithDepartment } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import {
   Button,
@@ -133,14 +133,12 @@ export default function ManageComponents() {
 
   const teamId = component?.teamId;
 
-  const { data: team } = useQuery<TeamWithDepartment>({
+  const { data: team } = useQuery<StrictTeamWithDepartment>({
     queryKey: ['team', teamId],
     queryFn: () => Api.team.getById(String(teamId)),
 
     enabled: !!teamId,
   });
-
-  console.log(team);
 
   if (!id) {
     return (
@@ -174,14 +172,11 @@ export default function ManageComponents() {
           variant={'link'}
           className="font-bold text-3xl text-slate-400"
         >
-          {/* @ts-ignore */}
           <Link
             href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              team.Department?.name as string
+              team.Department.name as string
             )}`}
           >
-            {/* can be solved by setting the correct type  */}
-            {/* @ts-ignore */}
             {team.Department.name}
           </Link>
         </Button>

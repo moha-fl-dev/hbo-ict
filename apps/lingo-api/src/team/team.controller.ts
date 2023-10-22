@@ -1,12 +1,6 @@
 import { TeamService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
-import {
-  CreateTeamDto,
-  SingleNameFieldDto,
-  SingleNameFieldSchema,
-  TeamWithDepartment,
-  createTeamSchema,
-} from '@hbo-ict/lingo/types';
+import { CreateTeamDto, createTeamSchema } from '@hbo-ict/lingo/types';
 import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 
 @Controller('team')
@@ -34,7 +28,7 @@ export class TeamController {
 
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    const res: TeamWithDepartment = await this.teamService.get({
+    const res = await this.teamService.get({
       where: { id },
       include: {
         Department: {

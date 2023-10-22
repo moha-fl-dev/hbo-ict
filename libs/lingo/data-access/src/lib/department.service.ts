@@ -87,21 +87,21 @@ export class DepartmentService {
     return department;
   }
 
-  async createTeam(
-    { where: { id } }: Prisma.DepartmentFindUniqueArgs,
-    payload: Prisma.TeamCreateInput
-  ) {
-    const department = await this.prisma.team.create({
-      data: payload,
-      include: {
-        Department: {
-          where: {
-            id,
-          },
-        },
-      },
-    });
+  // async createTeam(
+  //   { where: { id } }: Prisma.DepartmentFindUniqueArgs,
+  //   payload: Prisma.TeamCreateInput
+  // ) {
+  //   const department = await this.prisma.team.create({
+  //     data: payload,
+  //     include: {
+  //       Department: {
+  //         where: {
+  //           id,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    return department; // hmmm... have i done this right?
-  }
+  //   return department; // hmmm... have i done this right?
+  // }
 }

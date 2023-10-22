@@ -51,8 +51,8 @@ model Team {
   updatedAt DateTime @updatedAt
 
   members      Employee[]
-  Department   Department? @relation(fields: [departmentId], references: [id])
-  departmentId String?     @db.Uuid
+  Department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String     @db.Uuid
 
   components Component[]
   Tickets    Ticket[]

@@ -196,7 +196,7 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                                         </SelectTrigger>
                                       </FormControl>
                                       <SelectContent>
-                                        <ScrollArea className="h-[400px]">
+                                        <ScrollArea className="max-h-[400px]">
                                           {departments?.map((department) => (
                                             <SelectItem
                                               className={`hover:bg-slate-50 transition-colors ${

@@ -24,6 +24,8 @@ import {
   YAxis,
 } from 'recharts';
 
+import { ticketStatusEnum } from '@hbo-ict/lingo/types';
+
 const data = [
   {
     name: 'Jan',
@@ -166,7 +168,7 @@ export default function ManageDepartments() {
           label={'Total open'}
           href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&ticket_state=open`}
+          )}&ticket_state=${ticketStatusEnum.OPEN}`}
         />
 
         <SummaryLink
@@ -176,7 +178,7 @@ export default function ManageDepartments() {
           label={'Total closed'}
           href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&ticket_state=closed`}
+          )}&ticket_state=${ticketStatusEnum.CLOSED}`}
         />
         <SummaryLink
           max={100}
@@ -185,7 +187,7 @@ export default function ManageDepartments() {
           label={'Total assigned'}
           href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&ticket_state=assigned`}
+          )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
         />
         <SummaryLink
           max={100}
@@ -194,7 +196,7 @@ export default function ManageDepartments() {
           label={'Total unassigned'}
           href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&ticket_state=unassigned`}
+          )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
         />
       </div>
       {router.query.department && (
