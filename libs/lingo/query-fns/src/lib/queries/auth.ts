@@ -69,8 +69,8 @@ async function signUp(payload: SignUpDto): Promise<AuthResponse> {
  *  gets the current user
  * @returns promise of AuthResponse
  */
-async function me(): Promise<AuthResponse> {
-  const result = await axiosInstance.get<AuthResponse>('auth/me');
+async function me(): Promise<{ email: string }> {
+  const result = await axiosInstance.get<{ email: string }>('auth/me');
 
   return result.data;
 }

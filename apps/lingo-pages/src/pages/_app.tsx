@@ -3,10 +3,15 @@ import { Inter } from 'next/font/google';
 import { NextPage } from 'next';
 import type { ReactElement, ReactNode } from 'react';
 import '../styles/globals.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useIsFetching,
+} from '@tanstack/react-query';
 import Router from 'next/router';
 import { AxiosError } from 'axios';
 import { Toaster } from '@hbo-ict/ui';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 /**
  * @see
@@ -77,10 +82,30 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       `}</style>
       <QueryClientProvider client={queryClient}>
         <main>
+          <LoadingSpinner />
+          <ReactQueryDevtools initialIsOpen={false} />
           {<Toaster />}
           {getLayout(<Component {...pageProps} />)}
         </main>
       </QueryClientProvider>
     </>
+  );
+}
+
+function LoadingSpinner() {
+  const isFetching = useIsFetching();
+  if (!isFetching) {
+    return null;
+  }
+  return (
+    <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-white bg-opacity-50">
+      <div
+        className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+        role="status"
+        aria-label="loading"
+      >
+        <span className="sr-only">Loading...</span>
+      </div>
+    </div>
   );
 }

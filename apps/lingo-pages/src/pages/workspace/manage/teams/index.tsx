@@ -1,3 +1,4 @@
+import { useDepartment, useTeam } from '@hbo-ict/hooks';
 import { Api } from '@hbo-ict/query-fns';
 import {
   Button,
@@ -109,23 +110,11 @@ export default function ManageTeams() {
 
   const teamId = router.query.team as string;
 
-  const { data: team, isLoading } = useQuery<Team>(
-    ['team', teamId],
-    () => Api.team.getById(teamId),
-    {
-      enabled: !!teamId,
-    }
-  );
+  const { team } = useTeam(teamId);
 
-  const departmentId = team?.departmentId;
+  const departmentId = team?.departmentId as string;
 
-  const { data: department } = useQuery<Team>(
-    ['department', departmentId],
-    () => Api.department.getById(departmentId as string),
-    {
-      enabled: !!departmentId,
-    }
-  );
+  const { department } = useDepartment(departmentId);
 
   useEffect(() => {
     setChartData(
@@ -148,14 +137,6 @@ export default function ManageTeams() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Loading...</span>
-      </div>
-    );
-  }
-
   if (!team || !department) {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
@@ -174,7 +155,7 @@ export default function ManageTeams() {
         >
           <Link
             href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              department.name
+              department.id
             )}`}
           >
             {department.name}
@@ -191,7 +172,7 @@ export default function ManageTeams() {
           icon={<LockOpen1Icon />}
           label={'Total open'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            router.query.team as string
+            team.id
           )}&state=open`}
         />
 
@@ -201,7 +182,7 @@ export default function ManageTeams() {
           icon={<LockClosedIcon />}
           label={'Total closed'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            router.query.team as string
+            team.id
           )}&state=closed`}
         />
         <SummaryLink
@@ -210,7 +191,7 @@ export default function ManageTeams() {
           icon={<Link1Icon />}
           label={'Total assigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            router.query.team as string
+            team.id
           )}&state=assigned`}
         />
         <SummaryLink
@@ -219,7 +200,7 @@ export default function ManageTeams() {
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            router.query.team as string
+            team.id
           )}&state=unassigned`}
         />
       </div>

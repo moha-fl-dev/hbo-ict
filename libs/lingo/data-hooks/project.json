@@ -1,0 +1,16 @@
+{
+  "name": "hooks",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/lingo/data-hooks/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/lingo/data-hooks/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

@@ -52,6 +52,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/select';
+import { useDepartments, useTeams } from '@hbo-ict/hooks';
 
 export function TeamsLayout({ children }: { children: React.ReactNode }) {
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
@@ -68,15 +69,9 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const { data: teams } = useQuery<Team[]>({
-    queryKey: ['teams'],
-    queryFn: Api.team.getAll,
-  });
+  const { teams } = useTeams();
 
-  const { data: departments } = useQuery<Department[]>({
-    queryKey: ['department'],
-    queryFn: Api.department.getAll,
-  });
+  const { departments } = useDepartments();
 
   const { mutate } = useMutation({
     mutationKey: ['create-team'],

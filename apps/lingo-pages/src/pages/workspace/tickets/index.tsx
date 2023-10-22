@@ -3,7 +3,7 @@ import { ScrollArea, WorkspaceRootLayout } from '@hbo-ict/ui';
 export default function TicketsRoot() {
   return (
     <div className="h-full">
-      {Array.from({ length: 100 }, (_, i) => (
+      {Array.from({ length: 1000 }, (_, i) => (
         <h1 key={i}>Tickets Root {i}</h1>
       ))}
     </div>

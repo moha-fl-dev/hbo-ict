@@ -1,7 +1,6 @@
 import {
   DepartmentsLayout,
   ScrollArea,
-  Separator,
   SummaryLink,
   Table,
   TableBody,
@@ -18,8 +17,7 @@ import {
   LockClosedIcon,
   LockOpen1Icon,
 } from '@radix-ui/react-icons';
-import { useIsFetching, useQueries, useQuery } from '@tanstack/react-query';
-import Link, { LinkProps } from 'next/link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import {
@@ -33,9 +31,12 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Team, ticketStatusEnum } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
-import { Department } from '@prisma/client/lingo';
+import {
+  useDepartment,
+  useTeams,
+  useTeamsWithDepartment,
+} from '@hbo-ict/hooks';
+import { TicketStatusEnum } from '@hbo-ict/lingo/types';
 
 const data = [
   {
@@ -117,24 +118,10 @@ export default function ManageDepartments() {
   const router = useRouter();
 
   const departmentId = router.query.department as string;
-  const teamId = router.query.team as string;
-  const { data: department, isLoading } = useQuery<Department>(
-    ['department', departmentId],
-    () => Api.department.getById(departmentId),
-    {
-      enabled: !!departmentId,
-    }
-  );
 
-  const { data: teams } = useQuery<
-    Array<Pick<Team, 'departmentId' | 'name' | 'id'>>
-  >(
-    ['teams', departmentId],
-    () => Api.team.getTeamsByDepartmentId(departmentId),
-    { enabled: !!department?.id }
-  );
+  const { department } = useDepartment(departmentId);
 
-  console.log(teams);
+  const { teams } = useTeamsWithDepartment(departmentId);
 
   useEffect(() => {
     setBarData(
@@ -153,14 +140,6 @@ export default function ManageDepartments() {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
         <span className="text-slate-200">Select a department</span>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Loading department...</span>
       </div>
     );
   }
@@ -219,7 +198,7 @@ export default function ManageDepartments() {
                 label={'Total open'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${ticketStatusEnum.OPEN}`}
+                )}&ticket_state=${TicketStatusEnum.OPEN}`}
               />
 
               <SummaryLink
@@ -229,7 +208,7 @@ export default function ManageDepartments() {
                 label={'Total closed'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${ticketStatusEnum.CLOSED}`}
+                )}&ticket_state=${TicketStatusEnum.CLOSED}`}
               />
               <SummaryLink
                 max={100}
@@ -238,7 +217,7 @@ export default function ManageDepartments() {
                 label={'Total assigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
+                )}&ticket_state=${TicketStatusEnum.IN_PROGRESS}`}
               />
               <SummaryLink
                 max={100}
@@ -247,7 +226,7 @@ export default function ManageDepartments() {
                 label={'Total unassigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
+                )}&ticket_state=${TicketStatusEnum.ON_HOLD}`}
               />
             </div>
             <ResponsiveContainer height={350} width={'100%'}>
@@ -281,87 +260,3 @@ ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
     </WorkspaceRootLayout>
   );
 };
-
-{
-  /* <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-between gap-2 ">
-      <h1 className="font-bold text-3xl text-slate-400">{department.name}</h1>
-      <div className="flex flex-row gap-2 content-center">
-        {teams && (
-          <div className="flex flex-row gap-2">
-            {teams.map((team) => {
-              return (
-                <Link
-                  key={team.name}
-                  href={`/workspace/manage/departments/${department.id}/teams/${team.name}`}
-                >
-                  <span className="text-slate-200 hover:text-slate-100">
-                    {team.name}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-        <div className="grid grid-cols-2 gap-2">
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LockOpen1Icon />}
-            label={'Total open'}
-            href={`/workspace/tickets?department=${encodeURIComponent(
-              department.id
-            )}&ticket_state=${ticketStatusEnum.OPEN}`}
-          />
-
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LockClosedIcon />}
-            label={'Total closed'}
-            href={`/workspace/tickets?department=${encodeURIComponent(
-              department.id
-            )}&ticket_state=${ticketStatusEnum.CLOSED}`}
-          />
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<Link1Icon />}
-            label={'Total assigned'}
-            href={`/workspace/tickets?department=${encodeURIComponent(
-              department.id
-            )}&ticket_state=${ticketStatusEnum.IN_PROGRESS}`}
-          />
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LinkNone1Icon />}
-            label={'Total unassigned'}
-            href={`/workspace/tickets?department=${encodeURIComponent(
-              department.id
-            )}&ticket_state=${ticketStatusEnum.ON_HOLD}`}
-          />
-        </div>
-      </div>
-      <ResponsiveContainer
-        height={350}
-        width={'100%'}
-        className="lg:block hidden"
-      >
-        <LineChart data={barData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="name"
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div> */
-}

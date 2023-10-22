@@ -1,4 +1,5 @@
 import {
+  AvatarIcon,
   BellIcon,
   DotsVerticalIcon,
   ExitIcon,
@@ -21,6 +22,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from '../components/dropdown.menu';
+import { useCurrentUser } from '@hbo-ict/hooks';
 
 export function WorkspaceRootLayout({
   children,
@@ -76,17 +78,20 @@ export function WorkspaceRootLayout({
 }
 
 function UserDropDown() {
+  const { currentUser } = useCurrentUser();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <Avatar className="w-6 h-6 ">
-          <AvatarFallback className="bg-workspace-foreground text-white hover:bg-workspace-primary transition-colors">
-            JD
-          </AvatarFallback>
-        </Avatar>
+        <Button
+          variant={'outline'}
+          size={'icon'}
+          className="flex flex-row gap-2"
+        >
+          <AvatarIcon />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-5">
-        <DropdownMenuLabel>Account</DropdownMenuLabel>
+        <DropdownMenuLabel>{currentUser?.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild className="cursor-pointer">

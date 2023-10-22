@@ -1,3 +1,4 @@
+import { useComponent, useTeam } from '@hbo-ict/hooks';
 import { StrictTeamWithDepartment } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import {
@@ -106,9 +107,10 @@ const data = [
 
 export default function ManageComponents() {
   const [barData, setBarData] = useState(data);
-  const {
-    query: { id },
-  } = useRouter();
+
+  const router = useRouter();
+
+  const componentId = router.query.component as string;
 
   useEffect(() => {
     setBarData(
@@ -121,37 +123,18 @@ export default function ManageComponents() {
         };
       })
     );
-  }, [id]);
+  }, [componentId]);
 
-  const { data: component, isLoading } = useQuery<Component>(
-    ['component', id],
-    () => Api.component.getById(String(id)),
-    {
-      enabled: !!id,
-    }
-  );
+  const { component } = useComponent(componentId);
 
-  const teamId = component?.teamId;
+  const teamId = component?.teamId as string;
 
-  const { data: team } = useQuery<StrictTeamWithDepartment>({
-    queryKey: ['team', teamId],
-    queryFn: () => Api.team.getById(String(teamId)),
+  const { team } = useTeam(teamId);
 
-    enabled: !!teamId,
-  });
-
-  if (!id) {
+  if (!componentId) {
     return (
       <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
         <span className="text-slate-200">Select a component</span>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Loading...</span>
       </div>
     );
   }
@@ -202,7 +185,7 @@ export default function ManageComponents() {
           icon={<LockOpen1Icon />}
           label={'Total open'}
           href={`department=${encodeURIComponent(
-            router.query.department as string
+            team.Department.id
           )}&state=open`}
         />
 
@@ -212,7 +195,7 @@ export default function ManageComponents() {
           icon={<LockClosedIcon />}
           label={'Total closed'}
           href={`department=${encodeURIComponent(
-            router.query.department as string
+            team.Department.id
           )}&state=closed`}
         />
         <SummaryLink
@@ -221,7 +204,7 @@ export default function ManageComponents() {
           icon={<Link1Icon />}
           label={'Total assigned'}
           href={`department=${encodeURIComponent(
-            router.query.department as string
+            team.Department.id
           )}&state=assigned`}
         />
         <SummaryLink
@@ -230,7 +213,7 @@ export default function ManageComponents() {
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
           href={`department=${encodeURIComponent(
-            router.query.department as string
+            team.Department.id
           )}&state=unassigned`}
         />
       </div>

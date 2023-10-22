@@ -6,7 +6,8 @@ import {
   TicketStatusEnum,
 } from '@prisma/client/lingo';
 
-export type { Team } from '@prisma/client/lingo';
+export type { Team, Component, Department } from '@prisma/client/lingo';
+export { TicketStatusEnum, TicketActionTypeEnum } from '@prisma/client/lingo';
 
 /**
  * shared zod schema for front-end and back-end

@@ -43,6 +43,7 @@ import {
 import { Input } from '../components/input';
 import { Separator } from '../components/seperator';
 import { useState } from 'react';
+import { useDepartments } from '@hbo-ict/hooks';
 
 export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
@@ -53,10 +54,7 @@ export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
       name: '',
     },
   });
-  const { data: departments } = useQuery<Department[]>({
-    queryKey: ['departments'],
-    queryFn: Api.department.getAll,
-  });
+  const { departments } = useDepartments();
 
   const { mutate } = useMutation({
     mutationKey: ['create-department'],

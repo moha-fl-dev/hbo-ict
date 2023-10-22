@@ -53,6 +53,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/select';
+import { useComponents, useTeams } from '@hbo-ict/hooks';
 
 export function ComponentsLayout({ children }: { children: React.ReactNode }) {
   const [sheetOpen, setSheetOpen] = useState<boolean>(false);
@@ -68,14 +69,9 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const { data: components } = useQuery<Department[]>({
-    queryKey: ['components'],
-    queryFn: Api.component.getAll,
-  });
-  const { data: teams } = useQuery<Team[]>({
-    queryKey: ['teams'],
-    queryFn: Api.team.getAll,
-  });
+  const { components } = useComponents();
+
+  const { teams } = useTeams();
 
   const { mutate } = useMutation({
     mutationKey: ['create-component'],
@@ -86,7 +82,7 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
         description: `${data.name} component has been created.`,
       });
       setSheetOpen(() => false);
-      router.push(`/workspace/manage/components/?id=${data.id}`);
+      router.push(`/workspace/manage/components/?component=${data.id}`);
     },
   });
 
@@ -224,13 +220,13 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
                 <TableRow key={i} className="">
                   <TableCell
                     className={`${
-                      router.query.component === component.name &&
+                      router.query.component === component.id &&
                       'bg-slate-100 hover:bg-slate-100'
                     } transition-colors hover:bg-slate-50`}
                     key={i}
                   >
                     <Link
-                      href={`/workspace/manage/components/?id=${encodeURIComponent(
+                      href={`/workspace/manage/components/?component=${encodeURIComponent(
                         component.id
                       )}`}
                       className="w-full block"
