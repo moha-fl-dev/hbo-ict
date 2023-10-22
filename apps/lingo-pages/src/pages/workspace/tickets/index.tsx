@@ -1,13 +1,21 @@
-import { WorkspaceRootLayout } from '@hbo-ict/ui';
+import { ScrollArea, WorkspaceRootLayout } from '@hbo-ict/ui';
 
 export default function TicketsRoot() {
   return (
-    <div>
-      <h1>Tickets Root</h1>
+    <div className="h-full">
+      {Array.from({ length: 100 }, (_, i) => (
+        <h1 key={i}>Tickets Root {i}</h1>
+      ))}
     </div>
   );
 }
 
 TicketsRoot.getLayout = function getLayout(page: JSX.Element) {
-  return <WorkspaceRootLayout>{page}</WorkspaceRootLayout>;
+  return (
+    <WorkspaceRootLayout>
+      <ScrollArea className="max-h-[90vh] h-[90vh] min-h[90vh]">
+        {page}
+      </ScrollArea>
+    </WorkspaceRootLayout>
+  );
 };
