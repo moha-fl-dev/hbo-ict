@@ -164,9 +164,9 @@ export default function ManageDepartments() {
           min={10}
           icon={<LockOpen1Icon />}
           label={'Total open'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&state=open`}
+          )}&ticket_state=open`}
         />
 
         <SummaryLink
@@ -174,27 +174,27 @@ export default function ManageDepartments() {
           min={10}
           icon={<LockClosedIcon />}
           label={'Total closed'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&state=closed`}
+          )}&ticket_state=closed`}
         />
         <SummaryLink
           max={100}
           min={10}
           icon={<Link1Icon />}
           label={'Total assigned'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&state=assigned`}
+          )}&ticket_state=assigned`}
         />
         <SummaryLink
           max={100}
           min={10}
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?department=${encodeURIComponent(
             router.query.department as string
-          )}&state=unassigned`}
+          )}&ticket_state=unassigned`}
         />
       </div>
       {router.query.department && (
