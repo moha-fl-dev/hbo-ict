@@ -49,6 +49,12 @@ export const SignUpSchema = eamilAndPasswordSchema
     path: ['confirm_password'],
   });
 
+export const resetPasswordSchema = z.object({
+  password: z.string().min(8, {
+    message: 'Password must be at least 8 characters long',
+  }),
+});
+
 /**
  * The DTO for the sign up endpoint.
  */
@@ -60,7 +66,7 @@ export type SignInDto = z.infer<typeof SignInSchema>;
 /**
  * The DTO for the reset password endpoint.
  */
-export type ResetPasswordDto = z.infer<typeof emailSchema>;
+export type ResetPasswordDto = z.infer<typeof resetPasswordSchema>;
 
 /**
  * The response from the auth endpoint when the user sign in is success.

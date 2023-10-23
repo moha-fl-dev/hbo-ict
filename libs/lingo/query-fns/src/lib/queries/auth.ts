@@ -22,8 +22,8 @@ async function refreshToken() {
  * @param payload ResetPasswordDto
  * @returns promise of void
  */
-async function forgotPassword(payload: ResetPasswordDto): Promise<void> {
-  const result = await axiosInstance.post('auth/forgot-password', payload);
+async function resetPassword(payload: ResetPasswordDto): Promise<void> {
+  const result = await axiosInstance.post('auth/reset-password', payload);
 
   return result.data;
 }
@@ -80,7 +80,9 @@ async function me(): Promise<{ email: string }> {
  * @returns promise of void
  */
 async function signOut(): Promise<void> {
-  await axiosInstance.post('auth/sign-out');
+  const res = await axiosInstance.post('auth/sign-out');
+
+  return res.data;
 }
 
 /**
@@ -99,7 +101,7 @@ const auth = {
   me,
   signOut,
   refresh,
-  forgotPassword,
+  resetPassword,
   refreshToken,
 };
 

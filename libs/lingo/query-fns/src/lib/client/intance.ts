@@ -80,7 +80,7 @@ axiosInstance.interceptors.response.use(
   },
   async (error: AxiosError) => {
     const originalRequest = error.config! as OriginalRequestConfig;
-
+    console.log(originalRequest.url);
     // Prevent infinite loops or retrying requests that have no recoverable errors
     if (
       !error.response ||

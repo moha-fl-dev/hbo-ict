@@ -97,4 +97,34 @@ export class AuthService {
       expires_in: session!.expires_in,
     };
   }
+
+  async resetPassword({ password }: { password: string }) {
+    const client = await this.supabaseService.getAnonClient();
+
+    const { data, error } = await client.auth.updateUser({ password });
+
+    if (error instanceof AuthError) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
+
+    return {
+      status: HttpStatus.ACCEPTED,
+      message: 'Password reset',
+    };
+  }
+
+  async signOut(jwt: string) {
+    const client = await this.supabaseService.getAdminClient();
+
+    const { data, error } = await client.auth.admin.signOut(jwt, 'global');
+
+    if (error instanceof AuthError) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
+
+    return {
+      status: HttpStatus.ACCEPTED,
+      message: 'User signed out',
+    };
+  }
 }

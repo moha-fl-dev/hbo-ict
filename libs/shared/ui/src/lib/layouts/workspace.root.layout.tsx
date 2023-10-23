@@ -23,6 +23,9 @@ import {
   DropdownMenuItem,
 } from '../components/dropdown.menu';
 import { useCurrentUser } from '@hbo-ict/hooks';
+import { useMutation } from '@tanstack/react-query';
+import { Api } from '@hbo-ict/query-fns';
+import { useRouter } from 'next/router';
 
 export function WorkspaceRootLayout({
   children,
@@ -79,6 +82,20 @@ export function WorkspaceRootLayout({
 
 function UserDropDown() {
   const { currentUser } = useCurrentUser();
+  const router = useRouter();
+  const { mutate } = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: Api.auth.signOut,
+
+    onSettled: () => {
+      router.push('/');
+    },
+  });
+
+  function handlerSignOut() {
+    mutate();
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -99,7 +116,7 @@ function UserDropDown() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handlerSignOut}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

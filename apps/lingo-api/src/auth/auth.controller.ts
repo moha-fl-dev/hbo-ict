@@ -14,6 +14,8 @@ import {
   SignInDto,
   SignUpDto,
   SignUpSchema,
+  ResetPasswordDto,
+  resetPasswordSchema,
 } from '@hbo-ict/lingo/types';
 import { Request, Response } from 'express';
 import { Public, ZodValidate } from '@hbo-ict/lingo-utils';
@@ -116,11 +118,6 @@ export class AuthController {
     });
   }
 
-  @Post('sign-out')
-  async logout() {
-    return 'logout';
-  }
-
   @Public()
   @UseGuards(TokensGuard)
   @Get('refresh-token')
@@ -162,6 +159,52 @@ export class AuthController {
 
     response.status(HttpStatus.CREATED).send({
       message: 'Token refreshed!',
+    });
+  }
+
+  @Post('reset-password')
+  @ZodValidate<ResetPasswordDto>(resetPasswordSchema)
+  async resetPassword(
+    @Body() payload: ResetPasswordDto,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const { status, message } = await this.authService.resetPassword(payload);
+
+    return {
+      status,
+      message,
+    };
+  }
+
+  @Post('sign-out')
+  async signOut(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const jwt = request.signedCookies.access_token;
+
+    const { status, message } = await this.authService.signOut(jwt);
+
+    response.clearCookie('access_token', {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+    response.clearCookie('refresh_token', {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+    response.status(status).send({
+      message,
     });
   }
 }
