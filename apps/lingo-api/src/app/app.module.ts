@@ -14,6 +14,7 @@ import {
 } from '@hbo-ict/lingo-prisma-client';
 import { TeamModule } from '../team/team.module';
 import { ComponentModule } from '../component/component.module';
+import { EmployeeModule } from '../employee/employee.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +34,7 @@ import { ComponentModule } from '../component/component.module';
     DepartmentModule,
     TeamModule,
     ComponentModule,
+    EmployeeModule,
     LingoPrismaClientModule,
   ],
   controllers: [AppController],

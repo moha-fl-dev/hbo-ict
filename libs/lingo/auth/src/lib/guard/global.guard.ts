@@ -10,6 +10,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { SupabaseService } from '../supabase/supabase.service';
+import { User } from '@supabase/supabase-js';
 
 /**
  * Global guard that checks if the user is authenticated
@@ -52,6 +53,7 @@ export class GlobalGuard implements CanActivate {
     if (!access_token || !refresh_token) {
       throw new UnauthorizedException();
     }
+    let _user: User;
     try {
       const client = await this.supabseService.getAnonClient();
 
@@ -62,9 +64,11 @@ export class GlobalGuard implements CanActivate {
       if (!user) {
         throw new UnauthorizedException();
       }
+      _user = user;
     } catch {
       throw new UnauthorizedException();
     }
+    request['user'] = _user;
     return true;
   }
 

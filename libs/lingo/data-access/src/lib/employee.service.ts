@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, Prisma, Employee } from '@prisma/client/lingo';
+import { Prisma, Employee } from '@prisma/client/lingo';
+
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 
 @Injectable()
 export class EmployeeService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create({ data }: Prisma.EmployeeCreateArgs) {
-    const employee = await this.prisma.employee.create({
-      data,
+  async upsert({ data }: Prisma.EmployeeCreateArgs) {
+    const employee = await this.prisma.employee.upsert({
+      create: data,
+      update: data,
+      where: {
+        id: String(data.id),
+      },
     });
 
     return employee;

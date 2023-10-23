@@ -6,7 +6,12 @@ import {
   TicketStatusEnum,
 } from '@prisma/client/lingo';
 
-export type { Team, Component, Department } from '@prisma/client/lingo';
+export type {
+  Team,
+  Component,
+  Department,
+  Employee,
+} from '@prisma/client/lingo';
 export { TicketStatusEnum, TicketActionTypeEnum } from '@prisma/client/lingo';
 
 /**
@@ -117,4 +122,33 @@ export type TicketActionType_Enum = TicketActionTypeEnum;
 
 export type StrictTeamWithDepartment = Prisma.TeamGetPayload<{
   include: { Department: true };
+}>;
+
+export const accountSchema = z.object({
+  name: z.string().min(2, {
+    message: 'name must be at least 2 characters.',
+  }),
+  department: z.object({
+    id: z.string().uuid({
+      message: 'You must select a department.',
+    }),
+  }),
+  team: z.object({
+    id: z.string().uuid({
+      message: 'You must select a team.',
+    }),
+  }),
+});
+
+export const passwordSchema = z.object({
+  password: z.string().min(8, {
+    message: 'Password must be at least 8 characters.',
+  }),
+});
+
+export type AccountDto = z.infer<typeof accountSchema>;
+export type PasswordDto = z.infer<typeof passwordSchema>;
+
+export type ExtendedEmployee = Prisma.EmployeeGetPayload<{
+  include: { Team: true };
 }>;

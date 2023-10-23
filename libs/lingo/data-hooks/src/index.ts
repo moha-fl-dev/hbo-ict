@@ -7,3 +7,4 @@ export {
   useDepartmentWithTeams,
   useDepartments,
 } from './lib/use-department';
+export { useCurrentEmployeeExtendedDetails } from './lib/use-current-employee';
