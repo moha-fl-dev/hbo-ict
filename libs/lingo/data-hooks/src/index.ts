@@ -8,3 +8,4 @@ export {
   useDepartments,
 } from './lib/use-department';
 export { useCurrentEmployeeExtendedDetails } from './lib/use-current-employee';
+export { usePerformSignOut } from './lib/use-auth';

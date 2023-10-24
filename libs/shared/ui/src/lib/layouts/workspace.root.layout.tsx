@@ -1,11 +1,4 @@
-import {
-  AvatarIcon,
-  BellIcon,
-  DotsVerticalIcon,
-  ExitIcon,
-  PlusIcon,
-} from '@radix-ui/react-icons';
-import { Avatar, AvatarFallback } from '../components/avatar';
+import { AvatarIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Button } from '../components/button';
 import { Input } from '../components/input';
 import { Logo } from '../components/logo';
@@ -22,10 +15,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from '../components/dropdown.menu';
-import { useCurrentUser } from '@hbo-ict/hooks';
-import { useMutation } from '@tanstack/react-query';
-import { Api } from '@hbo-ict/query-fns';
-import { useRouter } from 'next/router';
+import { useCurrentUser, usePerformSignOut } from '@hbo-ict/hooks';
 
 export function WorkspaceRootLayout({
   children,
@@ -82,18 +72,10 @@ export function WorkspaceRootLayout({
 
 function UserDropDown() {
   const { currentUser } = useCurrentUser();
-  const router = useRouter();
-  const { mutate } = useMutation({
-    mutationKey: ['logout'],
-    mutationFn: Api.auth.signOut,
-
-    onSettled: () => {
-      router.push('/');
-    },
-  });
+  const { signOut } = usePerformSignOut();
 
   function handlerSignOut() {
-    mutate();
+    signOut();
   }
 
   return (

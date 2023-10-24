@@ -2,6 +2,7 @@ import {
   useCurrentEmployeeExtendedDetails,
   useCurrentUser,
   useDepartments,
+  usePerformSignOut,
   useTeamsWithDepartment,
 } from '@hbo-ict/hooks';
 import {
@@ -28,16 +29,17 @@ import {
   SelectTrigger,
   SelectValue,
   WorkspaceRootLayout,
+  useToast,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { set, useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   accountSchema,
   AccountDto,
-  passwordSchema,
-  PasswordDto,
+  ResetPasswordDto,
+  resetPasswordSchema,
 } from '@hbo-ict/lingo/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Api } from '@hbo-ict/query-fns';
@@ -49,11 +51,13 @@ export default function ManageAccount() {
   >(null);
 
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const { departments } = useDepartments();
   const { currentUser } = useCurrentUser();
   const { currentEmployeeExtendedDetails } =
     useCurrentEmployeeExtendedDetails();
+  const { signOut } = usePerformSignOut();
 
   const form = useForm<AccountDto>({
     resolver: zodResolver(accountSchema),
@@ -90,8 +94,8 @@ export default function ManageAccount() {
     }
   }, [teams]);
 
-  const accountForm = useForm<PasswordDto>({
-    resolver: zodResolver(passwordSchema),
+  const accountForm = useForm<ResetPasswordDto>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       password: '',
     },
@@ -100,18 +104,31 @@ export default function ManageAccount() {
     mutationKey: ['update-account'],
     mutationFn: Api.employee.upsert,
     onSuccess: (data) => {
-      console.log(data);
       queryClient.invalidateQueries(['currentEmployeeExtendedDetails']);
+      toast({
+        description: 'Your account has been updated',
+      });
     },
   });
 
   function onSubmit(values: AccountDto) {
-    console.log(values);
     mutate(values);
   }
+  const { mutate: mutatePasswordReset } = useMutation({
+    mutationKey: ['update-password'],
+    mutationFn: Api.auth.resetPassword,
+    onSuccess: (data) => {
+      toast({
+        description: 'Your password has been updated',
+      });
+      signOut();
+    },
+  });
 
-  function onAccountSubmit(values: PasswordDto) {
+  function onAccountSubmit(values: ResetPasswordDto) {
     console.log(values);
+
+    mutatePasswordReset(values);
   }
 
   return (
@@ -124,7 +141,7 @@ export default function ManageAccount() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <Label className="text-slate-600 space-y-4">
-                {currentUser?.email}
+                {(currentUser && currentUser.email) || '....'}
               </Label>
               <FormField
                 control={form.control}

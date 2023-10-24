@@ -98,13 +98,18 @@ export class AuthService {
     };
   }
 
-  async resetPassword({ password }: { password: string }) {
-    const client = await this.supabaseService.getAnonClient();
+  async resetPassword({ password, uuid }: { password: string; uuid: string }) {
+    const client = await this.supabaseService.getAdminClient();
 
-    const { data, error } = await client.auth.updateUser({ password });
+    const { error } = await client.updateUserById(uuid, {
+      password,
+    });
 
     if (error instanceof AuthError) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      console.log({
+        reset_password_error: error.message,
+      });
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
 
     return {
@@ -116,7 +121,7 @@ export class AuthService {
   async signOut(jwt: string) {
     const client = await this.supabaseService.getAdminClient();
 
-    const { data, error } = await client.auth.admin.signOut(jwt, 'global');
+    const { data, error } = await client.signOut(jwt, 'global');
 
     if (error instanceof AuthError) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);

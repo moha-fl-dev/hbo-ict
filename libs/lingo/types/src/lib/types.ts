@@ -146,14 +146,7 @@ export const accountSchema = z.object({
   }),
 });
 
-export const passwordSchema = z.object({
-  password: z.string().min(8, {
-    message: 'Password must be at least 8 characters.',
-  }),
-});
-
 export type AccountDto = z.infer<typeof accountSchema>;
-export type PasswordDto = z.infer<typeof passwordSchema>;
 
 export type ExtendedEmployee = Prisma.EmployeeGetPayload<{
   include: { Team: true };

@@ -20,6 +20,7 @@ import {
 import { Request, Response } from 'express';
 import { Public, ZodValidate } from '@hbo-ict/lingo-utils';
 import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
+import { User } from '@supabase/supabase-js';
 
 /**
  * The auth controller.
@@ -165,15 +166,43 @@ export class AuthController {
   @Post('reset-password')
   @ZodValidate<ResetPasswordDto>(resetPasswordSchema)
   async resetPassword(
+    @Req() request: Request,
     @Body() payload: ResetPasswordDto,
     @Res({ passthrough: true }) response: Response
   ) {
-    const { status, message } = await this.authService.resetPassword(payload);
+    const user = request['user'] as User;
+    const { id: uuid } = user;
+    const { password } = payload;
 
-    return {
-      status,
+    console.log({ uuid, password });
+
+    const { status, message } = await this.authService.resetPassword({
+      password,
+      uuid,
+    });
+
+    response.clearCookie('access_token', {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+    response.clearCookie('refresh_token', {
+      httpOnly: true, // set to true in production
+      secure: true, //process.env.NODE_ENV === 'production', // set to true if your site is served over HTTPS
+      // maxAge: expires_in * 1000, // ?? hour in ms
+      sameSite: 'none', // required for cross-domain cookies
+      // domain: 'localhost', // replace with your domain
+      signed: true, //process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+
+    response.status(status).send({
       message,
-    };
+    });
   }
 
   @Post('sign-out')

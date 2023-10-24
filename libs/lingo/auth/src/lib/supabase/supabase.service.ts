@@ -20,7 +20,7 @@ import { ConfSchemType } from '@hbo-ict/lingo-utils';
 @Injectable({ scope: Scope.REQUEST })
 export class SupabaseService {
   private anonClientInstance: SupabaseClient | null = null;
-  private adminClientInstance: SupabaseClient | null = null;
+  private adminClientInstance: SupabaseClient['auth']['admin'] | null = null;
 
   constructor(
     @Inject(REQUEST) private readonly request: Request,
@@ -65,16 +65,31 @@ export class SupabaseService {
       {
         auth: {
           persistSession: false,
+          autoRefreshToken: true,
+          detectSessionInUrl: false,
         },
-        global: {
-          headers: {
-            Authorization: `Bearer ${ExtractJwt.fromAuthHeaderAsBearerToken()(
-              this.request
-            )}`,
-          },
-        },
+        // global: {
+        //   headers: {
+        //     // Authorization: `Bearer ${ExtractJwt.fromAuthHeaderAsBearerToken()(
+        //     //   this.request
+        //     // )}`,
+
+        //     Authorization: `Bearer ${
+        //       // this.extractTokenFromCookie(this.request).access_token
+        //       this.configService.get('SUPABASE_SERVICE_ROLE')
+        //     }`,
+        //   },
+        // },
       }
-    );
+    ).auth.admin;
+
     return this.adminClientInstance;
+  }
+
+  private extractTokenFromCookie(request: Request) {
+    return {
+      refresh_token: request.signedCookies['refresh_token'],
+      access_token: request.signedCookies['access_token'],
+    };
   }
 }

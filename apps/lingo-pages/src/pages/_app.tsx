@@ -44,7 +44,9 @@ const queryClient = new QueryClient({
          */
 
         if (err.response?.status === 404 || err.response?.status === 401) {
-          Router.replace('/sign-in');
+          if (Router.pathname !== '/sign-up') {
+            Router.replace('/sign-in');
+          }
           return false;
         }
         // retry 2 times, then fail

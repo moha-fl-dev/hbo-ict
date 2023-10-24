@@ -31,6 +31,7 @@ export default function SignUp() {
     },
     onSuccess: (data) => {
       console.log(data);
+      router.push('/sign-in');
     },
   });
 
