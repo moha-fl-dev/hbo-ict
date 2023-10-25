@@ -50,7 +50,7 @@ export function WorkspaceRootLayout({
             asChild
           >
             <Link href={'/workspace/tickets/create'}>
-              <PlusIcon className="w-4 h-4" />
+              <PlusIcon />
               <span>Create Ticket</span>
             </Link>
           </Button>

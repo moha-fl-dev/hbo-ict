@@ -16,8 +16,8 @@ datasource db {
 
 enum TicketStatusEnum {
   OPEN
-  IN_PROGRESS
-  ON_HOLD
+  ACTIVE
+  HOLD
   CLOSED
 }
 

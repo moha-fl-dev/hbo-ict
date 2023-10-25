@@ -142,3 +142,7 @@ export {
   DialogTitle,
   DialogDescription,
 } from './lib/components/dialog';
+
+export { TicketsLayout } from './lib/layouts/tickets.layout';
+
+export { TicketStatusBar } from './lib/components/ticket-status';
