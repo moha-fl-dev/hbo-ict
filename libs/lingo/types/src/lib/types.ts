@@ -11,6 +11,7 @@ export type {
   Component,
   Department,
   Employee,
+  TicketNumber,
 } from '@prisma/client/lingo';
 export { TicketStatusEnum, TicketActionTypeEnum } from '@prisma/client/lingo';
 

@@ -4,6 +4,7 @@ import { workspace } from './queries/workspace';
 import { team } from './queries/team';
 import { component } from './queries/component';
 import { employee } from './queries/employee';
+import { ticketNumber } from './queries/ticketNumber';
 
 async function createDepartment(url: string) {}
 
@@ -14,6 +15,7 @@ const Api = {
   team,
   component,
   employee,
+  ticketNumber,
 };
 
 export { Api };

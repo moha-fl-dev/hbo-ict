@@ -1,40 +1,32 @@
-import {
-  PrismaService,
-  Prisma,
-  TicketNumber,
-} from '@hbo-ict/lingo-prisma-client';
+import { Prisma, TicketNumber } from '@prisma/client/lingo';
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TicketNumberService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getNextTicketNumber(): Promise<TicketNumber['currentNumber']> {
-    const nextNumber = await this.nextTicketNumber();
+  async createTicketNumber(): Promise<TicketNumber> {
+    const { nanoid } = await import('nanoid');
 
-    return nextNumber;
-  }
+    const number = nanoid(16);
 
-  private async getCurrentTicketNumber(): Promise<TicketNumber> {
-    const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow();
+    const ticketNumber = await this.prisma.ticketNumber.create({
+      data: {
+        number,
+      },
+    });
 
     return ticketNumber;
   }
 
-  private async nextTicketNumber(): Promise<TicketNumber['currentNumber']> {
-    const { currentNumber } = await this.getCurrentTicketNumber();
-
-    const data: Prisma.TicketNumberUpdateInput = {
-      currentNumber: currentNumber + 1,
-    };
-
-    const nextTicketNumber = await this.prisma.ticketNumber.update({
-      where: { currentNumber: currentNumber },
-      data,
+  async getTicketNumber(
+    args: Prisma.TicketNumberFindFirstOrThrowArgs
+  ): Promise<TicketNumber> {
+    const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow({
+      ...args,
     });
 
-    const { currentNumber: nextNumber } = nextTicketNumber;
-
-    return nextNumber;
+    return ticketNumber;
   }
 }

@@ -8,13 +8,11 @@ import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { AuthModule } from '../auth/auth.module';
 import { WorkspaceModule } from '../workspace/workspace.module';
 import { DepartmentModule } from '../department/department.module';
-import {
-  LingoPrismaClientModule,
-  PrismaService,
-} from '@hbo-ict/lingo-prisma-client';
+import { LingoPrismaClientModule } from '@hbo-ict/lingo-prisma-client';
 import { TeamModule } from '../team/team.module';
 import { ComponentModule } from '../component/component.module';
 import { EmployeeModule } from '../employee/employee.module';
+import { TicketNumberModule } from '../ticket-number/ticket-number.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +33,7 @@ import { EmployeeModule } from '../employee/employee.module';
     TeamModule,
     ComponentModule,
     EmployeeModule,
+    TicketNumberModule,
     LingoPrismaClientModule,
   ],
   controllers: [AppController],
