@@ -13,7 +13,11 @@ export type {
   Employee,
   TicketNumber,
 } from '@prisma/client/lingo';
-export { TicketStatusEnum, TicketActionTypeEnum } from '@prisma/client/lingo';
+export {
+  TicketStatusEnum,
+  TicketActionTypeEnum,
+  SeverityEnum,
+} from '@prisma/client/lingo';
 
 /**
  * shared zod schema for front-end and back-end
@@ -152,3 +156,31 @@ export type AccountDto = z.infer<typeof accountSchema>;
 export type ExtendedEmployee = Prisma.EmployeeGetPayload<{
   include: { Team: true };
 }>;
+
+export const createTicketSchema = z.object({
+  title: z.string().nonempty({
+    message: 'Title is required',
+  }),
+  description: z.string().nonempty({
+    message: 'Description is required',
+  }),
+  severity: z.nativeEnum(SeverityEnum),
+  callerId: z.string().uuid({
+    message: 'You must provide a valid caller',
+  }),
+  assigneeId: z.string().uuid({
+    message: 'You must provide a valid assignee',
+  }),
+  teamId: z.string().uuid({
+    message: 'You must provide a valid team',
+  }),
+  ticketNumber: z.string().nonempty({
+    message: 'Ticket number is required',
+  }),
+  status: z.nativeEnum(TicketStatusEnum),
+  componentId: z.string().uuid({
+    message: 'You must provide a valid component',
+  }),
+});
+
+export type CreateTicketDto = z.infer<typeof createTicketSchema>;

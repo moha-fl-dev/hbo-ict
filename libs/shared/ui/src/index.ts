@@ -41,6 +41,7 @@ export {
 export { SignInForm } from './lib/blocks/sign-in-form';
 export { SignUpForm } from './lib/blocks/sign-up-form';
 export { ResetPasswordForm } from './lib/blocks/reset-password-form';
+export { CreateTicketForm } from './lib/blocks/create-ticket-form';
 
 export { AuthLayout } from './lib/layouts/auth.layout';
 
@@ -146,3 +147,5 @@ export {
 export { TicketsLayout } from './lib/layouts/tickets.layout';
 
 export { TicketStatusBar } from './lib/components/ticket-status';
+
+export { Textarea } from './lib/components/textarea';

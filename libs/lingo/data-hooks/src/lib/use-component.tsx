@@ -27,6 +27,19 @@ export function useComponent(componentId: string) {
   };
 }
 
+export function useComponentsWithTeamId(teamId: string) {
+  const { data, isError } = useQuery<Component[]>(
+    ['components-by-team', teamId],
+    () => Api.component.getComponentsByTeamId(teamId),
+    { enabled: !!teamId }
+  );
+
+  return {
+    components: data,
+    isError,
+  };
+}
+
 // export function useComponentWithTeams(componentId: string) {
 //   const { data, isError } = useQuery<Component>(
 //     ['component-teams', componentId],

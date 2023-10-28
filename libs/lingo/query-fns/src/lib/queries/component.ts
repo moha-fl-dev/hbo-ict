@@ -20,10 +20,19 @@ async function getById(id: string) {
   return res.data;
 }
 
+async function getComponentsByTeamId(teamId: string) {
+  const res = await axiosInstance.get<Component[]>(
+    `component/${teamId}/components`
+  );
+
+  return res.data;
+}
+
 const component = {
   create,
   getAll,
   getById,
+  getComponentsByTeamId,
 };
 
 export { component };

@@ -47,4 +47,15 @@ export class ComponentController {
       include: { Team: true },
     });
   }
+
+  @Get('/:teamId/components')
+  async createComponent(@Param('teamId') teamId: string) {
+    const components = await this.componentService.getMany({
+      where: {
+        teamId,
+      },
+    });
+
+    return components;
+  }
 }

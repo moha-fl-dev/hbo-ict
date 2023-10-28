@@ -23,6 +23,15 @@ export class ComponentService {
     return components;
   }
 
+  async getMany({ where, include }: Prisma.ComponentFindManyArgs) {
+    const components = await this.prisma.component.findMany({
+      where,
+      include,
+    });
+
+    return components;
+  }
+
   async all() {
     const components = await this.prisma.component.findMany();
 
