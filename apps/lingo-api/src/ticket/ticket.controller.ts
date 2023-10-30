@@ -1,7 +1,15 @@
 import { TicketService } from '@hbo-ict/data-access';
-import { ZodValidate } from '@hbo-ict/lingo-utils';
-import { CreateTicketDto, createTicketSchema } from '@hbo-ict/lingo/types';
-import { Controller, Post, Req } from '@nestjs/common';
+import {
+  QueryBooleanPipe,
+  TransformInclude,
+  ZodValidate,
+} from '@hbo-ict/lingo-utils';
+import {
+  CreateTicketDto,
+  TicketFindUniqueArgs,
+  createTicketSchema,
+} from '@hbo-ict/lingo/types';
+import { Controller, Get, Post, Query, Req, UsePipes } from '@nestjs/common';
 import { Prisma } from '@prisma/client/lingo';
 
 @Controller('ticket')
@@ -60,5 +68,21 @@ export class TicketController {
     );
 
     return data;
+  }
+
+  @Get('/find')
+  async find(
+    @Query() query: TicketFindUniqueArgs,
+    @TransformInclude()
+    transformIncludeBooleanValues: TicketFindUniqueArgs['include']
+  ) {
+    const { where } = query;
+
+    const res = await this.ticketService.find({
+      where,
+      include: transformIncludeBooleanValues,
+    });
+
+    return res;
   }
 }

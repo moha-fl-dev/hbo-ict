@@ -11,3 +11,5 @@ export * from './lib/pipes/zod.validation.pipe';
 export * from './lib/decorators/zodvalidate.decorator';
 
 export * from './lib/decorators/public.decorator';
+export * from './lib/pipes/queryBooleanPipe';
+export * from './lib/decorators/include.boolean.decorator';

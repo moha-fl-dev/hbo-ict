@@ -54,7 +54,7 @@ export class TicketService {
     return this.prisma.ticket.findMany();
   }
 
-  async findOne({ where, include }: Prisma.TicketFindUniqueArgs) {
+  async find({ where, include }: Prisma.TicketFindUniqueArgs) {
     return this.prisma.ticket.findUnique({
       where,
       include,

@@ -12,6 +12,7 @@ export type {
   Department,
   Employee,
   TicketNumber,
+  Ticket,
 } from '@prisma/client/lingo';
 export {
   TicketStatusEnum,
@@ -184,3 +185,17 @@ export const createTicketSchema = z.object({
 });
 
 export type CreateTicketDto = z.infer<typeof createTicketSchema>;
+
+export type TicketFindUniqueArgs = Prisma.TicketFindUniqueArgs;
+
+export type TicketNumbeFindUniqueArgs = Prisma.TicketNumberFindUniqueArgs;
+
+export type TicketDefaultReturn = Prisma.TicketGetPayload<{
+  include: {
+    caller: true;
+    assignee: true;
+    team: true;
+    component: true;
+    ticketNumber: true;
+  };
+}>;

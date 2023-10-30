@@ -53,5 +53,12 @@ export class EmployeeController {
     return employee;
   }
 
+  @Get('/all')
+  async getAll() {
+    const employees = await this.employeeService.all();
+
+    return employees;
+  }
+
 
 }

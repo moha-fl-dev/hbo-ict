@@ -42,7 +42,7 @@ export class TicketNumberService {
   async getTicketNumber({
     where,
     include,
-  }: Prisma.TicketNumberFindFirstOrThrowArgs): Promise<TicketNumber> {
+  }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber> {
     const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow({
       where,
       include,

@@ -1,5 +1,6 @@
 import { TicketNumberService } from '@hbo-ict/data-access';
-import { Controller, Get } from '@nestjs/common';
+import { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
+import { Controller, Get, Query } from '@nestjs/common';
 
 @Controller('ticket-number')
 export class TicketNumberController {
@@ -10,5 +11,16 @@ export class TicketNumberController {
     const ticketNumber = await this.ticketNumberService.createTicketNumber();
 
     return ticketNumber;
+  }
+
+  @Get('/find')
+  async find(@Query() query: TicketNumbeFindUniqueArgs) {
+    console.log(query);
+    const { where, include } = query;
+
+    return this.ticketNumberService.getTicketNumber({
+      where,
+      include,
+    });
   }
 }
