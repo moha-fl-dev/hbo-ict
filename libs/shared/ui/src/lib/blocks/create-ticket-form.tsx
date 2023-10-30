@@ -36,19 +36,12 @@ export function CreateTicketForm({
 }: MinimalFormProps<CreateTicketDto>) {
   //
 
-  const { ticketNumber: ticket_number } = useTicketNumber();
   const [selectedTeamId, setSelectedTeamId] = useState<string>('');
   const severityOptions = Object.values(SeverityEnum);
   const statusOptions = Object.values(TicketStatusEnum);
 
   const { teams } = useTeams();
   const { components } = useComponentsWithTeamId(selectedTeamId);
-
-  useEffect(() => {
-    if (ticket_number) {
-      form.setValue('ticketNumber', ticket_number.number);
-    }
-  }, [ticket_number]);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>

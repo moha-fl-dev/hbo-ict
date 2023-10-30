@@ -4,6 +4,7 @@ import { TeamService } from './team.service';
 import { ComponentService } from './component.service';
 import { EmployeeService } from './employee.service';
 import { TicketNumberService } from './ticketNumber.service';
+import { TicketService } from './ticket.service';
 
 @Module({
   controllers: [],
@@ -13,6 +14,7 @@ import { TicketNumberService } from './ticketNumber.service';
     ComponentService,
     EmployeeService,
     TicketNumberService,
+    TicketService,
   ],
   exports: [
     DepService,
@@ -20,6 +22,7 @@ import { TicketNumberService } from './ticketNumber.service';
     ComponentService,
     EmployeeService,
     TicketNumberService,
+    TicketService,
   ],
   imports: [],
 })

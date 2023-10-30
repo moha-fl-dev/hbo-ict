@@ -6,27 +6,86 @@ import { Injectable } from '@nestjs/common';
 export class TicketNumberService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createTicketNumber(): Promise<TicketNumber> {
-    const { nanoid } = await import('nanoid');
+  async createTicketNumber(): Promise<TicketNumber | null> {
+    const MAX_RETRIES = 5;
+    const nanoid = (await import('nanoid')).nanoid;
 
-    const number = nanoid(16);
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const number = nanoid(16);
 
-    const ticketNumber = await this.prisma.ticketNumber.create({
-      data: {
-        number,
-      },
+        const newTicketNumber = await this.create({ number });
+
+        return newTicketNumber;
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          continue;
+        } else {
+          throw error;
+        }
+      }
+    }
+    return null;
+  }
+
+  private async create(
+    payload: Prisma.TicketNumberCreateInput
+  ): Promise<TicketNumber> {
+    return this.prisma.ticketNumber.create({
+      data: payload,
+    });
+  }
+
+  async getTicketNumber({
+    where,
+    include,
+  }: Prisma.TicketNumberFindFirstOrThrowArgs): Promise<TicketNumber> {
+    const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow({
+      where,
+      include,
     });
 
     return ticketNumber;
   }
 
-  async getTicketNumber(
-    args: Prisma.TicketNumberFindFirstOrThrowArgs
-  ): Promise<TicketNumber> {
-    const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow({
-      ...args,
-    });
+  async verifyAndClaimTicketNumber({
+    where,
+    include,
+  }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber | null> {
+    try {
+      const ticketNumberRecord = await this.getTicketNumber({
+        where,
+        include,
+      });
 
-    return ticketNumber;
+      if (!ticketNumberRecord || ticketNumberRecord.used) {
+        return await this.createTicketNumber();
+      }
+
+      return await this.claimTicketNumber({
+        where,
+        include,
+      });
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private async claimTicketNumber({
+    where,
+    include,
+  }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber | null> {
+    try {
+      return await this.prisma.ticketNumber.update({
+        where,
+        data: { used: true },
+        include,
+      });
+    } catch (error) {
+      return null;
+    }
   }
 }

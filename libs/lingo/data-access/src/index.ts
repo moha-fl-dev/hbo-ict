@@ -4,3 +4,4 @@ export * from './lib/team.service';
 export * from './lib/component.service';
 export * from './lib/employee.service';
 export * from './lib/ticketNumber.service';
+export * from './lib/ticket.service';

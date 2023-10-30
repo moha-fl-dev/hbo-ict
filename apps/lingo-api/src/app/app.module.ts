@@ -13,6 +13,7 @@ import { TeamModule } from '../team/team.module';
 import { ComponentModule } from '../component/component.module';
 import { EmployeeModule } from '../employee/employee.module';
 import { TicketNumberModule } from '../ticket-number/ticket-number.module';
+import { TicketModule } from '../ticket/ticket.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +34,7 @@ import { TicketNumberModule } from '../ticket-number/ticket-number.module';
     TeamModule,
     ComponentModule,
     EmployeeModule,
+    TicketModule,
     TicketNumberModule,
     LingoPrismaClientModule,
   ],

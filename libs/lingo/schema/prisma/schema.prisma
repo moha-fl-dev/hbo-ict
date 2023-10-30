@@ -65,33 +65,7 @@ model Component {
   updatedAt DateTime @updatedAt
   Team      Team?    @relation(fields: [teamId], references: [id])
   teamId    String?  @db.Uuid
-}
-
-model Ticket {
-  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  title       String @unique
-  description String
-
-  status   TicketStatusEnum @default(OPEN)
-  severity SeverityEnum     @default(LOW)
-
-  callerId String   @db.Uuid
-  caller   Employee @relation(name: "TicketCaller", fields: [callerId], references: [id])
-
-  assigneeId String?   @db.Uuid
-  assignee   Employee? @relation(name: "TicketAssignee", fields: [assigneeId], references: [id])
-
-  team           Team?            @relation(fields: [teamId], references: [id])
-  teamId         String?          @db.Uuid
-  Comment        Comment[]
-  TicketHistory  TicketHistory[]
-  TicketFollower TicketFollower[]
-
-  ticketNumber String         @unique
-  TicketNumber TicketNumber[]
+  Ticket    Ticket[]
 }
 
 model Comment {
@@ -154,6 +128,35 @@ model TicketNumber {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   used      Boolean  @default(false)
-  ticket    Ticket?  @relation(fields: [ticketId], references: [id])
-  ticketId  String?  @db.Uuid
+  ticket    Ticket?
+}
+
+model Ticket {
+  id        String   @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String @unique
+  description String
+
+  status   TicketStatusEnum @default(OPEN)
+  severity SeverityEnum     @default(LOW)
+
+  callerId String   @db.Uuid
+  caller   Employee @relation(name: "TicketCaller", fields: [callerId], references: [id])
+
+  assigneeId String?   @db.Uuid
+  assignee   Employee? @relation(name: "TicketAssignee", fields: [assigneeId], references: [id])
+
+  team           Team?            @relation(fields: [teamId], references: [id])
+  teamId         String?          @db.Uuid
+  Comment        Comment[]
+  TicketHistory  TicketHistory[]
+  TicketFollower TicketFollower[]
+
+  ticketNumber   TicketNumber @relation(fields: [ticketNumberId], references: [id])
+  ticketNumberId String       @unique @db.Uuid
+
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId String    @db.Uuid
 }
