@@ -25,7 +25,7 @@ export default function FindTicket() {
     title: ticket?.title || '',
     description: ticket?.description || '',
     status: ticket?.status || 'OPEN',
-    ticketNumber: ticket?.ticketNumber.number || '',
+    ticketNumber: ticketNumber || '',
     assigneeId: ticket?.assignee?.name || '',
     severity: ticket?.severity || 'LOW',
     callerId: ticket?.caller?.name || '',
@@ -40,7 +40,7 @@ export default function FindTicket() {
   return (
     <div className="flex flex-col gap-10 mt-2">
       <TicketStatusBar activeStatus={minumumTicketData.status} />
-      <TicketForm action="update" defaultValues={minumumTicketData} />
+      <TicketForm action="UPDATE" defaultValues={minumumTicketData} />
     </div>
   );
 }

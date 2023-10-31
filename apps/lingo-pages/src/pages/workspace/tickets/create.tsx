@@ -9,59 +9,36 @@ import { Api } from '@hbo-ict/query-fns';
 import {
   CreateTicketForm,
   Form,
+  TicketForm,
   TicketStatusBar,
   TicketsLayout,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 
 export default function CreateTicket() {
   //
-  const { ticketNumber: ticket_number } = useTicketNumber();
-
-  const createTicketForm = useForm<CreateTicketDto>({
-    resolver: zodResolver(createTicketSchema),
-    defaultValues: {
-      ticketNumber: '',
-      title: '',
-      description: '',
-      severity: SeverityEnum.LOW,
-      assigneeId: '',
-      callerId: '',
-      teamId: '',
-      status: TicketStatusEnum.OPEN,
-      componentId: '',
-    },
-  });
-
-  useEffect(() => {
-    if (ticket_number) {
-      createTicketForm.setValue('ticketNumber', ticket_number.number);
-    }
-  }, [ticket_number]);
-
-  const { mutate } = useMutation({
-    mutationKey: ['createTicket'],
-    mutationFn: Api.ticket.create,
-  });
-
-  function onSubmit(data: CreateTicketDto) {
-    console.log(data);
-    mutate(data);
-  }
+  const defaultValues = {
+    ticketNumber: '',
+    title: '',
+    description: '',
+    severity: SeverityEnum.LOW,
+    assigneeId: '',
+    callerId: '',
+    teamId: '',
+    status: TicketStatusEnum.OPEN,
+    componentId: '',
+  };
 
   return (
     <div className="flex flex-col gap-10 mt-2">
       <TicketStatusBar activeStatus={'OPEN'} />
-      <Form {...createTicketForm}>
-        <CreateTicketForm
-          form={createTicketForm}
-          onSubmit={createTicketForm.handleSubmit(onSubmit)}
-        />
-      </Form>
+
+      <TicketForm
+        defaultValues={defaultValues}
+        action="CREATE"
+        key={'create-ticket'}
+      />
     </div>
   );
 }

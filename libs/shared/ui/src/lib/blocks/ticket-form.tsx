@@ -12,8 +12,12 @@ import {
   FormLabel,
   FormMessage,
 } from '../components/form';
-import { useTeams, useComponentsWithTeamId } from '@hbo-ict/hooks';
-import { useEffect, useState } from 'react';
+import {
+  useTeams,
+  useComponentsWithTeamId,
+  useTicketNumber,
+} from '@hbo-ict/hooks';
+import { Dispatch, useEffect, useReducer, useState } from 'react';
 import { Button } from '../components/button';
 import { Input } from '../components/input';
 import { Textarea } from '../components/textarea';
@@ -27,26 +31,64 @@ import {
 } from '../components/select';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Api } from '@hbo-ict/query-fns';
+
+type FormAction = 'CREATE' | 'UPDATE';
 
 type TicketFormProps = {
-  action: 'create' | 'update';
+  action: FormAction;
   defaultValues?: CreateTicketDto;
 };
 
+type TicketNumberState = {
+  mode: FormAction;
+  ticketNumber: string | null;
+};
+
+type TicketNumberAction =
+  | { type: 'CREATE'; payload: string }
+  | { type: 'UPDATE' };
+
+function reducer(
+  state: TicketNumberState,
+  action: TicketNumberAction
+): TicketNumberState {
+  switch (action.type) {
+    case 'CREATE':
+      return { mode: 'CREATE', ticketNumber: action.payload };
+    case 'UPDATE':
+      return { ...state, mode: 'UPDATE' };
+    default:
+      throw new Error('Unhandled action type');
+  }
+}
+
 export function TicketForm({ defaultValues, action }: TicketFormProps) {
   //
+  const [selectedTeamId, setSelectedTeamId] = useState<string>('');
+
+  const [state, dispatch] = useReducer(reducer, {
+    mode: action,
+    ticketNumber: null,
+  });
+
+  const shouldFetchTicketNumber =
+    state.mode === 'CREATE' && state.ticketNumber === null;
 
   const ticketForm = useForm<CreateTicketDto>({
     resolver: zodResolver(createTicketSchema),
     defaultValues,
   });
 
-  const [selectedTeamId, setSelectedTeamId] = useState<string>('');
   const severityOptions = Object.values(SeverityEnum);
   const statusOptions = Object.values(TicketStatusEnum);
 
   const { teams } = useTeams();
   const { components } = useComponentsWithTeamId(selectedTeamId);
+  const { ticketNumber: ticket_number, isSuccess } = useTicketNumber({
+    enabled: shouldFetchTicketNumber,
+  });
 
   useEffect(() => {
     if (defaultValues?.teamId) {
@@ -54,9 +96,30 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
     }
   }, [defaultValues]);
 
+  useEffect(() => {
+    if (isSuccess && ticket_number) {
+      dispatch({ type: 'CREATE', payload: ticket_number.number });
+      ticketForm.setValue('ticketNumber', ticket_number.number);
+    }
+  }, [isSuccess]);
+
+  const { mutate: createTicket } = useMutation({
+    mutationKey: ['update-ticket'],
+    mutationFn: Api.ticket.create,
+  });
+
+  const { mutate: updateTicket } = useMutation({
+    mutationKey: ['update-ticket'],
+    mutationFn: Api.ticket.create,
+  });
+
   function sumit(payload: CreateTicketDto) {
-    if (action === 'update') {
-      console.log(payload);
+    if (action === 'UPDATE') {
+      console.log(action, { payload });
+      return updateTicket(payload);
+    } else {
+      console.log(action, { payload });
+      return createTicket(payload);
     }
   }
 

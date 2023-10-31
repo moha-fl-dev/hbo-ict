@@ -3,15 +3,20 @@ import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';
 
-export function useCreateTicket() {
-  const { data, isError } = useQuery({
+export function useCreateTicket({ enabled }: { enabled: boolean }) {
+  const { data, isError, isSuccess } = useQuery({
     queryKey: ['ticketNumber'],
     queryFn: Api.ticketNumber.create,
+    enabled,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   return {
     ticketNumber: data,
     isError,
+    isSuccess,
   };
 }
 
