@@ -23,6 +23,9 @@
       "@hbo-ict/lingo-prisma-client": ["libs/lingo/prisma-client/src/index.ts"],
       "@hbo-ict/lingo-prisma-schema": ["libs/lingo/schema/"],
       "@hbo-ict/lingo-utils": ["libs/lingo/utils/src/index.ts"],
+      "@hbo-ict/lingo/features/ticketNumber": [
+        "libs/lingo/features/ticket-number/src/index.ts"
+      ],
       "@hbo-ict/lingo/types": ["libs/lingo/types/src/index.ts"],
       "@hbo-ict/query-fns": ["libs/lingo/query-fns/src/index.ts"],
       "@hbo-ict/supabase-auth": ["libs/lingo/auth/src/index.ts"],

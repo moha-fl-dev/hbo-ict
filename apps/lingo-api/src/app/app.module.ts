@@ -12,8 +12,8 @@ import { LingoPrismaClientModule } from '@hbo-ict/lingo-prisma-client';
 import { TeamModule } from '../team/team.module';
 import { ComponentModule } from '../component/component.module';
 import { EmployeeModule } from '../employee/employee.module';
-import { TicketNumberModule } from '../ticket-number/ticket-number.module';
 import { TicketModule } from '../ticket/ticket.module';
+import { TicketNumberModule } from '@hbo-ict/lingo/features/ticketNumber';
 @Module({
   imports: [
     ConfigModule.forRoot({
