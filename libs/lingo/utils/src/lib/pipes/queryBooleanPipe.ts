@@ -27,8 +27,6 @@ export class QueryBooleanPipe<T> implements PipeTransform {
       }
     }
 
-    console.log({ result });
-
     return result as T;
   }
 }

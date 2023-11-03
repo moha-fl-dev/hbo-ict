@@ -23,7 +23,16 @@ export async function find({
   return res.data;
 }
 
+async function update(payload: CreateTicketDto) {
+  const res = await axiosInstance.post(
+    `ticket/${payload.ticketNumber}/update`,
+    payload
+  );
+  return res.data;
+}
+
 export const ticket = {
   create,
   find,
+  update,
 };

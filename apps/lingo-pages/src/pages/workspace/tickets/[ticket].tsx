@@ -1,5 +1,5 @@
-import { useComponents, useTicketByNumber } from '@hbo-ict/hooks';
-import { CreateTicketDto, Ticket } from '@hbo-ict/lingo/types';
+import { useTicketByNumber } from '@hbo-ict/hooks';
+import { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
   TicketForm,
   TicketStatusBar,
@@ -25,7 +25,7 @@ export default function FindTicket() {
     title: ticket?.title || '',
     description: ticket?.description || '',
     status: ticket?.status || 'OPEN',
-    ticketNumber: ticketNumber || '',
+    ticketNumber: ticket?.ticketNumber.number || '',
     assigneeId: ticket?.assignee?.name || '',
     severity: ticket?.severity || 'LOW',
     callerId: ticket?.caller?.name || '',

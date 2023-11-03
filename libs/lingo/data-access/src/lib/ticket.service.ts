@@ -61,14 +61,16 @@ export class TicketService {
     });
   }
 
-  async update(
-    where: Prisma.TicketWhereUniqueInput,
-    data: Prisma.TicketUpdateInput
-  ) {
-    return this.prisma.ticket.update({
-      where,
-      data,
+  async update(payload: Prisma.TicketUpdateInput) {
+    const findByTicketNumber = await this.ticketNumberService.find({
+      where: {
+        number: payload.ticketNumber?.connect?.number,
+      },
     });
+
+    console.log({ payload, findByTicketNumber });
+
+    return 'ok';
   }
 
   async remove(where: Prisma.TicketWhereUniqueInput) {

@@ -166,10 +166,10 @@ export const createTicketSchema = z.object({
     message: 'Description is required',
   }),
   severity: z.nativeEnum(SeverityEnum),
-  callerId: z.string().uuid({
+  callerId: z.string().nonempty({
     message: 'You must provide a valid caller',
   }),
-  assigneeId: z.string().uuid({
+  assigneeId: z.string().nonempty({
     message: 'You must provide a valid assignee',
   }),
   teamId: z.string().uuid({

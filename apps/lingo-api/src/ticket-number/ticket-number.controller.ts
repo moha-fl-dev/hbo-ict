@@ -18,7 +18,7 @@ export class TicketNumberController {
     console.log(query);
     const { where, include } = query;
 
-    return this.ticketNumberService.getTicketNumber({
+    return this.ticketNumberService.find({
       where,
       include,
     });

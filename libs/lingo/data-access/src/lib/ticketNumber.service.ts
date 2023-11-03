@@ -39,7 +39,7 @@ export class TicketNumberService {
     });
   }
 
-  async getTicketNumber({
+  async find({
     where,
     include,
   }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber> {
@@ -56,7 +56,7 @@ export class TicketNumberService {
     include,
   }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber | null> {
     try {
-      const ticketNumberRecord = await this.getTicketNumber({
+      const ticketNumberRecord = await this.find({
         where,
         include,
       });

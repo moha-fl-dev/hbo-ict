@@ -110,7 +110,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
 
   const { mutate: updateTicket } = useMutation({
     mutationKey: ['update-ticket'],
-    mutationFn: Api.ticket.create,
+    mutationFn: Api.ticket.update,
   });
 
   function sumit(payload: CreateTicketDto) {
