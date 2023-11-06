@@ -1,12 +1,14 @@
+import {
+  ITicketNumberService,
+  TICKET_NUMBER_SERVICE_TOKEN,
+} from '@hbo-ict/lingo/aggregators';
 import { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
-import { TICKET_NUMBER_SERVICE } from './constants';
-import { ITicketNumberService } from './interfaces/ticket.service';
 
 @Controller('ticket-number')
 export class TicketNumberController {
   constructor(
-    @Inject(TICKET_NUMBER_SERVICE)
+    @Inject(TICKET_NUMBER_SERVICE_TOKEN)
     private ticketNumberService: ITicketNumberService
   ) {}
 

@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TicketNumberService } from './ticket-number.service';
 import { TicketNumberController } from './ticket-number.controller';
-import { TICKET_NUMBER_SERVICE } from './constants';
+import { TicketAggregatorModule } from '@hbo-ict/lingo/aggregators';
 
 @Module({
+  imports: [TicketAggregatorModule],
   controllers: [TicketNumberController],
-  providers: [
-    {
-      provide: TICKET_NUMBER_SERVICE,
-      useClass: TicketNumberService,
-    },
-  ],
+  providers: [],
   exports: [],
 })
 export class TicketNumberModule {}
