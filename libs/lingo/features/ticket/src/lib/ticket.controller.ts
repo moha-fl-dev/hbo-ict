@@ -56,6 +56,7 @@ export class TicketController {
     @TransformInclude()
     transformIncludeBooleanValues: TicketFindUniqueArgs['include']
   ) {
+    console.log(JSON.stringify(query, null, 2));
     return this.ticketService.findMany({
       where: query.where,
       include: transformIncludeBooleanValues,

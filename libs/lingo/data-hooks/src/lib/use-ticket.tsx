@@ -38,10 +38,11 @@ function useTicketByArgs({ where, include }: TicketFindUniqueArgs) {
 
 export function useManyTickets(payload: TicketFindManyArgs) {
   const { data, isError, isLoading } = useQuery(
-    ['many-tickets'],
+    ['many-tickets', payload.where],
     () => Api.ticket.findMany(payload),
     {
       staleTime: 1000 * 60 * 5, // 5 minutes
+      enabled: clauseHasProperty<TicketFindManyArgs['where']>(payload.where),
     }
   );
 

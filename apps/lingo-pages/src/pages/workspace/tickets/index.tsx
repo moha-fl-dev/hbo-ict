@@ -1,8 +1,6 @@
 import { useManyTickets } from '@hbo-ict/hooks';
 import {
   Badge,
-  Button,
-  ScrollArea,
   Table,
   TableBody,
   TableCaption,
@@ -18,8 +16,6 @@ import { useRouter } from 'next/router';
 
 export default function TicketsRoot() {
   const router = useRouter();
-
-  console.log(router.query);
 
   const { isError, isLoading, tickets } = useManyTickets({
     include: {
