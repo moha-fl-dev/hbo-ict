@@ -1,6 +1,8 @@
 import { useTicketByNumber } from '@hbo-ict/hooks';
 import { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
+  CommmentForm,
+  Textarea,
   TicketForm,
   TicketStatusBar,
   TicketsLayout,
@@ -45,6 +47,7 @@ export default function FindTicket() {
         defaultValues={minumumTicketData}
         key={minumumTicketData.ticketNumber}
       />
+      <CommmentForm />
     </div>
   );
 }

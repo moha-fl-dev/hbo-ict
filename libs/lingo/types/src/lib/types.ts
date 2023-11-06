@@ -13,6 +13,7 @@ export type {
   Employee,
   TicketNumber,
   Ticket,
+  Comment as CommentType,
 } from '@prisma/client/lingo';
 export {
   TicketStatusEnum,
@@ -200,3 +201,11 @@ export type TicketDefaultReturn = Prisma.TicketGetPayload<{
     ticketNumber: true;
   };
 }>;
+
+export const createCommentSchema = z.object({
+  content: z.string().nonempty({
+    message: 'Comment is required',
+  }),
+});
+
+export type CreateCommentDto = z.infer<typeof createCommentSchema>;

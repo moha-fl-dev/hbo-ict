@@ -26,6 +26,9 @@
       "@hbo-ict/lingo/aggregators": [
         "libs/lingo/aggregators/ticket-aggregator/src/index.ts"
       ],
+      "@hbo-ict/lingo/features/comment": [
+        "libs/lingo/features/comment/src/index.ts"
+      ],
       "@hbo-ict/lingo/features/ticket": [
         "libs/lingo/features/ticket/src/index.ts"
       ],

@@ -1,13 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TICKET_NUMBER_SERVICE_TOKEN, TICKET_SERVICE_TOKEN } from '../tokens';
 import {
+  COMMENT_SERVICE_TOKEN,
+  TICKET_NUMBER_SERVICE_TOKEN,
+  TICKET_SERVICE_TOKEN,
+} from '../tokens';
+import {
+  ICommentService,
   ITicketAggregatorService,
   ITicketNumberService,
   ITicketService,
 } from '../interfaces';
 import { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import { $Enums, Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
-import { CreateTicketDto } from '@hbo-ict/lingo/types';
+import { Prisma, Ticket, TicketNumber, Comment } from '@prisma/client/lingo';
+import { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
 
 @Injectable()
 export class TicketAggregatorService implements ITicketAggregatorService {
@@ -18,8 +23,50 @@ export class TicketAggregatorService implements ITicketAggregatorService {
     @Inject(TICKET_SERVICE_TOKEN)
     private readonly ticketService: ITicketService,
 
+    @Inject(COMMENT_SERVICE_TOKEN)
+    private readonly commentService: ICommentService,
+
     private readonly prisma: PrismaService
   ) {}
+
+  async createCommentWithTicketAndNumber(
+    payload: CreateCommentDto & { ticketNumber: string },
+    authorId: string
+  ): Promise<Comment> {
+    const ticketN = await this.ticketNumberService.find({
+      where: {
+        number: payload.ticketNumber,
+      },
+    });
+
+    const ticket = await this.ticketService.find({
+      where: {
+        ticketNumberId: ticketN.id,
+      },
+    });
+
+    if (!ticket) {
+      throw new Error('Ticket not found.');
+    }
+
+    const data: Prisma.CommentCreateInput = {
+      content: payload.content,
+      author: {
+        connect: {
+          id: authorId,
+        },
+      },
+      ticket: {
+        connect: {
+          id: ticket.id,
+        },
+      },
+    };
+
+    const comment = await this.commentService.createComment(data);
+
+    return comment;
+  }
   async updateTicketByNumber(
     payload: CreateTicketDto
   ): Promise<[Ticket, TicketNumber | null] | null> {

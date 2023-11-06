@@ -6,6 +6,7 @@ import { component } from './queries/component';
 import { employee } from './queries/employee';
 import { ticketNumber } from './queries/ticketNumber';
 import { ticket } from './queries/ticket';
+import { comment } from './queries/comment';
 
 async function createDepartment(url: string) {}
 
@@ -18,6 +19,7 @@ const Api = {
   employee,
   ticketNumber,
   ticket,
+  comment,
 };
 
 export { Api };

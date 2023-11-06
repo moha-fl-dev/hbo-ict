@@ -417,9 +417,11 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
               </FormItem>
             )}
           />
-          <Button type="submit" variant={'workspace'}>
-            {action}
-          </Button>
+          <div className="flex flex-row justify-end">
+            <Button type="submit" variant={'workspace'}>
+              {action}
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

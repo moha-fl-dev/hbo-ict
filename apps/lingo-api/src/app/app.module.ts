@@ -14,6 +14,8 @@ import { ComponentModule } from '../component/component.module';
 import { EmployeeModule } from '../employee/employee.module';
 import { TicketNumberModule } from '@hbo-ict/lingo/features/ticketNumber';
 import { TicketModule } from '@hbo-ict/lingo/features/ticket';
+import { CommentModule } from '@hbo-ict/lingo/features/comment';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +38,7 @@ import { TicketModule } from '@hbo-ict/lingo/features/ticket';
     EmployeeModule,
     TicketModule,
     TicketNumberModule,
+    CommentModule,
     LingoPrismaClientModule,
   ],
   controllers: [AppController],
