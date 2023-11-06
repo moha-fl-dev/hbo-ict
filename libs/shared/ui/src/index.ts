@@ -151,3 +151,4 @@ export { TicketStatusBar } from './lib/components/ticket-status';
 export { Textarea } from './lib/components/textarea';
 export { Badge, badgeVariants } from './lib/components/badge';
 export { CommmentForm } from './lib/blocks/comment-form';
+export { Comments } from './lib/blocks/comments-block';

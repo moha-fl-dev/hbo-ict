@@ -1,5 +1,5 @@
-import { Controller, Inject, Post, Req } from '@nestjs/common';
-import { ZodValidate } from '@hbo-ict/lingo-utils';
+import { Controller, Get, Inject, Post, Query, Req } from '@nestjs/common';
+import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
 import { createCommentSchema, CreateCommentDto } from '@hbo-ict/lingo/types';
 import { User } from '@supabase/supabase-js';
 import {
@@ -8,6 +8,7 @@ import {
   ITicketAggregatorService,
   TICKET_AGGREGATOR_TOKEN,
 } from '@hbo-ict/lingo/aggregators';
+import { Prisma } from '@prisma/client/lingo';
 
 @Controller('comment')
 export class CommentController {
@@ -36,5 +37,18 @@ export class CommentController {
       body,
       id
     );
+  }
+
+  @Get('/all')
+  async all(
+    @Query() query: Prisma.CommentFindManyArgs,
+    @TransformInclude()
+    transformIncludeBooleanValues: Prisma.CommentFindManyArgs['include']
+  ) {
+    query.include = transformIncludeBooleanValues;
+
+    console.log(JSON.stringify(query, null, 2));
+
+    return this.commentService.findMany(query);
   }
 }

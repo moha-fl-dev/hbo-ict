@@ -1,4 +1,9 @@
-import { CommentType, CreateCommentDto } from '@hbo-ict/lingo/types';
+import {
+  CommentDefaultReturn,
+  CommentFindManyArgs,
+  CommentType,
+  CreateCommentDto,
+} from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
 
 async function create(
@@ -8,6 +13,16 @@ async function create(
   return res.data;
 }
 
+async function findMany(
+  args: CommentFindManyArgs
+): Promise<CommentDefaultReturn[]> {
+  const res = await axiosInstance.get<CommentDefaultReturn[]>('/comment/all', {
+    params: args,
+  });
+  return res.data;
+}
+
 export const comment = {
   create,
+  findMany,
 };

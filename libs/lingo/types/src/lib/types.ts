@@ -209,3 +209,12 @@ export const createCommentSchema = z.object({
 });
 
 export type CreateCommentDto = z.infer<typeof createCommentSchema>;
+
+export type CommentFindManyArgs = Prisma.CommentFindManyArgs;
+
+export type CommentDefaultReturn = Prisma.CommentGetPayload<{
+  include: {
+    ticket: true;
+    author: true;
+  };
+}>;

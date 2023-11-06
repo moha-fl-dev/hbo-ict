@@ -12,12 +12,13 @@ import {
 import { Button } from '../components/button';
 import { PaperPlaneIcon } from '@radix-ui/react-icons';
 import { CreateCommentDto, createCommentSchema } from '@hbo-ict/lingo/types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Api } from '@hbo-ict/query-fns';
 import { useRouter } from 'next/router';
 
 export function CommmentForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const commentForm = useForm<CreateCommentDto>({
     resolver: zodResolver(createCommentSchema),
@@ -33,10 +34,18 @@ export function CommmentForm() {
 
   function sumit(data: CreateCommentDto) {
     console.log(data);
-    createComment({
-      content: data.content,
-      ticketNumber: router.query.ticket as string,
-    });
+    createComment(
+      {
+        content: data.content,
+        ticketNumber: router.query.ticket as string,
+      },
+      {
+        onSuccess: () => {
+          commentForm.reset();
+          queryClient.invalidateQueries(['comments']);
+        },
+      }
+    );
   }
 
   return (

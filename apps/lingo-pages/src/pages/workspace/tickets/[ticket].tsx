@@ -1,6 +1,7 @@
 import { useTicketByNumber } from '@hbo-ict/hooks';
 import { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
+  Comments,
   CommmentForm,
   Textarea,
   TicketForm,
@@ -40,7 +41,7 @@ export default function FindTicket() {
   }
 
   return (
-    <div className="flex flex-col gap-10 mt-2">
+    <div className="flex flex-col gap-5 mt-2">
       <TicketStatusBar activeStatus={minumumTicketData.status} />
       <TicketForm
         action="UPDATE"
@@ -48,6 +49,7 @@ export default function FindTicket() {
         key={minumumTicketData.ticketNumber}
       />
       <CommmentForm />
+      <Comments />
     </div>
   );
 }
