@@ -24,8 +24,11 @@ export class TicketService implements ITicketService {
     });
   }
 
-  async update(payload: Prisma.TicketUpdateInput) {
-    return null;
+  async update({ data, where }: Prisma.TicketUpdateArgs) {
+    return this.prisma.ticket.update({
+      where,
+      data,
+    });
   }
 
   async remove(where: Prisma.TicketWhereUniqueInput) {

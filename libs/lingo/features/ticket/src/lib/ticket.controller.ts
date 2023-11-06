@@ -46,9 +46,7 @@ export class TicketController {
 
   @Post(':number/update')
   @ZodValidate<CreateTicketDto>(createTicketSchema)
-  async update(@Req() req: { body: Prisma.TicketUpdateInput }) {
-    const { body } = req;
-    console.log({ update: body });
-    return this.ticketService.update(body);
+  async update(@Req() req: { body: CreateTicketDto }) {
+    return this.ticketAggregator.updateTicketByNumber(req.body);
   }
 }

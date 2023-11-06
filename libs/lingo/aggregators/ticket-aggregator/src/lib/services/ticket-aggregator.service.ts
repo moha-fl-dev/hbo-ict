@@ -6,7 +6,7 @@ import {
   ITicketService,
 } from '../interfaces';
 import { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import { Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
+import { $Enums, Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
 import { CreateTicketDto } from '@hbo-ict/lingo/types';
 
 @Injectable()
@@ -20,6 +20,52 @@ export class TicketAggregatorService implements ITicketAggregatorService {
 
     private readonly prisma: PrismaService
   ) {}
+  async updateTicketByNumber(
+    payload: CreateTicketDto
+  ): Promise<[Ticket, TicketNumber | null] | null> {
+    const ticketN = payload.ticketNumber;
+
+    try {
+      const findNumber = await this.ticketNumberService.find({
+        where: {
+          number: ticketN,
+        },
+      });
+
+      const updateData: Prisma.TicketUpdateArgs = {
+        data: {
+          // assignee: { update: { id: payload.assigneeId } },
+          team: { update: { id: payload.teamId } },
+          component: { update: { id: payload.componentId } },
+          status: payload.status,
+          severity: payload.severity,
+          description: payload.description,
+          title: payload.title,
+
+          // caller: { update: { id: payload.callerId } },
+        },
+
+        where: {
+          ticketNumberId: findNumber.id,
+        },
+      };
+
+      const updateTicket = await this.ticketService.update({
+        data: updateData.data,
+        where: updateData.where,
+      });
+
+      if (!updateTicket) {
+        throw new Error('Failed to update ticket.');
+      }
+
+      return [updateTicket, findNumber];
+      return null;
+    } catch (error) {
+      console.error('Transaction failed:', error);
+      return null;
+    }
+  }
 
   async createTicketWithNumber(
     payload: CreateTicketDto

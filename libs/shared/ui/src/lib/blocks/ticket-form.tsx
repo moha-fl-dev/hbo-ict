@@ -70,7 +70,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
   //
   const { toast } = useToast();
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   const [selectedTeamId, setSelectedTeamId] = useState<string>('');
 
   const [state, dispatch] = useReducer(reducer, {
@@ -138,6 +138,9 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
     onSuccess() {
       toast({
         description: 'Ticket updated successfully',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['ticket'],
       });
     },
   });
@@ -409,7 +412,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
             )}
           />
           <Button type="submit" variant={'workspace'}>
-            Create
+            {action}
           </Button>
         </div>
       </form>

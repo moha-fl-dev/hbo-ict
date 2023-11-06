@@ -5,4 +5,8 @@ export interface ITicketAggregatorService {
   createTicketWithNumber(
     payload: CreateTicketDto
   ): Promise<[Ticket, TicketNumber | null] | null>;
+
+  updateTicketByNumber(
+    payload: CreateTicketDto
+  ): Promise<[Ticket, TicketNumber | null] | null>;
 }
