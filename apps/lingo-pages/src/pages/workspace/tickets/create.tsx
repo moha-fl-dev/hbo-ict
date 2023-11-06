@@ -1,4 +1,3 @@
-import { useTicketNumber } from '@hbo-ict/hooks';
 import {
   CreateTicketDto,
   SeverityEnum,

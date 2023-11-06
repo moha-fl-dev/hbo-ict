@@ -34,6 +34,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Api } from '@hbo-ict/query-fns';
 import { useRouter } from 'next/router';
+import { useToast } from '../hooks/use-toast';
 
 type FormAction = 'CREATE' | 'UPDATE';
 
@@ -67,15 +68,14 @@ function reducer(
 
 export function TicketForm({ defaultValues, action }: TicketFormProps) {
   //
-
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const router = useRouter();
 
   const [selectedTeamId, setSelectedTeamId] = useState<string>('');
 
   const [state, dispatch] = useReducer(reducer, {
     mode: action,
-    ticketNumber: null,
+    ticketNumber: defaultValues?.ticketNumber || null,
   });
 
   const shouldFetchTicketNumber =
@@ -87,6 +87,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
   });
 
   const severityOptions = Object.values(SeverityEnum);
+
   const statusOptions = Object.values(TicketStatusEnum);
 
   const { teams } = useTeams();
@@ -99,20 +100,34 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
     if (defaultValues?.teamId) {
       setSelectedTeamId(defaultValues.teamId);
     }
+
+    if (defaultValues?.ticketNumber) {
+      ticketForm.setValue('ticketNumber', defaultValues?.ticketNumber);
+      dispatch({ type: 'UPDATE' });
+    }
   }, [defaultValues]);
 
   useEffect(() => {
-    if (isSuccess && ticket_number) {
+    console.log({ state });
+  }, [state]);
+
+  useEffect(() => {
+    if (isSuccess && ticket_number && state.mode === 'CREATE') {
       dispatch({ type: 'CREATE', payload: ticket_number.number });
       ticketForm.setValue('ticketNumber', ticket_number.number);
+    } else if (state.mode === 'UPDATE') {
+      dispatch({ type: 'UPDATE' });
     }
-  }, [isSuccess]);
+  }, [isSuccess, ticket_number]);
 
   const { mutate: createTicket } = useMutation({
-    mutationKey: ['update-ticket'],
+    mutationKey: ['create-ticket'],
     mutationFn: Api.ticket.create,
     onSuccess() {
       ticketForm.reset();
+      toast({
+        description: 'Ticket created successfully',
+      });
       router.push(`/workspace/tickets/${ticket_number?.number}`);
     },
   });
@@ -120,6 +135,11 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
   const { mutate: updateTicket } = useMutation({
     mutationKey: ['update-ticket'],
     mutationFn: Api.ticket.update,
+    onSuccess() {
+      toast({
+        description: 'Ticket updated successfully',
+      });
+    },
   });
 
   function sumit(payload: CreateTicketDto) {

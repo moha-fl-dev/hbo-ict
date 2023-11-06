@@ -40,7 +40,11 @@ export default function FindTicket() {
   return (
     <div className="flex flex-col gap-10 mt-2">
       <TicketStatusBar activeStatus={minumumTicketData.status} />
-      <TicketForm action="UPDATE" defaultValues={minumumTicketData} />
+      <TicketForm
+        action="UPDATE"
+        defaultValues={minumumTicketData}
+        key={minumumTicketData.ticketNumber}
+      />
     </div>
   );
 }
