@@ -1,6 +1,17 @@
+import { useManyTickets } from '@hbo-ict/hooks';
 import { ScrollArea, TicketsLayout, WorkspaceRootLayout } from '@hbo-ict/ui';
 
 export default function TicketsRoot() {
+  const { isError, isLoading, tickets } = useManyTickets({
+    include: {
+      team: true,
+      assignee: true,
+      component: true,
+      ticketNumber: true,
+      caller: true,
+    },
+  });
+
   return (
     <div className="h-full">
       {Array.from({ length: 1000 }, (_, i) => (

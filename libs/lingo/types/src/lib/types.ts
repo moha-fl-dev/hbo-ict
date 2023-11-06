@@ -185,6 +185,7 @@ export const createTicketSchema = z.object({
 });
 
 export type CreateTicketDto = z.infer<typeof createTicketSchema>;
+export type TicketFindManyArgs = Prisma.TicketFindManyArgs;
 
 export type TicketFindUniqueArgs = Prisma.TicketFindUniqueArgs;
 

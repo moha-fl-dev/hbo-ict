@@ -1,4 +1,8 @@
-import { Ticket, TicketFindUniqueArgs } from '@hbo-ict/lingo/types';
+import {
+  Ticket,
+  TicketFindManyArgs,
+  TicketFindUniqueArgs,
+} from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';
@@ -30,4 +34,16 @@ function useTicketByArgs({ where, include }: TicketFindUniqueArgs) {
   });
 
   return { ticket: data, ticketError, isLoading };
+}
+
+export function useManyTickets(payload: TicketFindManyArgs) {
+  const { data, isError, isLoading } = useQuery(
+    ['many-tickets'],
+    () => Api.ticket.findMany(payload),
+    {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    }
+  );
+
+  return { tickets: data, isError, isLoading };
 }

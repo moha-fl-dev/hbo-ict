@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, TicketNumber, Ticket } from '@prisma/client/lingo';
 import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { ITicketService } from '../interfaces/ticket.interface';
+import { TicketDefaultReturn } from '@hbo-ict/lingo/types';
 
 @Injectable()
 export class TicketService implements ITicketService {
@@ -13,8 +14,8 @@ export class TicketService implements ITicketService {
     });
   }
 
-  async findAll() {
-    return this.prisma.ticket.findMany();
+  async findMany(payload: Prisma.TicketFindManyArgs): Promise<Ticket[]> {
+    return this.prisma.ticket.findMany(payload);
   }
 
   async find({ where, include }: Prisma.TicketFindUniqueArgs) {

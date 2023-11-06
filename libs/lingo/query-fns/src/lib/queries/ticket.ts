@@ -1,6 +1,7 @@
 import {
   CreateTicketDto,
   TicketDefaultReturn,
+  TicketFindManyArgs,
   TicketFindUniqueArgs,
 } from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
@@ -31,8 +32,15 @@ async function update(payload: CreateTicketDto) {
   return res.data;
 }
 
+async function findMany(payload: TicketFindManyArgs) {
+  const res = await axiosInstance.get<TicketDefaultReturn[]>('ticket/all', {
+    params: payload,
+  });
+  return res.data;
+}
 export const ticket = {
   create,
   find,
   update,
+  findMany,
 };

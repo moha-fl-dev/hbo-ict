@@ -49,4 +49,16 @@ export class TicketController {
   async update(@Req() req: { body: CreateTicketDto }) {
     return this.ticketAggregator.updateTicketByNumber(req.body);
   }
+
+  @Get('/all')
+  async all(
+    @Query() query: Prisma.TicketFindManyArgs,
+    @TransformInclude()
+    transformIncludeBooleanValues: TicketFindUniqueArgs['include']
+  ) {
+    return this.ticketService.findMany({
+      where: query.where,
+      include: transformIncludeBooleanValues,
+    });
+  }
 }
