@@ -1,1 +1,0 @@
-export const TICKET_NUMBER_SERVICE = Symbol('TICKET_NUMBER_SERVICE');
