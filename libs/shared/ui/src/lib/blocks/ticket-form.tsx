@@ -129,6 +129,9 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
         description: 'Ticket created successfully',
       });
       router.push(`/workspace/tickets/${ticket_number?.number}`);
+      queryClient.invalidateQueries({
+        queryKey: ['many-tickets'],
+      });
     },
   });
 
@@ -141,6 +144,9 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
       });
       queryClient.invalidateQueries({
         queryKey: ['ticket'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['many-tickets'],
       });
     },
   });

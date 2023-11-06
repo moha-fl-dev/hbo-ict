@@ -149,3 +149,4 @@ export { TicketsLayout } from './lib/layouts/tickets.layout';
 export { TicketStatusBar } from './lib/components/ticket-status';
 
 export { Textarea } from './lib/components/textarea';
+export { Badge, badgeVariants } from './lib/components/badge';
