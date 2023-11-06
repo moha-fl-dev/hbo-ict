@@ -1,6 +1,6 @@
 import { Ticket, TicketFindUniqueArgs } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';
 import { useWithTicketNumber } from './use-ticket-number';
 

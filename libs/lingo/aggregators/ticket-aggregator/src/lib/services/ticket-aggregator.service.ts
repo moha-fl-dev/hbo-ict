@@ -7,6 +7,7 @@ import {
 } from '../interfaces';
 import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
+import { CreateTicketDto } from '@hbo-ict/lingo/types';
 
 @Injectable()
 export class TicketAggregatorService implements ITicketAggregatorService {
@@ -21,16 +22,17 @@ export class TicketAggregatorService implements ITicketAggregatorService {
   ) {}
 
   async createTicketWithNumber(
-    ticketData: Prisma.TicketCreateInput,
-    ticketNumberData: Prisma.TicketNumberCreateInput
+    payload: CreateTicketDto
   ): Promise<[Ticket, TicketNumber | null] | null> {
+    const ticketN = payload.ticketNumber;
+
     try {
       const [ticket, ticketNumber] = await this.prisma.$transaction(
         async (): Promise<[Ticket, TicketNumber | null]> => {
           const ticketNumber =
             await this.ticketNumberService.verifyAndClaimTicketNumber({
               where: {
-                number: ticketNumberData.number,
+                number: ticketN,
               },
             });
           if (!ticketNumber) {
@@ -38,13 +40,15 @@ export class TicketAggregatorService implements ITicketAggregatorService {
               'No valid ticket number available or failed to claim the ticket number.'
             );
           }
+
+          const ticketData = this.mapCreateTicketDtoToPrismaInput(
+            payload,
+            ticketNumber.id
+          );
+
           const ticket = await this.ticketService.create({
             ...ticketData,
-            ticketNumber: {
-              connect: {
-                id: ticketNumber.id,
-              },
-            },
+            ticketNumber: { connect: { id: ticketNumber.id } },
           });
           return [ticket, ticketNumber];
         }
@@ -54,5 +58,22 @@ export class TicketAggregatorService implements ITicketAggregatorService {
       console.error('Transaction failed:', error);
       return null;
     }
+  }
+
+  private mapCreateTicketDtoToPrismaInput(
+    payload: CreateTicketDto,
+    ticketId: string
+  ): Prisma.TicketCreateInput {
+    return {
+      title: payload.title,
+      description: payload.description,
+      status: payload.status,
+      severity: payload.severity,
+      caller: { connect: { id: payload.callerId } },
+      assignee: { connect: { id: payload.assigneeId } },
+      team: { connect: { id: payload.teamId } },
+      component: { connect: { id: payload.componentId } },
+      ticketNumber: { connect: { id: ticketId } },
+    };
   }
 }

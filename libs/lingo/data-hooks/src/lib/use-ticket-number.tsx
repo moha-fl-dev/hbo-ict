@@ -8,9 +8,6 @@ export function useCreateTicket({ enabled }: { enabled: boolean }) {
     queryKey: ['ticketNumber'],
     queryFn: Api.ticketNumber.create,
     enabled,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   });
 
   return {

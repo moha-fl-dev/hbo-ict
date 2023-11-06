@@ -13,8 +13,5 @@ export {
 } from './lib/use-department';
 export { useCurrentEmployeeExtendedDetails } from './lib/use-current-employee';
 export { usePerformSignOut } from './lib/use-auth';
-export {
-  useCreateTicket as useTicketNumber,
-  useWithTicketNumber,
-} from './lib/use-ticket-number';
+export { useCreateTicket, useWithTicketNumber } from './lib/use-ticket-number';
 export { useTicketByNumber } from './lib/use-ticket';

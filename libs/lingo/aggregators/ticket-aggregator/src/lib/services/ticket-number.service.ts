@@ -44,10 +44,14 @@ export class TicketNumberService implements ITicketNumberService {
     where,
     include,
   }: Prisma.TicketNumberFindUniqueArgs): Promise<TicketNumber> {
-    const ticketNumber = await this.prisma.ticketNumber.findFirstOrThrow({
+    const ticketNumber = await this.prisma.ticketNumber.findUnique({
       where,
       include,
     });
+
+    if (!ticketNumber) {
+      throw new Error('No ticket number found.');
+    }
 
     return ticketNumber;
   }
@@ -62,12 +66,17 @@ export class TicketNumberService implements ITicketNumberService {
         include,
       });
 
+      // makes no sense. if ticketNumberRecord is null, it will throw an error.
+      // revisit this logic.
+      // it will change the prolimanary ticket shown to the user.
       if (!ticketNumberRecord || ticketNumberRecord.used) {
         return await this.createTicketNumber();
       }
 
       return await this.claimTicketNumber({
-        where,
+        where: {
+          ...ticketNumberRecord,
+        },
         include,
       });
     } catch (error) {

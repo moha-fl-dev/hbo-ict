@@ -1,4 +1,3 @@
-import { TicketService } from '@hbo-ict/data-access';
 import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
 import {
   CreateTicketDto,
@@ -14,10 +13,6 @@ import {
   TICKET_SERVICE_TOKEN,
 } from '@hbo-ict/lingo/aggregators';
 
-type Delta<T, S> = {
-  [P in keyof T]?: T[P] | S;
-};
-
 @Controller('ticket')
 export class TicketController {
   constructor(
@@ -30,55 +25,7 @@ export class TicketController {
   @Post('/create')
   @ZodValidate<CreateTicketDto>(createTicketSchema)
   async create(@Req() req: { body: CreateTicketDto }) {
-    //
-
-    const { body } = req;
-    const { ticketNumber } = body;
-
-    const ticketData: Prisma.TicketCreateInput = {
-      title: body.title,
-      description: body.description,
-      status: body.status,
-      severity: body.severity,
-      caller: {
-        connect: {
-          id: body.callerId,
-        },
-      },
-      assignee: {
-        connect: {
-          id: body.assigneeId,
-        },
-      },
-      team: {
-        connect: {
-          id: body.teamId,
-        },
-      },
-      component: {
-        connect: {
-          id: body.componentId,
-        },
-      },
-      ticketNumber: {
-        connect: {
-          id: body.ticketNumber,
-        },
-      },
-    };
-
-    console.log({
-      ticketData,
-    });
-
-    // const data = await this.ticketService.create(
-    //   {
-    //     ...ticketData,
-    //   },
-    //   ticketNumber
-    // );
-
-    return 'data';
+    return this.ticketAggregator.createTicketWithNumber(req.body);
   }
 
   @Get('/find')

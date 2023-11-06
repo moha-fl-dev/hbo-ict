@@ -1,8 +1,8 @@
+import { CreateTicketDto } from '@hbo-ict/lingo/types';
 import { Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
 
 export interface ITicketAggregatorService {
   createTicketWithNumber(
-    ticketData: Prisma.TicketCreateInput,
-    ticketNumberData: Prisma.TicketNumberCreateInput
+    payload: CreateTicketDto
   ): Promise<[Ticket, TicketNumber | null] | null>;
 }

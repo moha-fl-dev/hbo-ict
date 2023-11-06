@@ -15,7 +15,7 @@ export class TicketNumberController {
   @Get('/create')
   async createTicketNumber() {
     const ticketNumber = await this.ticketNumberService.createTicketNumber();
-
+    console.log({ ticketNumber });
     return ticketNumber;
   }
 

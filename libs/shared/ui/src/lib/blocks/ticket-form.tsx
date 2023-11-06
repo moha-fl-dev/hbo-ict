@@ -15,7 +15,7 @@ import {
 import {
   useTeams,
   useComponentsWithTeamId,
-  useTicketNumber,
+  useCreateTicket,
 } from '@hbo-ict/hooks';
 import { Dispatch, useEffect, useReducer, useState } from 'react';
 import { Button } from '../components/button';
@@ -31,8 +31,9 @@ import {
 } from '../components/select';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Api } from '@hbo-ict/query-fns';
+import { useRouter } from 'next/router';
 
 type FormAction = 'CREATE' | 'UPDATE';
 
@@ -66,6 +67,10 @@ function reducer(
 
 export function TicketForm({ defaultValues, action }: TicketFormProps) {
   //
+
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
   const [selectedTeamId, setSelectedTeamId] = useState<string>('');
 
   const [state, dispatch] = useReducer(reducer, {
@@ -86,7 +91,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
 
   const { teams } = useTeams();
   const { components } = useComponentsWithTeamId(selectedTeamId);
-  const { ticketNumber: ticket_number, isSuccess } = useTicketNumber({
+  const { ticketNumber: ticket_number, isSuccess } = useCreateTicket({
     enabled: shouldFetchTicketNumber,
   });
 
@@ -106,6 +111,10 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
   const { mutate: createTicket } = useMutation({
     mutationKey: ['update-ticket'],
     mutationFn: Api.ticket.create,
+    onSuccess() {
+      ticketForm.reset();
+      router.push(`/workspace/tickets/${ticket_number?.number}`);
+    },
   });
 
   const { mutate: updateTicket } = useMutation({
