@@ -28,5 +28,5 @@ export function formatDate(input: Date | string): string {
   const hours = pad(date.getHours());
   const minutes = pad(date.getMinutes());
 
-  return `${day}/${month}/${year} ${hours}:${minutes}`;
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
 }

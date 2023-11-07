@@ -158,3 +158,4 @@ export {
   TooltipContent,
   TooltipProvider,
 } from './lib/components/tooltip';
+export { formatDate } from './lib/utils';

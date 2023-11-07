@@ -14,8 +14,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
   WorkspaceRootLayout,
+  formatDate,
 } from '@hbo-ict/ui';
 import { TicketStatusEnum } from '@prisma/client/lingo';
+import { InfoCircledIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -62,38 +64,65 @@ export default function TicketsRoot() {
         <TableCaption>End of Tickets</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Ticket</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Department</TableHead>
-            <TableHead>Team</TableHead>
-            <TableHead>Component</TableHead>
-            <TableHead>Assignee</TableHead>
+            <TableHead>
+              <MagnifyingGlassIcon />
+            </TableHead>
+            <TableHead>Number</TableHead>
+            <TableHead>Opened</TableHead>
+            <TableHead>Short description</TableHead>
             <TableHead>Caller</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Severity</TableHead>
+            <TableHead>Assignment Group</TableHead>
+            <TableHead>Component</TableHead>
+            <TableHead>Assigned To</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Updated</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {tickets?.map((ticket, index) => (
-            <TableRow key={index}>
-              <TableCell>
+            <TableRow key={index} className={` border-none h-14 group`}>
+              <TableCell className="text-center ">
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <Link
-                        href={`/workspace/tickets/${ticket.ticketNumber.number}`}
-                      >
-                        <span>{ticket.ticketNumber.number}</span>
-                      </Link>
+                    <TooltipTrigger className="mt-2 hover:text-workspace-primary transition-colors">
+                      <InfoCircledIcon className="hidden group-hover:block" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>View ticket details</p>
+                      <span>Preview Ticket</span>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </TableCell>
-              <TableCell>{ticket.title}</TableCell>
-              <TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                <Link href={`/workspace/tickets/${ticket.ticketNumber.number}`}>
+                  <span className="text-workspace-primary hover:text-workspace-foreground transition-colors">
+                    {ticket.ticketNumber.number}
+                  </span>
+                </Link>
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {formatDate(ticket.createdAt)}
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {ticket.title}
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger className="hover:text-workspace-primary transition-colors">
+                      <span className="text-workspace-primary ">
+                        {ticket.caller.name}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>Preview employee</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                <Badge variant={ticket.severity}>{ticket.severity}</Badge>
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
@@ -101,7 +130,9 @@ export default function TicketsRoot() {
                         href={`/workspace/tickets/?department=${ticket.team?.Department.id}`}
                         className=""
                       >
-                        <span>{ticket.team?.Department.name}</span>
+                        <span className="text-workspace-primary hover:text-workspace-foreground transition-colors">
+                          {ticket.team?.Department.name}
+                        </span>
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -110,28 +141,18 @@ export default function TicketsRoot() {
                   </Tooltip>
                 </TooltipProvider>
               </TableCell>
-              <TableCell>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Link
-                        href={`/workspace/tickets/?team=${ticket.team?.id}`}
-                      >
-                        <span>{ticket.team?.name}</span>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Filter by this Team</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {ticket.component.name}
               </TableCell>
-              <TableCell>{ticket.component.name}</TableCell>
-              <TableCell>{ticket.assignee?.name}</TableCell>
-              <TableCell>{ticket.caller.name}</TableCell>
-              <TableCell>{ticket.status}</TableCell>
-              <TableCell>
-                <Badge variant={ticket.severity}>{ticket.severity}</Badge>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {ticket.assignee?.name}
+              </TableCell>
+
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {ticket.status}
+              </TableCell>
+              <TableCell className="hover:hover:bg-muted transition-colors">
+                {formatDate(ticket.updatedAt)}
               </TableCell>
             </TableRow>
           ))}
