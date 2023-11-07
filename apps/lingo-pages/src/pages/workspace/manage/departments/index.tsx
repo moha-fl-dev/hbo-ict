@@ -198,7 +198,7 @@ export default function ManageDepartments() {
                 label={'Total open'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${TicketStatusEnum.OPEN}`}
+                )}&ticket_status=${TicketStatusEnum.OPEN}`}
               />
 
               <SummaryLink
@@ -208,7 +208,7 @@ export default function ManageDepartments() {
                 label={'Total closed'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${TicketStatusEnum.CLOSED}`}
+                )}&ticket_status=${TicketStatusEnum.CLOSED}`}
               />
               <SummaryLink
                 max={100}
@@ -217,7 +217,7 @@ export default function ManageDepartments() {
                 label={'Total assigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${TicketStatusEnum.IN_PROGRESS}`}
+                )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
               />
               <SummaryLink
                 max={100}
@@ -226,7 +226,7 @@ export default function ManageDepartments() {
                 label={'Total unassigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
                   department.id
-                )}&ticket_state=${TicketStatusEnum.ON_HOLD}`}
+                )}&ticket_status=${TicketStatusEnum.HOLD}`}
               />
             </div>
             <ResponsiveContainer height={350} width={'100%'}>

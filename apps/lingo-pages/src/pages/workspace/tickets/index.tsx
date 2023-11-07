@@ -9,8 +9,13 @@ import {
   TableHeader,
   TableRow,
   TicketsLayout,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
+import { TicketStatusEnum } from '@prisma/client/lingo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -19,7 +24,11 @@ export default function TicketsRoot() {
 
   const { isError, isLoading, tickets } = useManyTickets({
     include: {
-      team: true,
+      team: {
+        include: {
+          Department: true,
+        },
+      },
       assignee: true,
       component: true,
       ticketNumber: true,
@@ -29,6 +38,19 @@ export default function TicketsRoot() {
       team: {
         id: {
           equals: router.query.team as string,
+        },
+        Department: {
+          id: {
+            equals: router.query.department as string,
+          },
+        },
+      },
+      status: {
+        equals: router.query.ticket_status as TicketStatusEnum,
+      },
+      component: {
+        id: {
+          equals: router.query.component as string,
         },
       },
     },
@@ -42,6 +64,7 @@ export default function TicketsRoot() {
           <TableRow>
             <TableHead>Ticket</TableHead>
             <TableHead>Title</TableHead>
+            <TableHead>Department</TableHead>
             <TableHead>Team</TableHead>
             <TableHead>Component</TableHead>
             <TableHead>Assignee</TableHead>
@@ -53,24 +76,55 @@ export default function TicketsRoot() {
         <TableBody>
           {tickets?.map((ticket, index) => (
             <TableRow key={index}>
-              <TableCell className="text-left">
-                <Link
-                  href={`/workspace/tickets/${ticket.ticketNumber.number}`}
-                  className="hover:underline underline-offset-8
-                  "
-                >
-                  <span>{ticket.ticketNumber.number}</span>
-                </Link>
+              <TableCell>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={`/workspace/tickets/${ticket.ticketNumber.number}`}
+                      >
+                        <span>{ticket.ticketNumber.number}</span>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>View ticket details</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </TableCell>
               <TableCell>{ticket.title}</TableCell>
               <TableCell>
-                <Link
-                  href={`/workspace/tickets/?team=${ticket.team?.id}`}
-                  className="hover:underline underline-offset-8
-                  "
-                >
-                  <span>{ticket.team?.name}</span>
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={`/workspace/tickets/?department=${ticket.team?.Department.id}`}
+                        className=""
+                      >
+                        <span>{ticket.team?.Department.name}</span>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Filter by this department</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </TableCell>
+              <TableCell>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link
+                        href={`/workspace/tickets/?team=${ticket.team?.id}`}
+                      >
+                        <span>{ticket.team?.name}</span>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Filter by this Team</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </TableCell>
               <TableCell>{ticket.component.name}</TableCell>
               <TableCell>{ticket.assignee?.name}</TableCell>

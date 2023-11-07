@@ -152,3 +152,9 @@ export { Textarea } from './lib/components/textarea';
 export { Badge, badgeVariants } from './lib/components/badge';
 export { CommmentForm } from './lib/blocks/comment-form';
 export { Comments } from './lib/blocks/comments-block';
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from './lib/components/tooltip';

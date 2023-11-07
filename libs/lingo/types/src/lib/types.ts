@@ -196,7 +196,9 @@ export type TicketDefaultReturn = Prisma.TicketGetPayload<{
   include: {
     caller: true;
     assignee: true;
-    team: true;
+    team: {
+      include: { Department: true };
+    };
     component: true;
     ticketNumber: true;
   };

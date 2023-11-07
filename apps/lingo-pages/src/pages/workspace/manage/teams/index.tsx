@@ -7,7 +7,7 @@ import {
   TeamsLayout,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
-import { Team } from '@prisma/client/lingo';
+import { Team, TicketStatusEnum } from '@prisma/client/lingo';
 import {
   LockOpen1Icon,
   LockClosedIcon,
@@ -173,7 +173,7 @@ export default function ManageTeams() {
           label={'Total open'}
           href={`/workspace/tickets?team=${encodeURIComponent(
             team.id
-          )}&state=open`}
+          )}&ticket_status=${TicketStatusEnum.OPEN}`}
         />
 
         <SummaryLink
@@ -183,7 +183,7 @@ export default function ManageTeams() {
           label={'Total closed'}
           href={`/workspace/tickets?team=${encodeURIComponent(
             team.id
-          )}&state=closed`}
+          )}&ticket_status=${TicketStatusEnum.CLOSED}`}
         />
         <SummaryLink
           max={100}
@@ -192,7 +192,7 @@ export default function ManageTeams() {
           label={'Total assigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
             team.id
-          )}&state=assigned`}
+          )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
         />
         <SummaryLink
           max={100}
@@ -201,7 +201,7 @@ export default function ManageTeams() {
           label={'Total unassigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
             team.id
-          )}&state=unassigned`}
+          )}&ticket_status=${TicketStatusEnum.HOLD}`}
         />
       </div>
       <ResponsiveContainer

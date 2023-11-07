@@ -8,7 +8,7 @@ import {
   SummaryLink,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
-import { Component, Team } from '@prisma/client/lingo';
+import { Component, Team, TicketStatusEnum } from '@prisma/client/lingo';
 import {
   LockOpen1Icon,
   LockClosedIcon,
@@ -184,9 +184,13 @@ export default function ManageComponents() {
           min={10}
           icon={<LockOpen1Icon />}
           label={'Total open'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?component=${encodeURIComponent(
+            component.id
+          )}&ticket_status=${
+            TicketStatusEnum.OPEN
+          }&department=${encodeURIComponent(
             team.Department.id
-          )}&state=open`}
+          )}&team=${encodeURIComponent(team.id)}`}
         />
 
         <SummaryLink
@@ -194,27 +198,39 @@ export default function ManageComponents() {
           min={10}
           icon={<LockClosedIcon />}
           label={'Total closed'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?component=${encodeURIComponent(
+            component.id
+          )}&ticket_status=${
+            TicketStatusEnum.CLOSED
+          }&department=${encodeURIComponent(
             team.Department.id
-          )}&state=closed`}
+          )}&team=${encodeURIComponent(team.id)}`}
         />
         <SummaryLink
           max={100}
           min={10}
           icon={<Link1Icon />}
           label={'Total assigned'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?component=${encodeURIComponent(
+            component.id
+          )}&ticket_status=${
+            TicketStatusEnum.ACTIVE
+          }&department=${encodeURIComponent(
             team.Department.id
-          )}&state=assigned`}
+          )}&team=${encodeURIComponent(team.id)}`}
         />
         <SummaryLink
           max={100}
           min={10}
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
-          href={`department=${encodeURIComponent(
+          href={`/workspace/tickets?component=${encodeURIComponent(
+            component.id
+          )}&ticket_status=${
+            TicketStatusEnum.HOLD
+          }&department=${encodeURIComponent(
             team.Department.id
-          )}&state=unassigned`}
+          )}&team=${encodeURIComponent(team.id)}`}
         />
       </div>
       {router.query.department && (
