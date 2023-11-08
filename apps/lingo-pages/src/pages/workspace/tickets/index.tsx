@@ -21,6 +21,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
   QuikViewTicket,
+  formatDateWithRelativeTime,
 } from '@hbo-ict/ui';
 import { TicketStatusEnum } from '@prisma/client/lingo';
 import { DotsVerticalIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
@@ -213,7 +214,9 @@ export default function TicketsRoot() {
                 </Link>
               </TableCell>
               <TableCell className="hover:hover:bg-muted transition-colors">
-                {formatDate(ticket.createdAt)}
+                {formatDateWithRelativeTime(
+                  ticket.createdAt
+                ).formattedDateTime()}
               </TableCell>
               <TableCell className="hover:hover:bg-muted transition-colors">
                 {ticket.title}
@@ -268,7 +271,7 @@ export default function TicketsRoot() {
                 {ticket.status}
               </TableCell>
               <TableCell className="hover:hover:bg-muted transition-colors">
-                {formatDate(ticket.updatedAt)}
+                {formatDateWithRelativeTime(ticket.updatedAt).relativeTime()}
               </TableCell>
             </TableRow>
           ))}

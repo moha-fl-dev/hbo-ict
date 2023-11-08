@@ -1,7 +1,7 @@
 import { useFindComment } from '@hbo-ict/hooks';
 import { CommentDefaultReturn } from '@hbo-ict/lingo/types';
 import { useRouter } from 'next/router';
-import { formatDate } from '../utils';
+import { formatDate, formatDateWithRelativeTime } from '../utils';
 
 export function Comments() {
   const router = useRouter();
@@ -52,7 +52,7 @@ function CommentA(comment: CommentDefaultReturn) {
           {comment.author.name}
         </span>
         <span className="text-xs text-primary">
-          {formatDate(comment.createdAt)}
+          {formatDateWithRelativeTime(comment.createdAt).formattedDateTime()}
         </span>
       </div>
       <div className="flex-1 border-gray-300 bg-secondary/30 p-2 rounded-md align-bottom">
@@ -77,7 +77,9 @@ function CommentB(comment: CommentDefaultReturn) {
           <p className="leading-relaxed">{comment.content}</p>
         </div>
         <div className="text-xs flex fle-row justify-end">
-          <span>{formatDate(comment.createdAt)}</span>
+          <span>
+            {formatDateWithRelativeTime(comment.createdAt).formattedDateTime()}
+          </span>
         </div>
       </div>
     </div>
