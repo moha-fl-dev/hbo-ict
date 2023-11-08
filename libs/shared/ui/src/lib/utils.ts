@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { format, formatDistanceToNow } from 'date-fns';
 
 /**
  * cn
@@ -29,4 +30,41 @@ export function formatDate(input: Date | string): string {
   const minutes = pad(date.getMinutes());
 
   return `${day}-${month}-${year} ${hours}:${minutes}`;
+}
+
+export function formatDateWithRelativeTime(date: Date | string) {
+  const dateObject = typeof date === 'string' ? new Date(date) : date;
+
+  // Format the date as 'dd-MMM-yy'
+  const formattedDate = () => format(dateObject, 'dd-MMM-yy');
+
+  // Format the date as 'x ago'
+  const relativeTime = () =>
+    formatDistanceToNow(dateObject, { addSuffix: true });
+
+  // Format the date as 'HH:mm:ss'
+  const formattedTime = () => format(dateObject, 'HH:mm:ss');
+
+  // Format the date as 'dd-MMM-yy HH:mm:ss'
+  const formattedDateTime = () => `${formattedDate()} ${formattedTime()}`;
+
+  return {
+    formattedDate,
+    relativeTime,
+    formattedTime,
+    formattedDateTime,
+  };
+}
+
+export function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) {
+    // Return the first two letters if there's only one part
+    // cases where employee hasnt set a name
+    return name.substring(0, 2).toUpperCase();
+  }
+
+  // return initials
+  const initials = parts[0][0] + parts[parts.length - 1][0];
+  return initials.toUpperCase();
 }

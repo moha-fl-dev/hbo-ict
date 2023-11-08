@@ -158,4 +158,10 @@ export {
   TooltipContent,
   TooltipProvider,
 } from './lib/components/tooltip';
-export { formatDate } from './lib/utils';
+export {
+  formatDate,
+  formatDateWithRelativeTime,
+  getInitials,
+} from './lib/utils';
+
+export { QuikViewTicket } from './lib/blocks/quick-view-ticket-sheet';

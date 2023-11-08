@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        'inner-top': 'inset 0 4px 6px -6px rgba(0, 0, 0, 0.1)', // adjust the rgba values to control the color and opacity
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

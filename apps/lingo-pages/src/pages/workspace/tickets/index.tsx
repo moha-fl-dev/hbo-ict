@@ -17,22 +17,17 @@ import {
   formatDate,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  QuikViewTicket,
 } from '@hbo-ict/ui';
 import { TicketStatusEnum } from '@prisma/client/lingo';
-import {
-  DotsVerticalIcon,
-  InfoCircledIcon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons';
+import { DotsVerticalIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { Router, useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 type Sort = 'asc' | 'desc';
 
@@ -208,16 +203,7 @@ export default function TicketsRoot() {
           {tickets?.map((ticket, index) => (
             <TableRow key={index} className={` border-none h-14 group`}>
               <TableCell className="text-center ">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="mt-2 hover:text-workspace-primary transition-colors">
-                      <InfoCircledIcon className="hidden group-hover:block" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <span>Preview Ticket</span>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <QuikViewTicket {...ticket} />
               </TableCell>
               <TableCell className="hover:bg-muted transition-colors">
                 <Link href={`/workspace/tickets/${ticket.ticketNumber.number}`}>
