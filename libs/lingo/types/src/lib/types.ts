@@ -14,6 +14,7 @@ export type {
   TicketNumber,
   Ticket,
   Comment as CommentType,
+  TicketHistory,
 } from '@prisma/client/lingo';
 export {
   TicketStatusEnum,

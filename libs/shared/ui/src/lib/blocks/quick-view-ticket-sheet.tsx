@@ -1,4 +1,4 @@
-import { TicketDefaultReturn } from '@hbo-ict/lingo/types';
+import { TicketDefaultReturn, TicketHistory } from '@hbo-ict/lingo/types';
 import {
   Sheet,
   SheetClose,
@@ -14,12 +14,15 @@ import {
   Cross2Icon,
   CopyIcon,
   Share1Icon,
+  CalendarIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { Badge } from '../components/badge';
 import { Button } from '../components/button';
 import { formatDateWithRelativeTime, getInitials } from '../utils';
 import { Avatar, AvatarFallback } from '../components/avatar';
+import { ScrollArea } from '../components/scroll-area';
+import { TimeLine } from './time-line';
 
 export function QuikViewTicket(ticket: TicketDefaultReturn) {
   return (
@@ -108,15 +111,10 @@ export function QuikViewTicket(ticket: TicketDefaultReturn) {
             <div className="mt-4 px-4">
               <span className="text-base text-primary ">Recent activity</span>
             </div>
-            <div className="bg-gray-50 border-t mt-4 shadow-inner-top p-4">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <RecentComment
-                  authorName={ticket.caller.name!}
-                  content={ticket.description}
-                  createdAt={ticket.createdAt}
-                  key={'recent-comments'}
-                />
-              ))}
+            <div className="bg-gray-50 border-t mt-4 shadow-inner-top p-4 h-screen">
+              <ScrollArea className="max-h-[70%] h-[70%]">
+                <TimeLine />
+              </ScrollArea>
             </div>
           </SheetDescription>
         </SheetHeader>
