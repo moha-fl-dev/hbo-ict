@@ -23,7 +23,7 @@ export function WorkspaceRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-full min-h-screen">
+    <div className="flex h-full min-h-screen" key={'root-workspace-layout'}>
       <aside className="w-[12%] min-w-[200px] hidden md:block border-r">
         <div className="flex flex-col gap-2 w-full mt-5 ">
           <Logo
