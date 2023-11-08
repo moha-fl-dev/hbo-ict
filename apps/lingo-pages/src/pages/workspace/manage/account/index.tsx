@@ -138,7 +138,7 @@ export default function ManageAccount() {
           <em>
             <h1 className="text-xl font-semibold text-slate-600">Account</h1>
           </em>
-          <Form {...form}>
+          <Form {...form} key={'account-form'}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <Label className="text-slate-600 space-y-4">
                 {(currentUser && currentUser.email) || '....'}
