@@ -30,7 +30,7 @@ export default function CreateTicket() {
   };
 
   return (
-    <div className="flex flex-col gap-10 mt-2">
+    <div className="flex flex-col gap-10 mt-2 container">
       <TicketStatusBar activeStatus={'OPEN'} />
 
       <TicketForm
