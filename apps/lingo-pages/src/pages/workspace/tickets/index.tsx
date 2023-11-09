@@ -69,11 +69,16 @@ export default function TicketsRoot() {
         },
       },
     },
-
-    orderBy: {
-      createdAt: router.query.sort_by_created_at as Sort,
-      updatedAt: router.query.sort_by_updated_at as Sort,
-    },
+    skip: router.query.skip as unknown as number | undefined,
+    take: router.query.take as unknown as number | undefined,
+    orderBy: [
+      {
+        createdAt: router.query.sort_by_created_at as Sort,
+      },
+      {
+        updatedAt: router.query.sort_by_updated_at as Sort,
+      },
+    ],
   });
 
   return (
@@ -183,7 +188,7 @@ export default function TicketsRoot() {
                         queryClient.invalidateQueries(['many-tickets']);
                         router.push({
                           pathname: '/workspace/tickets',
-                          query: { ...router.query, sort_by_created_at: value },
+                          query: { ...router.query, sort_by_updated_at: value },
                         });
                       }}
                     >

@@ -60,6 +60,8 @@ export class TicketController {
     return this.ticketService.findMany({
       where: query.where,
       include: transformIncludeBooleanValues,
+      skip: query.skip ? Number(query.skip) : undefined, // lazy solution. but it works
+      take: query.take ? Number(query.take) : undefined, // lazy solution. might take the time to build a interceptor for this. not sure yet
     });
   }
 }

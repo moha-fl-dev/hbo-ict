@@ -30,7 +30,7 @@ export function QuikViewTicket(ticket: TicketDefaultReturn) {
       <SheetTrigger>
         <InfoCircledIcon className="hidden group-hover:block" />
       </SheetTrigger>
-      <SheetContent className="p-0 md:max-w-md sm:max-w-xl">
+      <SheetContent className="p-0 md:max-w-lg sm:max-w-xl">
         <SheetHeader>
           <SheetTitle className="shadow-sm border-b py-2.5 px-2">
             <div className="flex flex-row justify-between items-center align-middle">
