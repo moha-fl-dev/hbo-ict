@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import https from 'https';
 import axios from 'axios';
-import { setAxiosToken } from '@hbo-ict/query-fns';
 
 export default async function handler(
   req: NextApiRequest,

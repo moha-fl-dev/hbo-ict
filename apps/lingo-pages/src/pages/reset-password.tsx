@@ -39,7 +39,7 @@ export default function ResetPassword() {
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: Api.auth.forgotPassword,
+    mutationFn: Api.auth.resetPassword,
     onError: (error) => {
       setServerError(true);
     },
@@ -51,7 +51,7 @@ export default function ResetPassword() {
   const form = useForm<ResetPasswordDto>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
-      email: '',
+      password: '',
     },
   });
 

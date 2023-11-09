@@ -40,4 +40,4 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
 
 ListItem.displayName = 'ListItem';
 
-export { ListItem, ListItemProps };
+export { ListItem, type ListItemProps };

@@ -45,7 +45,7 @@ export { CreateTicketForm } from './lib/blocks/create-ticket-form';
 export { TicketForm } from './lib/blocks/ticket-form';
 export { AuthLayout } from './lib/layouts/auth.layout';
 
-export { MinimalFormProps } from './lib/types';
+export type { MinimalFormProps } from './lib/types';
 
 export { QueryLoader } from './lib/layouts/loader';
 

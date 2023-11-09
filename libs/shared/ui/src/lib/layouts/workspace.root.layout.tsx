@@ -1,21 +1,25 @@
-import { AvatarIcon, PlusIcon } from '@radix-ui/react-icons';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { Button } from '../components/button';
 import { Input } from '../components/input';
 import { Logo } from '../components/logo';
 import { Separator } from '../components/seperator';
 import { WorkspaceMenu } from '../components/workspace.menu';
 import Link from 'next/link';
-import { MobileSideNav } from '../components/sideNav';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from '../components/dropdown.menu';
-import { useCurrentUser, usePerformSignOut } from '@hbo-ict/hooks';
+import dynamic from 'next/dynamic';
+
+const DynamicUserDropDown = dynamic(
+  () => import('../blocks/user-dropdown').then((mod) => mod.UserDropDown),
+  {
+    ssr: false,
+  }
+);
+
+const DynamicMobileSideNav = dynamic(
+  () => import('../components/sideNav').then((mod) => mod.MobileSideNav),
+  {
+    ssr: false,
+  }
+);
 
 export function WorkspaceRootLayout({
   children,
@@ -59,47 +63,13 @@ export function WorkspaceRootLayout({
       <main className="flex-1 h-full ">
         <div className="border-b shadow-sm flex flex-col h-[57px] justify-evenly ">
           <div className="flex flex-row p-5 justify-between align-middle items-center">
-            <MobileSideNav />
+            <DynamicMobileSideNav />
             <Input placeholder="Search.... INC123456789" className="w-[50%]" />
-            <UserDropDown />
+            <DynamicUserDropDown />
           </div>
         </div>
         <div className="mt-2 px-4 h-full">{children}</div>
       </main>
     </div>
-  );
-}
-
-function UserDropDown() {
-  const { currentUser } = useCurrentUser();
-  const { signOut } = usePerformSignOut();
-
-  function handlerSignOut() {
-    signOut();
-  }
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild className="cursor-pointer">
-        <Button
-          variant={'outline'}
-          size={'icon'}
-          className="flex flex-row gap-2"
-        >
-          <AvatarIcon />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 mr-5">
-        <DropdownMenuLabel>{currentUser?.email}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/workspace/manage/account">Settings</Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handlerSignOut}>Log out</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }

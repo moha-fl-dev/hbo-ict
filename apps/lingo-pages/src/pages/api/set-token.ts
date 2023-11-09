@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import { setAxiosToken } from '@hbo-ict/query-fns';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,8 +23,6 @@ export default async function handler(
     Jwt.verify(token, process.env.SUPABASE_JWT_SECRET as string, {
       algorithms: ['HS256'],
     });
-
-    setAxiosToken(token);
 
     res.status(200);
     return;

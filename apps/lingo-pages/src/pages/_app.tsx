@@ -85,7 +85,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <LoadingSpinner />
         <main>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           {<Toaster />}
           {getLayout(<Component {...pageProps} />)}
         </main>

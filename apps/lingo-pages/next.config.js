@@ -13,11 +13,15 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: true,
+
 };
+
+const withBundleAnalyzer = process.env.ANALYZE_BUNDLE === 'true' ? require('@next/bundle-analyzer')() : (/** @type {any} */ a) => a;
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
   withNx,
+  withBundleAnalyzer,
 ];
 
 module.exports = composePlugins(...plugins)(nextConfig);

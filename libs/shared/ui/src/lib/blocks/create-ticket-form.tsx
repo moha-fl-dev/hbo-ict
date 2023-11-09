@@ -11,11 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../components/form';
-import {
-  useTeams,
-  useComponentsWithTeamId,
-  useTicketNumber,
-} from '@hbo-ict/hooks';
+import { useTeams, useComponentsWithTeamId } from '@hbo-ict/hooks';
 
 import { useEffect, useState } from 'react';
 import { Button } from '../components/button';

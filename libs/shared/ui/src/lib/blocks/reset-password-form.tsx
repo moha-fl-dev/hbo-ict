@@ -33,7 +33,7 @@ export function ResetPasswordForm({
     >
       <FormField
         control={form.control}
-        name="email"
+        name="password"
         render={({ field }) => (
           <FormItem>
             <FormLabel>E-mail</FormLabel>
