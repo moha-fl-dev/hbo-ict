@@ -39,13 +39,6 @@
       "options": {
         "cwd": "libs/lingo/schema"
       }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/lingo/schama/**/*.ts"]
-      }
     }
   },
   "tags": []

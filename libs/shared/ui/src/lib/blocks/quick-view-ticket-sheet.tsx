@@ -88,6 +88,7 @@ export function QuikViewTicket(ticket: TicketDefaultReturn) {
                 />
                 <QuickViewTicketItem
                   label={'Group'}
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
                   value={ticket.team?.Department.name!}
                 />
 

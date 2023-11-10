@@ -96,7 +96,7 @@ export class TicketController {
     return this.ticketService.update(body);
   }
 
-  private findDeltaDiff<T extends Object>(
+  private findDeltaDiff<T extends object>(
     originalObject: T,
     revisedObject: T
   ): Delta<T, typeof TicketController.REMOVED_PROPERTY> {
@@ -161,10 +161,10 @@ export class TicketController {
           delta[key as keyof T] = nestedDelta as T[Extract<keyof T, string>];
         }
       } else if (
-        (originalObject.hasOwnProperty(key) &&
-          !revisedObject.hasOwnProperty(key)) ||
-        (revisedObject.hasOwnProperty(key) &&
-          !originalObject.hasOwnProperty(key)) ||
+        (Object.prototype.hasOwnProperty.call(originalObject, key) &&
+          !Object.prototype.hasOwnProperty.call(revisedObject, key)) ||
+        (Object.prototype.hasOwnProperty.call(revisedObject, key) &&
+          !Object.prototype.hasOwnProperty.call(originalObject, key)) ||
         originalValue !== revisedValue
       ) {
         delta[key as keyof T] = TicketController.REMOVED_PROPERTY as T[Extract<

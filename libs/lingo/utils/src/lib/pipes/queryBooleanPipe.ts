@@ -15,7 +15,7 @@ export class QueryBooleanPipe<T> implements PipeTransform {
       return obj.map((item) => this.transformStringToBoolean(item)) as any;
     }
 
-    let result: Record<string, any> = {};
+    const result: Record<string, any> = {};
     for (const key in obj) {
       const value = obj[key];
       if (value === 'true') {

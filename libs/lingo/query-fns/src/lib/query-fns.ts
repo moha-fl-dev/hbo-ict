@@ -8,7 +8,7 @@ import { ticketNumber } from './queries/ticketNumber';
 import { ticket } from './queries/ticket';
 import { comment } from './queries/comment';
 
-async function createDepartment(url: string) {}
+// async function createDepartment(url: string) {}
 
 const Api = {
   auth,
