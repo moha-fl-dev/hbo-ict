@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
 import './global.css';
 
 export const metadata = {
@@ -9,7 +9,7 @@ export const metadata = {
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-})
+});
 
 export default function RootLayout({
   children,

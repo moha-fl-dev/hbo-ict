@@ -13,12 +13,14 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: true,
-
 };
 
-const withBundleAnalyzer = process.env.ANALYZE_BUNDLE === 'true' ? require('@next/bundle-analyzer')({
-  openAnalyzer: false,
-}) : (/** @type {any} */ a) => a;
+const withBundleAnalyzer =
+  process.env.ANALYZE_BUNDLE === 'true'
+    ? require('@next/bundle-analyzer')({
+        openAnalyzer: false,
+      })
+    : (/** @type {any} */ a) => a;
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
