@@ -8,13 +8,11 @@ import cookieParser from 'cookie-parser';
 import * as fs from 'fs';
 import * as path from 'path';
 
-
 /**
  * The main function of the app.
  * @returns The app.
  */
 (async () => {
-
   /**
    * The https options.
    * makes it possible to use secure cookies.
@@ -23,7 +21,7 @@ import * as path from 'path';
    */
   const httpsOptions: NestApplicationOptions['httpsOptions'] = {
     key: fs.readFileSync(path.join(__dirname, '../../../localhost-key.pem')),
-    cert: fs.readFileSync(path.join(__dirname,'../../../localhost.pem')),
+    cert: fs.readFileSync(path.join(__dirname, '../../../localhost.pem')),
   };
 
   /**
@@ -31,8 +29,6 @@ import * as path from 'path';
    */
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions,
-    
-    
   });
 
   /**
@@ -55,7 +51,7 @@ import * as path from 'path';
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization', 'noAuth'],
   });
-  
+
   /**
    * get the port from the config module.
    */
@@ -64,9 +60,12 @@ import * as path from 'path';
   /**
    * Start the app.
    */
-  app.listen(port).then(() => {
-    Logger.log(`🚀 Application is running on: https://localhost:${port}`);
-  }).catch((err) => {
-    Logger.error(err);
-  })
+  app
+    .listen(port)
+    .then(() => {
+      Logger.log(`🚀 Application is running on: https://localhost:${port}`);
+    })
+    .catch((err) => {
+      Logger.error(err);
+    });
 })();

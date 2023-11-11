@@ -28,7 +28,7 @@ import { User } from '@supabase/supabase-js';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService // private readonly configService: NestAppConfig<ConfSchemType>
+    private readonly authService: AuthService, // private readonly configService: NestAppConfig<ConfSchemType>
   ) {}
 
   @Public()
@@ -42,7 +42,7 @@ export class AuthController {
   @ZodValidate<SignInDto>(SignInSchema)
   async signIn(
     @Body() payload: SignInDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const { access_token, expires_in, refresh_token } =
       await this.authService.signIn(payload);
@@ -76,7 +76,7 @@ export class AuthController {
   @ZodValidate<SignUpDto>(SignUpSchema)
   async SignUp(
     @Body() payload: SignUpDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const { access_token, expires_in, refresh_token } =
       await this.authService.SignUp(payload);
@@ -108,10 +108,10 @@ export class AuthController {
   @Get('me')
   async getProfile(
     @Req() request: Request,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const { email, status } = await this.authService.me(
-      request.signedCookies.access_token
+      request.signedCookies.access_token,
     );
 
     response.status(status).send({
@@ -124,7 +124,7 @@ export class AuthController {
   @Get('refresh-token')
   async refreshToken(
     @Req() request: Request,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const _refresh_token = request.signedCookies.refresh_token;
     const _access_token = request.signedCookies.access_token;
@@ -168,7 +168,7 @@ export class AuthController {
   async resetPassword(
     @Req() request: Request,
     @Body() payload: ResetPasswordDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const user = request['user'] as User;
     const { id: uuid } = user;
@@ -208,7 +208,7 @@ export class AuthController {
   @Post('sign-out')
   async signOut(
     @Req() request: Request,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const jwt = request.signedCookies.access_token;
 

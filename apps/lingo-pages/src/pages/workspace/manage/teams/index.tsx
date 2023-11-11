@@ -125,7 +125,7 @@ export default function ManageTeams() {
           uv: Math.floor(Math.random() * 50) + 100,
           pv: Math.floor(Math.random() * 50) + 100,
         };
-      })
+      }),
     );
   }, [teamId]);
 
@@ -155,7 +155,7 @@ export default function ManageTeams() {
         >
           <Link
             href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              department.id
+              department.id,
             )}`}
           >
             {department.name}
@@ -172,7 +172,7 @@ export default function ManageTeams() {
           icon={<LockOpen1Icon />}
           label={'Total open'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id
+            team.id,
           )}&ticket_status=${TicketStatusEnum.OPEN}`}
         />
 
@@ -182,7 +182,7 @@ export default function ManageTeams() {
           icon={<LockClosedIcon />}
           label={'Total closed'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id
+            team.id,
           )}&ticket_status=${TicketStatusEnum.CLOSED}`}
         />
         <SummaryLink
@@ -191,7 +191,7 @@ export default function ManageTeams() {
           icon={<Link1Icon />}
           label={'Total assigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id
+            team.id,
           )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
         />
         <SummaryLink
@@ -200,7 +200,7 @@ export default function ManageTeams() {
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
           href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id
+            team.id,
           )}&ticket_status=${TicketStatusEnum.HOLD}`}
         />
       </div>

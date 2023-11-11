@@ -121,7 +121,7 @@ export default function ManageComponents() {
           uv: Math.floor(Math.random() * 5000) + 1000,
           pv: Math.floor(Math.random() * 5000) + 1000,
         };
-      })
+      }),
     );
   }, [componentId]);
 
@@ -157,7 +157,7 @@ export default function ManageComponents() {
         >
           <Link
             href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              team.Department.id as string
+              team.Department.id as string,
             )}`}
           >
             {team.Department.name}
@@ -185,11 +185,11 @@ export default function ManageComponents() {
           icon={<LockOpen1Icon />}
           label={'Total open'}
           href={`/workspace/tickets?component=${encodeURIComponent(
-            component.id
+            component.id,
           )}&ticket_status=${
             TicketStatusEnum.OPEN
           }&department=${encodeURIComponent(
-            team.Department.id
+            team.Department.id,
           )}&team=${encodeURIComponent(team.id)}`}
         />
 
@@ -199,11 +199,11 @@ export default function ManageComponents() {
           icon={<LockClosedIcon />}
           label={'Total closed'}
           href={`/workspace/tickets?component=${encodeURIComponent(
-            component.id
+            component.id,
           )}&ticket_status=${
             TicketStatusEnum.CLOSED
           }&department=${encodeURIComponent(
-            team.Department.id
+            team.Department.id,
           )}&team=${encodeURIComponent(team.id)}`}
         />
         <SummaryLink
@@ -212,11 +212,11 @@ export default function ManageComponents() {
           icon={<Link1Icon />}
           label={'Total assigned'}
           href={`/workspace/tickets?component=${encodeURIComponent(
-            component.id
+            component.id,
           )}&ticket_status=${
             TicketStatusEnum.ACTIVE
           }&department=${encodeURIComponent(
-            team.Department.id
+            team.Department.id,
           )}&team=${encodeURIComponent(team.id)}`}
         />
         <SummaryLink
@@ -225,11 +225,11 @@ export default function ManageComponents() {
           icon={<LinkNone1Icon />}
           label={'Total unassigned'}
           href={`/workspace/tickets?component=${encodeURIComponent(
-            component.id
+            component.id,
           )}&ticket_status=${
             TicketStatusEnum.HOLD
           }&department=${encodeURIComponent(
-            team.Department.id
+            team.Department.id,
           )}&team=${encodeURIComponent(team.id)}`}
         />
       </div>

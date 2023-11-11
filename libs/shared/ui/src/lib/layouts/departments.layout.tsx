@@ -173,7 +173,7 @@ export function DepartmentsLayout({ children }: { children: React.ReactNode }) {
                   >
                     <Link
                       href={`/workspace/manage/departments/?department=${encodeURIComponent(
-                        department.id
+                        department.id,
                       )}`}
                       className="w-full block"
                     >

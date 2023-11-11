@@ -17,7 +17,7 @@ export class CommentController {
     private readonly ticketAggregatorService: ITicketAggregatorService,
 
     @Inject(COMMENT_SERVICE_TOKEN)
-    private readonly commentService: ICommentService
+    private readonly commentService: ICommentService,
   ) {}
 
   @Post('/create')
@@ -27,7 +27,7 @@ export class CommentController {
     req: {
       body: CreateCommentDto & { ticketNumber: string };
       user: User;
-    }
+    },
   ) {
     const {
       body,
@@ -35,7 +35,7 @@ export class CommentController {
     } = req;
     return this.ticketAggregatorService.createCommentWithTicketAndNumber(
       body,
-      id
+      id,
     );
   }
 
@@ -43,7 +43,7 @@ export class CommentController {
   async all(
     @Query() query: Prisma.CommentFindManyArgs,
     @TransformInclude()
-    transformIncludeBooleanValues: Prisma.CommentFindManyArgs['include']
+    transformIncludeBooleanValues: Prisma.CommentFindManyArgs['include'],
   ) {
     query.include = transformIncludeBooleanValues;
 

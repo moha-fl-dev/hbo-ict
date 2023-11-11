@@ -26,7 +26,7 @@ export function useWithTicketNumber({
     () => Api.ticketNumber.find({ where, include }),
     {
       enabled: clauseHasProperty<TicketNumbeFindUniqueArgs['where']>(where),
-    }
+    },
   );
 
   return { ticketNumberData: data, isError };

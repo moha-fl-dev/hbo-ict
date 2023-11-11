@@ -132,7 +132,7 @@ export default function ManageDepartments() {
           uv: Math.floor(Math.random() * 5000) + 1000,
           pv: Math.floor(Math.random() * 5000) + 1000,
         };
-      })
+      }),
     );
   }, [departmentId]);
 
@@ -172,7 +172,7 @@ export default function ManageDepartments() {
                     <TableCell key={i}>
                       <Link
                         href={`/workspace/manage/teams/?team=${encodeURIComponent(
-                          team.id
+                          team.id,
                         )}`}
                         className="w-full block"
                       >
@@ -197,7 +197,7 @@ export default function ManageDepartments() {
                 icon={<LockOpen1Icon />}
                 label={'Total open'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id
+                  department.id,
                 )}&ticket_status=${TicketStatusEnum.OPEN}`}
               />
 
@@ -207,7 +207,7 @@ export default function ManageDepartments() {
                 icon={<LockClosedIcon />}
                 label={'Total closed'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id
+                  department.id,
                 )}&ticket_status=${TicketStatusEnum.CLOSED}`}
               />
               <SummaryLink
@@ -216,7 +216,7 @@ export default function ManageDepartments() {
                 icon={<Link1Icon />}
                 label={'Total assigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id
+                  department.id,
                 )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
               />
               <SummaryLink
@@ -225,7 +225,7 @@ export default function ManageDepartments() {
                 icon={<LinkNone1Icon />}
                 label={'Total unassigned'}
                 href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id
+                  department.id,
                 )}&ticket_status=${TicketStatusEnum.HOLD}`}
               />
             </div>

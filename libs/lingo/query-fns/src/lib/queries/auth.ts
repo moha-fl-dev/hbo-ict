@@ -41,7 +41,7 @@ async function signIn(payload: SignInDto): Promise<AuthResponse> {
       headers: {
         noAuth: true,
       },
-    }
+    },
   );
   return result.data;
 }
@@ -59,7 +59,7 @@ async function signUp(payload: SignUpDto): Promise<AuthResponse> {
       headers: {
         noAuth: true,
       },
-    }
+    },
   );
 
   return result.data;

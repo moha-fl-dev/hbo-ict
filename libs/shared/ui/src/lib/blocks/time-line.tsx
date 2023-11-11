@@ -39,7 +39,7 @@ function TimeLineItem({
   newValue,
 }: TicketHistory) {
   const date = formatDateWithRelativeTime(
-    '2023-11-06 12:40:51.917'
+    '2023-11-06 12:40:51.917',
   ).relativeTime();
 
   return (

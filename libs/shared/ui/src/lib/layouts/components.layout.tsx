@@ -233,7 +233,7 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
                   >
                     <Link
                       href={`/workspace/manage/components/?component=${encodeURIComponent(
-                        component.id
+                        component.id,
                       )}`}
                       className="w-full block"
                     >

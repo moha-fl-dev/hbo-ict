@@ -44,7 +44,7 @@ export function CommmentForm() {
           commentForm.reset();
           queryClient.invalidateQueries(['comments']);
         },
-      }
+      },
     );
   }
 

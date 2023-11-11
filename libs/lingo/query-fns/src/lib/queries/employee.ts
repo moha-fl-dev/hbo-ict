@@ -9,7 +9,7 @@ async function upsert(payload: AccountDto) {
 
 async function userProfileExtended(): Promise<ExtendedEmployee> {
   const res = await axiosInstance.get<ExtendedEmployee>(
-    'employee/UserProfileExtended'
+    'employee/UserProfileExtended',
   );
 
   return res.data;

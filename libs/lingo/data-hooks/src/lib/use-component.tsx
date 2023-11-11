@@ -18,7 +18,7 @@ export function useComponent(componentId: string) {
   const { data, isError } = useQuery<Component>(
     ['component', componentId],
     () => Api.component.getById(componentId),
-    { enabled: !!componentId }
+    { enabled: !!componentId },
   );
 
   return {
@@ -31,7 +31,7 @@ export function useComponentsWithTeamId(teamId: string) {
   const { data, isError } = useQuery<Component[]>(
     ['components-by-team', teamId],
     () => Api.component.getComponentsByTeamId(teamId),
-    { enabled: !!teamId }
+    { enabled: !!teamId },
   );
 
   return {

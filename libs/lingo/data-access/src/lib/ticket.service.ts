@@ -7,7 +7,7 @@ import { TicketNumberService } from './ticketNumber.service';
 export class TicketService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly ticketNumberService: TicketNumberService
+    private readonly ticketNumberService: TicketNumberService,
   ) {}
 
   async create(data: Prisma.TicketCreateInput, number: string) {
@@ -25,7 +25,7 @@ export class TicketService {
 
           if (!ticketNumber) {
             throw new Error(
-              'No valid ticket number available or failed to claim the ticket number.'
+              'No valid ticket number available or failed to claim the ticket number.',
             );
           }
 

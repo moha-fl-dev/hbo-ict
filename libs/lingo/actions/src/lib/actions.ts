@@ -20,7 +20,7 @@ export async function signUpAction(payload: SignUpDto): Promise<AuthResponse> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    }
+    },
   );
 
   const data = await result.json();
@@ -45,7 +45,7 @@ export async function signInAction(payload: SignInDto): Promise<AuthResponse> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    }
+    },
   );
 
   const data = await result.json();
@@ -78,6 +78,6 @@ async function setAuthCookie({
       secure: process.env['NODE_ENV'] === 'production',
       maxAge: expires_in, // 1 hr from now
       sameSite: 'lax',
-    }
+    },
   );
 }

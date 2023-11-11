@@ -17,7 +17,7 @@ const statusBarVariants = cva(
     defaultVariants: {
       variant: 'active',
     },
-  }
+  },
 );
 
 interface StatusBarProps
@@ -29,7 +29,7 @@ interface StatusBarProps
 const TicketStatusBar = React.forwardRef<HTMLDivElement, StatusBarProps>(
   (
     { className, activeStatus = TicketStatusEnum.OPEN, variant, ...props },
-    ref
+    ref,
   ) => {
     const statusses = Object.values(TicketStatusEnum);
 
@@ -48,7 +48,7 @@ const TicketStatusBar = React.forwardRef<HTMLDivElement, StatusBarProps>(
                   statusBarVariants({
                     variant: status === activeStatus ? variant : 'inactive',
                     className,
-                  })
+                  }),
                 )}
                 {...props}
               >
@@ -61,7 +61,7 @@ const TicketStatusBar = React.forwardRef<HTMLDivElement, StatusBarProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 TicketStatusBar.displayName = 'TicketStatusBar';
 

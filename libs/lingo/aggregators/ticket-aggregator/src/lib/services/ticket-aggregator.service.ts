@@ -26,12 +26,12 @@ export class TicketAggregatorService implements ITicketAggregatorService {
     @Inject(COMMENT_SERVICE_TOKEN)
     private readonly commentService: ICommentService,
 
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
   ) {}
 
   async createCommentWithTicketAndNumber(
     payload: CreateCommentDto & { ticketNumber: string },
-    authorId: string
+    authorId: string,
   ): Promise<Comment> {
     const ticketN = await this.ticketNumberService.find({
       where: {
@@ -68,7 +68,7 @@ export class TicketAggregatorService implements ITicketAggregatorService {
     return comment;
   }
   async updateTicketByNumber(
-    payload: CreateTicketDto
+    payload: CreateTicketDto,
   ): Promise<[Ticket, TicketNumber | null] | null> {
     const ticketN = payload.ticketNumber;
 
@@ -115,7 +115,7 @@ export class TicketAggregatorService implements ITicketAggregatorService {
   }
 
   async createTicketWithNumber(
-    payload: CreateTicketDto
+    payload: CreateTicketDto,
   ): Promise<[Ticket, TicketNumber | null] | null> {
     const ticketN = payload.ticketNumber;
 
@@ -130,13 +130,13 @@ export class TicketAggregatorService implements ITicketAggregatorService {
             });
           if (!ticketNumber) {
             throw new Error(
-              'No valid ticket number available or failed to claim the ticket number.'
+              'No valid ticket number available or failed to claim the ticket number.',
             );
           }
 
           const ticketData = this.mapCreateTicketDtoToPrismaInput(
             payload,
-            ticketNumber.id
+            ticketNumber.id,
           );
 
           const ticket = await this.ticketService.create({
@@ -144,7 +144,7 @@ export class TicketAggregatorService implements ITicketAggregatorService {
             ticketNumber: { connect: { id: ticketNumber.id } },
           });
           return [ticket, ticketNumber];
-        }
+        },
       );
       return [ticket, ticketNumber];
     } catch (error) {
@@ -155,7 +155,7 @@ export class TicketAggregatorService implements ITicketAggregatorService {
 
   private mapCreateTicketDtoToPrismaInput(
     payload: CreateTicketDto,
-    ticketId: string
+    ticketId: string,
   ): Prisma.TicketCreateInput {
     return {
       title: payload.title,

@@ -9,7 +9,7 @@ import { Controller, Get, Inject, Query } from '@nestjs/common';
 export class TicketNumberController {
   constructor(
     @Inject(TICKET_NUMBER_SERVICE_TOKEN)
-    private ticketNumberService: ITicketNumberService
+    private ticketNumberService: ITicketNumberService,
   ) {}
 
   @Get('/create')

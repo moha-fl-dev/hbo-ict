@@ -72,7 +72,7 @@ export function QuikViewTicket(ticket: TicketDefaultReturn) {
                 <QuickViewTicketItem
                   label={'Opened'}
                   value={formatDateWithRelativeTime(
-                    ticket.createdAt
+                    ticket.createdAt,
                   ).formattedDateTime()}
                 />
                 <QuickViewTicketItem
@@ -100,7 +100,7 @@ export function QuikViewTicket(ticket: TicketDefaultReturn) {
                 <QuickViewTicketItem
                   label={'Updated'}
                   value={formatDateWithRelativeTime(
-                    ticket.updatedAt
+                    ticket.updatedAt,
                   ).relativeTime()}
                 />
                 <QuickViewTicketItem

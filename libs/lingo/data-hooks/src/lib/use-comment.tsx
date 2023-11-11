@@ -9,7 +9,7 @@ export function useFindComment(args: CommentFindManyArgs) {
     () => Api.comment.findMany(args),
     {
       enabled: clauseHasProperty<CommentFindManyArgs['where']>(args.where),
-    }
+    },
   );
 
   return {

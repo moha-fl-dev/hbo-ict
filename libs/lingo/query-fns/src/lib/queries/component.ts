@@ -22,7 +22,7 @@ async function getById(id: string) {
 
 async function getComponentsByTeamId(teamId: string) {
   const res = await axiosInstance.get<Component[]>(
-    `component/${teamId}/components`
+    `component/${teamId}/components`,
   );
 
   return res.data;

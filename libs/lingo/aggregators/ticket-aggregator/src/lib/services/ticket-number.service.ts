@@ -33,7 +33,7 @@ export class TicketNumberService implements ITicketNumberService {
   }
 
   private async create(
-    payload: Prisma.TicketNumberCreateInput
+    payload: Prisma.TicketNumberCreateInput,
   ): Promise<TicketNumber> {
     return this.prisma.ticketNumber.create({
       data: payload,

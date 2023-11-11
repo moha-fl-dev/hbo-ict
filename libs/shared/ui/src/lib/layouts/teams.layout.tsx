@@ -232,7 +232,7 @@ export function TeamsLayout({ children }: { children: React.ReactNode }) {
                   >
                     <Link
                       href={`/workspace/manage/teams/?team=${encodeURIComponent(
-                        team.id
+                        team.id,
                       )}`}
                       className="w-full block"
                     >

@@ -5,7 +5,7 @@ import { Department } from '@prisma/client/lingo';
 async function create(payload: SingleNameFieldDto) {
   const res = await axiosInstance.post<Department>(
     'department/create',
-    payload
+    payload,
   );
 
   return res.data;

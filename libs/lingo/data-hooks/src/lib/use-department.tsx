@@ -18,7 +18,7 @@ export function useDepartment(departmentId: string) {
   const { data, isError } = useQuery<Department>(
     ['department', departmentId],
     () => Api.department.getById(departmentId),
-    { enabled: !!departmentId }
+    { enabled: !!departmentId },
   );
 
   return {
@@ -31,7 +31,7 @@ export function useDepartmentWithTeams(departmentId: string) {
   const { data, isError } = useQuery<StrictTeamWithDepartment>(
     ['department-teams', departmentId],
     () => Api.team.getTeamsByDepartmentId(departmentId),
-    { enabled: !!departmentId }
+    { enabled: !!departmentId },
   );
 
   return {

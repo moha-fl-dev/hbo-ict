@@ -12,7 +12,7 @@ import { AuthError } from '@supabase/supabase-js';
 export class AuthService {
   constructor(
     private readonly supabaseService: SupabaseService,
-    private readonly configService: NestAppConfig<ConfSchemType>
+    private readonly configService: NestAppConfig<ConfSchemType>,
   ) {}
 
   async signIn(payload: SignInDto) {

@@ -3,7 +3,7 @@ import Jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const cookie = req.cookies;
 

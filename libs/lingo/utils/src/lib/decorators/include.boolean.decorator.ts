@@ -13,5 +13,5 @@ export const TransformInclude = createParamDecorator(
     });
 
     return transformedInclude;
-  }
+  },
 );

@@ -38,7 +38,7 @@ interface OriginalRequestConfig<D = any> extends InternalAxiosRequestConfig<D> {
  */
 interface RequestQueueItem {
   resolve: (
-    value?: AxiosRequestConfig | PromiseLike<AxiosRequestConfig> | undefined
+    value?: AxiosRequestConfig | PromiseLike<AxiosRequestConfig> | undefined,
   ) => void;
   reject: (reason?: any) => void;
 }
@@ -60,10 +60,10 @@ let failedQueue: RequestQueueItem[] = [];
  */
 function processQueue(
   error: any,
-  requestConfig: AxiosRequestConfig | null = null
+  requestConfig: AxiosRequestConfig | null = null,
 ) {
   failedQueue.forEach(({ resolve, reject }) =>
-    error ? reject(error) : resolve(requestConfig!)
+    error ? reject(error) : resolve(requestConfig!),
   );
   failedQueue = [];
 }
@@ -130,7 +130,7 @@ axiosInstance.interceptors.response.use(
       // Reset the refresh flag so subsequent requests can trigger refresh if needed
       isRefreshing = false;
     }
-  }
+  },
 );
 
 axiosInstance.interceptors.request.use(
@@ -139,5 +139,5 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );

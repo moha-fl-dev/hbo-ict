@@ -6,7 +6,6 @@ import { Prisma } from '@prisma/client/lingo';
 import { User } from '@supabase/supabase-js';
 import { Request } from 'express';
 
-
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
@@ -14,7 +13,6 @@ export class EmployeeController {
   @Post()
   @ZodValidate<AccountDto>(accountSchema)
   async create(@Body() payload: AccountDto, @Req() req: Request) {
-
     const user = req['user'] as User;
 
     const data = {
@@ -27,7 +25,6 @@ export class EmployeeController {
         },
       },
     } satisfies Prisma.EmployeeCreateInput;
-
 
     const employee = await this.employeeService.upsert({
       data,
@@ -47,8 +44,7 @@ export class EmployeeController {
       include: {
         Team: true,
       },
-    
-    })
+    });
 
     return employee;
   }
@@ -59,6 +55,4 @@ export class EmployeeController {
 
     return employees;
   }
-
-
 }

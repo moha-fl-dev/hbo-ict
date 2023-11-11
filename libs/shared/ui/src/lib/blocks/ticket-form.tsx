@@ -54,7 +54,7 @@ type TicketNumberAction =
 
 function reducer(
   state: TicketNumberState,
-  action: TicketNumberAction
+  action: TicketNumberAction,
 ): TicketNumberState {
   switch (action.type) {
     case 'CREATE':

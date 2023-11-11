@@ -21,25 +21,19 @@ export function Comments() {
 
   if (randomValue < 1 / 3) {
     <div className="w-full flex flex-col gap-2">
-      {comments?.map((comment) => (
-        <CommentA key={comment.id} {...comment} />
-      ))}
+      {comments?.map((comment) => <CommentA key={comment.id} {...comment} />)}
     </div>;
   } else {
     return (
       <div className="w-full flex flex-col gap-2">
-        {comments?.map((comment) => (
-          <CommentB key={comment.id} {...comment} />
-        ))}
+        {comments?.map((comment) => <CommentB key={comment.id} {...comment} />)}
       </div>
     );
   }
 
   return (
     <div className="w-full flex flex-col gap-2">
-      {comments?.map((comment) => (
-        <CommentA key={comment.id} {...comment} />
-      ))}
+      {comments?.map((comment) => <CommentA key={comment.id} {...comment} />)}
     </div>
   );
 }

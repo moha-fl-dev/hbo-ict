@@ -10,7 +10,7 @@ import { useWithTicketNumber } from './use-ticket-number';
 
 export function useTicketByNumber(
   number: string,
-  include?: TicketFindUniqueArgs['include']
+  include?: TicketFindUniqueArgs['include'],
 ) {
   const { isError, ticketNumberData } = useWithTicketNumber({
     where: { number },
@@ -41,7 +41,7 @@ export function useManyTickets(payload: TicketFindManyArgs) {
   const enabled = Boolean(
     clauseHasProperty<TicketFindManyArgs['where']>(payload.where) ||
       (payload.skip !== undefined && payload.take !== undefined) ||
-      clauseHasProperty<TicketFindManyArgs['orderBy']>(payload.orderBy)
+      clauseHasProperty<TicketFindManyArgs['orderBy']>(payload.orderBy),
   );
 
   // construct query key based on payload
@@ -60,7 +60,7 @@ export function useManyTickets(payload: TicketFindManyArgs) {
     {
       staleTime: 1000 * 60 * 5, // 5 minutes
       enabled,
-    }
+    },
   );
 
   return { tickets: data, isError, isLoading };

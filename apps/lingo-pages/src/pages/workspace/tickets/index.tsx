@@ -220,7 +220,7 @@ export default function TicketsRoot() {
               </TableCell>
               <TableCell className="hover:hover:bg-muted transition-colors">
                 {formatDateWithRelativeTime(
-                  ticket.createdAt
+                  ticket.createdAt,
                 ).formattedDateTime()}
               </TableCell>
               <TableCell className="hover:hover:bg-muted transition-colors">

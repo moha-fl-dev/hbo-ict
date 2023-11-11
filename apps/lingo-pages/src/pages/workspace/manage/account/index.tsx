@@ -79,13 +79,13 @@ export default function ManageAccount() {
       form.setValue(
         'department.id',
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-        currentEmployeeExtendedDetails.Team?.departmentId!
+        currentEmployeeExtendedDetails.Team?.departmentId!,
       );
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       form.setValue('team.id', currentEmployeeExtendedDetails.Team?.id!);
       setSelectedDepartmentId(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-        currentEmployeeExtendedDetails.Team?.departmentId!
+        currentEmployeeExtendedDetails.Team?.departmentId!,
       );
     }
   }, [currentEmployeeExtendedDetails, form.setValue]);

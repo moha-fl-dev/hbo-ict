@@ -35,7 +35,7 @@ const ListItem = React.forwardRef<HTMLLIElement, ListItemProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 ListItem.displayName = 'ListItem';

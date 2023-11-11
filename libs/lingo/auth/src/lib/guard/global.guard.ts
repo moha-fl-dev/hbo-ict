@@ -21,7 +21,7 @@ import { User } from '@supabase/supabase-js';
 export class GlobalGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private supabseService: SupabaseService
+    private supabseService: SupabaseService,
   ) {}
 
   /**

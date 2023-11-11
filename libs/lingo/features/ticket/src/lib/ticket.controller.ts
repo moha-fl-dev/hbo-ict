@@ -19,7 +19,7 @@ export class TicketController {
     @Inject(TICKET_SERVICE_TOKEN)
     private readonly ticketService: ITicketService,
     @Inject(TICKET_AGGREGATOR_TOKEN)
-    private readonly ticketAggregator: ITicketAggregatorService
+    private readonly ticketAggregator: ITicketAggregatorService,
   ) {}
 
   @Post('/create')
@@ -32,7 +32,7 @@ export class TicketController {
   async find(
     @Query() query: TicketFindUniqueArgs,
     @TransformInclude()
-    transformIncludeBooleanValues: TicketFindUniqueArgs['include']
+    transformIncludeBooleanValues: TicketFindUniqueArgs['include'],
   ) {
     const { where } = query;
 
@@ -54,7 +54,7 @@ export class TicketController {
   async all(
     @Query() query: Prisma.TicketFindManyArgs,
     @TransformInclude()
-    transformIncludeBooleanValues: TicketFindUniqueArgs['include']
+    transformIncludeBooleanValues: TicketFindUniqueArgs['include'],
   ) {
     console.log(JSON.stringify(query, null, 2));
     return this.ticketService.findMany({

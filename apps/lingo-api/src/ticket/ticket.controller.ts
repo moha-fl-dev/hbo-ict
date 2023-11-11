@@ -66,7 +66,7 @@ export class TicketController {
       {
         ...ticketData,
       },
-      ticketNumber
+      ticketNumber,
     );
 
     return data;
@@ -76,7 +76,7 @@ export class TicketController {
   async find(
     @Query() query: TicketFindUniqueArgs,
     @TransformInclude()
-    transformIncludeBooleanValues: TicketFindUniqueArgs['include']
+    transformIncludeBooleanValues: TicketFindUniqueArgs['include'],
   ) {
     const { where } = query;
 
@@ -98,7 +98,7 @@ export class TicketController {
 
   private findDeltaDiff<T extends object>(
     originalObject: T,
-    revisedObject: T
+    revisedObject: T,
   ): Delta<T, typeof TicketController.REMOVED_PROPERTY> {
     if (
       typeof originalObject === 'object' &&
@@ -179,7 +179,7 @@ export class TicketController {
 
   private applyDelta<T>(
     object: T,
-    delta: Delta<T, typeof TicketController.REMOVED_PROPERTY>
+    delta: Delta<T, typeof TicketController.REMOVED_PROPERTY>,
   ): T {
     for (const key in delta) {
       if (delta[key] === TicketController.REMOVED_PROPERTY) {

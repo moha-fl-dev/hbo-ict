@@ -11,14 +11,14 @@ const DynamicUserDropDown = dynamic(
   () => import('../blocks/user-dropdown').then((mod) => mod.UserDropDown),
   {
     ssr: false,
-  }
+  },
 );
 
 const DynamicMobileSideNav = dynamic(
   () => import('../components/sideNav').then((mod) => mod.MobileSideNav),
   {
     ssr: false,
-  }
+  },
 );
 
 export function WorkspaceRootLayout({

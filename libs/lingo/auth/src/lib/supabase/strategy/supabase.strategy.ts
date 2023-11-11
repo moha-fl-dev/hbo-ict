@@ -14,7 +14,7 @@ import { Request } from 'express';
 export class SupabaseStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: NestAppConfig<ConfSchemType>,
-    private readonly supabaseService: SupabaseService
+    private readonly supabaseService: SupabaseService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -34,7 +34,7 @@ export class SupabaseStrategy extends PassportStrategy(Strategy) {
 
     try {
       const { data: user, error } = await client.auth.getUser(
-        payload.access_token
+        payload.access_token,
       );
 
       return payload;

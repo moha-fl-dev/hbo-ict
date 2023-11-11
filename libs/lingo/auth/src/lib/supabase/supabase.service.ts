@@ -24,7 +24,7 @@ export class SupabaseService {
 
   constructor(
     @Inject(REQUEST) private readonly request: Request,
-    private readonly configService: NestAppConfig<ConfSchemType>
+    private readonly configService: NestAppConfig<ConfSchemType>,
   ) {}
 
   async getAnonClient() {
@@ -44,11 +44,11 @@ export class SupabaseService {
         global: {
           headers: {
             Authorization: `Bearer ${ExtractJwt.fromAuthHeaderAsBearerToken()(
-              this.request
+              this.request,
             )}`,
           },
         },
-      }
+      },
     );
 
     return this.anonClientInstance;
@@ -80,7 +80,7 @@ export class SupabaseService {
         //     }`,
         //   },
         // },
-      }
+      },
     ).auth.admin;
 
     return this.adminClientInstance;
