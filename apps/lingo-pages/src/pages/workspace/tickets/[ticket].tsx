@@ -1,9 +1,8 @@
 import { useTicketByNumber } from '@hbo-ict/hooks';
-import { CreateTicketDto } from '@hbo-ict/lingo/types';
+import type { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
   Comments,
   CommmentForm,
-  Textarea,
   TicketForm,
   TicketStatusBar,
   TicketsLayout,

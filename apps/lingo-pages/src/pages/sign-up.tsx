@@ -1,9 +1,6 @@
-import {
-  type SignInDto,
-  SignInSchema,
-  SignUpDto,
-  SignUpSchema,
-} from '@hbo-ict/lingo/types';
+import type { SignUpDto } from '@hbo-ict/lingo/types';
+import { SignUpSchema } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   AuthLayout,
   Button,
@@ -13,12 +10,10 @@ import {
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import type { GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { Api } from '@hbo-ict/query-fns';
-import Link from 'next/link';
 
 export default function SignUp() {
   const [serverError, setServerError] = useState<boolean>(false);
@@ -26,7 +21,7 @@ export default function SignUp() {
 
   const { mutate } = useMutation({
     mutationFn: Api.auth.signUp,
-    onError: (error) => {
+    onError: () => {
       setServerError(true);
     },
     onSuccess: (data) => {

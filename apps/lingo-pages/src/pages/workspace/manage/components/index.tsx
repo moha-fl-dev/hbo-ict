@@ -1,6 +1,4 @@
 import { useComponent, useTeam } from '@hbo-ict/hooks';
-import { StrictTeamWithDepartment } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
 import {
   Button,
   ComponentsLayout,
@@ -8,26 +6,25 @@ import {
   SummaryLink,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
-import { Component, Team, TicketStatusEnum } from '@prisma/client/lingo';
+import { TicketStatusEnum } from '@prisma/client/lingo';
 import {
-  LockOpen1Icon,
-  LockClosedIcon,
   Link1Icon,
   LinkNone1Icon,
+  LockClosedIcon,
+  LockOpen1Icon,
 } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
-  ResponsiveContainer,
-  LineChart,
   CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
   Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 
 const data = [

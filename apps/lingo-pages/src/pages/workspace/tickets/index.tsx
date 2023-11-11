@@ -1,6 +1,12 @@
 import { useManyTickets } from '@hbo-ict/hooks';
 import {
   Badge,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  QuikViewTicket,
   Table,
   TableBody,
   TableCaption,
@@ -14,21 +20,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
   WorkspaceRootLayout,
-  formatDate,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-  QuikViewTicket,
   formatDateWithRelativeTime,
 } from '@hbo-ict/ui';
-import { TicketStatusEnum } from '@prisma/client/lingo';
+import type { TicketStatusEnum } from '@prisma/client/lingo';
 import { DotsVerticalIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type Sort = 'asc' | 'desc';
 
@@ -37,7 +36,7 @@ export default function TicketsRoot() {
   const queryClient = useQueryClient();
   const [position, setPosition] = useState<string>('');
 
-  const { isError, isLoading, tickets } = useManyTickets({
+  const { tickets } = useManyTickets({
     include: {
       team: {
         include: {

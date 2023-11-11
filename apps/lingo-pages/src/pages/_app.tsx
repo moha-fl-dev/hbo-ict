@@ -1,23 +1,23 @@
-import type { AppProps } from 'next/app';
-import { Inter } from 'next/font/google';
-import { NextPage } from 'next';
-import type { ReactElement, ReactNode } from 'react';
-import '../styles/globals.css';
+import { Toaster } from '@hbo-ict/ui';
 import {
   QueryClient,
   QueryClientProvider,
   useIsFetching,
 } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import type { NextPage } from 'next';
+import type { AppProps } from 'next/app';
+import { Inter } from 'next/font/google';
 import Router from 'next/router';
-import { AxiosError } from 'axios';
-import { Toaster } from '@hbo-ict/ui';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { ReactElement, ReactNode } from 'react';
+import '../styles/globals.css';
 
 /**
  * @see
  *
  */
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  // eslint-disable-next-line no-unused-vars
   getLayout?: (page: ReactElement) => ReactNode;
 };
 

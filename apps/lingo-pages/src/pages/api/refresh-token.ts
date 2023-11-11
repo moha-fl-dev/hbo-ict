@@ -1,7 +1,5 @@
+import Jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import https from 'https';
-import axios from 'axios';
 
 export default async function handler(
   req: NextApiRequest,

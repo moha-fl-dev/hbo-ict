@@ -1,46 +1,25 @@
-import {
-  type SignInDto,
-  SignInSchema,
-  SignUpDto,
-  SignUpSchema,
-  ResetPasswordDto,
-  emailSchema,
-} from '@hbo-ict/lingo/types';
+import type { ResetPasswordDto } from '@hbo-ict/lingo/types';
+import { emailSchema } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   AuthLayout,
   Button,
   Form,
   RedAlertWithNoTitle,
   ResetPasswordForm,
-  SignUpForm,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import type { GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { Api } from '@hbo-ict/query-fns';
-import Link from 'next/link';
-
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
-  return {
-    props: {
-      data: 'to hell.',
-    },
-  };
-}
 
 export default function ResetPassword() {
   const [serverError, setServerError] = useState<boolean>(false);
-  const router = useRouter();
 
   const { mutate } = useMutation({
     mutationFn: Api.auth.resetPassword,
-    onError: (error) => {
+    onError: () => {
       setServerError(true);
     },
     onSuccess: (data) => {

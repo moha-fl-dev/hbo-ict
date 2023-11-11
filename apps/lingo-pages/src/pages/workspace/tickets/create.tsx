@@ -1,19 +1,10 @@
+import { SeverityEnum, TicketStatusEnum } from '@hbo-ict/lingo/types';
 import {
-  CreateTicketDto,
-  SeverityEnum,
-  TicketStatusEnum,
-  createTicketSchema,
-} from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
-import {
-  CreateTicketForm,
-  Form,
   TicketForm,
   TicketStatusBar,
   TicketsLayout,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
-import React, { useEffect, useState } from 'react';
 
 export default function CreateTicket() {
   //

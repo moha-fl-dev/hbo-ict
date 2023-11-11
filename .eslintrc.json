@@ -5,9 +5,7 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "extends": [
-        "plugin:prettier/recommended"
-      ],
+      "extends": ["plugin:prettier/recommended"],
       "plugins": ["prettier"],
       "rules": {
         "@nx/enforce-module-boundaries": [
@@ -27,32 +25,27 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nx/typescript",
-        "plugin:prettier/recommended"
-      ],
+      "extends": ["plugin:@nx/typescript", "plugin:prettier/recommended"],
       "rules": {
+        "@typescript-eslint/consistent-type-imports": "error",
+        "no-unused-vars": [
+          "error",
+          { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }
+        ]
       }
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": [
-        "plugin:@nx/javascript",
-        "plugin:prettier/recommended"
-      ],
-      "rules": {
-      }
+      "extends": ["plugin:@nx/javascript", "plugin:prettier/recommended"],
+      "rules": {}
     },
     {
       "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
         "jest": true
       },
-      "extends": [
-        "plugin:prettier/recommended"
-      ],
-      "rules": {
-      }
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {}
     }
   ]
 }

@@ -1,10 +1,6 @@
 import { ScrollArea, Separator, WorkspaceRootLayout } from '@hbo-ict/ui';
 
-import { useRouter } from 'next/router';
-
 export default function Workspace() {
-  const router = useRouter();
-
   return (
     <div className="grid grid-cols-2 gap-4 grid-flow-row ">
       <ScrollArea className="h-[400px] border rounded-sm p-4 col-span-2 lg:col-span-1 shadow-sm">

@@ -5,6 +5,9 @@ import {
   usePerformSignOut,
   useTeamsWithDepartment,
 } from '@hbo-ict/hooks';
+import type { AccountDto, ResetPasswordDto } from '@hbo-ict/lingo/types';
+import { accountSchema, resetPasswordSchema } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   Button,
   Dialog,
@@ -32,17 +35,10 @@ import {
   useToast,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  accountSchema,
-  AccountDto,
-  ResetPasswordDto,
-  resetPasswordSchema,
-} from '@hbo-ict/lingo/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Api } from '@hbo-ict/query-fns';
 
 export default function ManageAccount() {
   const queryClient = useQueryClient();
@@ -107,7 +103,7 @@ export default function ManageAccount() {
   const { mutate } = useMutation({
     mutationKey: ['update-account'],
     mutationFn: Api.employee.upsert,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(['currentEmployeeExtendedDetails']);
       toast({
         description: 'Your account has been updated',
@@ -121,7 +117,7 @@ export default function ManageAccount() {
   const { mutate: mutatePasswordReset } = useMutation({
     mutationKey: ['update-password'],
     mutationFn: Api.auth.resetPassword,
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         description: 'Your password has been updated',
       });

@@ -31,11 +31,7 @@ import {
   YAxis,
 } from 'recharts';
 
-import {
-  useDepartment,
-  useTeams,
-  useTeamsWithDepartment,
-} from '@hbo-ict/hooks';
+import { useDepartment, useTeamsWithDepartment } from '@hbo-ict/hooks';
 import { TicketStatusEnum } from '@hbo-ict/lingo/types';
 
 const data = [

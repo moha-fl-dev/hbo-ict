@@ -1,8 +1,5 @@
-import {
-  type SignInDto,
-  SignInSchema,
-  SuccesfulAuthResponse,
-} from '@hbo-ict/lingo/types';
+import { SignInSchema, type SignInDto } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   AuthLayout,
   Button,
@@ -11,12 +8,11 @@ import {
   SignInForm,
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { Api } from '@hbo-ict/query-fns';
-import Link from 'next/link';
 
 export default function SignIn() {
   const [serverError, setServerError] = useState<boolean>(false);
@@ -25,11 +21,10 @@ export default function SignIn() {
   const { mutate } = useMutation({
     mutationKey: ['auth'],
     mutationFn: Api.auth.signIn,
-    onError: (error) => {
+    onError: () => {
       setServerError(true);
     },
-    onSuccess: (data: unknown) => {
-      const res = data as SuccesfulAuthResponse;
+    onSuccess: () => {
       router.push('/workspace');
     },
   });
