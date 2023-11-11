@@ -1,4 +1,4 @@
-import type { TicketNumberService } from '@hbo-ict/data-access';
+import { TicketNumberService } from '@hbo-ict/data-access';
 import type { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
 import { Controller, Get, Query } from '@nestjs/common';
 

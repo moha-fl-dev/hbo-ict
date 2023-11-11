@@ -22,7 +22,7 @@ import {
 import type { User } from '@supabase/supabase-js';
 import type { Request, Response } from 'express';
 import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
-import type { AuthService } from './auth.service';
+import { AuthService } from './auth.service';
 
 /**
  * The auth controller.

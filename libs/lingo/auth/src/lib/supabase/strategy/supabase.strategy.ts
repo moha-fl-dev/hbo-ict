@@ -1,10 +1,10 @@
-import { Strategy, ExtractJwt } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import type { NestAppConfig } from '@hbo-ict/config';
+import { NestAppConfig } from '@hbo-ict/config';
 import type { ConfSchemType } from '@hbo-ict/lingo-utils';
-import type { SupabaseService } from '../supabase.service';
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 import type { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { SupabaseService } from '../supabase.service';
 
 /**
  * A strategy that checks if the user is authenticated. *
@@ -33,6 +33,7 @@ export class SupabaseStrategy extends PassportStrategy(Strategy) {
     const client = await this.supabaseService.getAnonClient();
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { data: user, error } = await client.auth.getUser(
         payload.access_token,
       );

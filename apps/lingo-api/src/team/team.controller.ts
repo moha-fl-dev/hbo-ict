@@ -1,4 +1,4 @@
-import type { TeamService } from '@hbo-ict/data-access';
+import { TeamService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { CreateTeamDto } from '@hbo-ict/lingo/types';
 import { createTeamSchema } from '@hbo-ict/lingo/types';

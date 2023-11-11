@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * A generic service that provides access to the config.

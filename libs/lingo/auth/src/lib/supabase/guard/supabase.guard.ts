@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import type { SupabaseStrategy } from '../strategy/supabase.strategy';
+import { SupabaseStrategy } from '../strategy/supabase.strategy';
 
 /**
  * A guard that checks if the user is authenticated.

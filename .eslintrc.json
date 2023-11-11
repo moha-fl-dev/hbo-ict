@@ -34,6 +34,21 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
       ],
+      "overrides": [
+        {
+          // disable the rule for nest.js specific files
+          "files": [
+            "*.service.ts",
+            "*.controller.ts",
+            "*.module.ts",
+            "*.strategy.ts",
+            "*.guard.ts"
+          ],
+          "rules": {
+            "@typescript-eslint/consistent-type-imports": "off"
+          }
+        }
+      ],
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/consistent-type-imports": "error",

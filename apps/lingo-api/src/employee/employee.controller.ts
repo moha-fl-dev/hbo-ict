@@ -1,4 +1,4 @@
-import type { EmployeeService } from '@hbo-ict/data-access';
+import { EmployeeService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { AccountDto } from '@hbo-ict/lingo/types';
 import { accountSchema } from '@hbo-ict/lingo/types';

@@ -19,7 +19,6 @@
       "@hbo-ict/config": ["libs/shared/nest-app-config/src/index.ts"],
       "@hbo-ict/data-access": ["libs/lingo/data-access/src/index.ts"],
       "@hbo-ict/hooks": ["libs/lingo/data-hooks/src/index.ts"],
-      "@hbo-ict/hooks/server": ["libs/lingo/data-hooks/src/server.ts"],
       "@hbo-ict/lingo-prisma-client": ["libs/lingo/prisma-client/src/index.ts"],
       "@hbo-ict/lingo-prisma-schema": ["libs/lingo/schema/"],
       "@hbo-ict/lingo-utils": ["libs/lingo/utils/src/index.ts"],

@@ -1,6 +1,6 @@
-import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { Injectable } from '@nestjs/common';
-import type { Prisma, Department } from '@prisma/client/lingo';
+import type { Department, Prisma } from '@prisma/client/lingo';
 
 @Injectable()
 export class DepartmentService {

@@ -1,6 +1,5 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
-import type { PrismaClient, Prisma } from '@prisma/client/lingo';
-import { TicketFollower } from '@prisma/client/lingo';
+import { Injectable } from '@nestjs/common';
+import { PrismaClient, type Prisma } from '@prisma/client/lingo';
 
 @Injectable()
 export class TicketFollowerService {

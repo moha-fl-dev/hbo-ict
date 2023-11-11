@@ -1,8 +1,8 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { DepartmentService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { SingleNameFieldDto } from '@hbo-ict/lingo/types';
 import { SingleNameFieldSchema } from '@hbo-ict/lingo/types';
-import type { DepartmentService } from '@hbo-ict/data-access';
+import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 
 @Controller('department')
 export class DepartmentController {

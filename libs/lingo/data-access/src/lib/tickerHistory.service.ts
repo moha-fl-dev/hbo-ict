@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { PrismaClient, Prisma } from '@prisma/client/lingo';
-import { TicketHistory } from '@prisma/client/lingo';
+import { PrismaClient, type Prisma } from '@prisma/client/lingo';
 
 @Injectable()
 export class TickerHistoryService {

@@ -1,23 +1,23 @@
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import type { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  COMMENT_SERVICE_TOKEN,
-  TICKET_NUMBER_SERVICE_TOKEN,
-  TICKET_SERVICE_TOKEN,
-} from '../tokens';
+import type {
+  Comment,
+  Prisma,
+  Ticket,
+  TicketNumber,
+} from '@prisma/client/lingo';
 import type {
   ICommentService,
   ITicketAggregatorService,
   ITicketNumberService,
   ITicketService,
 } from '../interfaces';
-import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import type {
-  Prisma,
-  Ticket,
-  TicketNumber,
-  Comment,
-} from '@prisma/client/lingo';
-import type { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
+import {
+  COMMENT_SERVICE_TOKEN,
+  TICKET_NUMBER_SERVICE_TOKEN,
+  TICKET_SERVICE_TOKEN,
+} from '../tokens';
 
 @Injectable()
 export class TicketAggregatorService implements ITicketAggregatorService {

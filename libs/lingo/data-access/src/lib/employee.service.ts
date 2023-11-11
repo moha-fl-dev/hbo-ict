@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma, Employee } from '@prisma/client/lingo';
+import type { Employee, Prisma } from '@prisma/client/lingo';
 
-import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 
 @Injectable()
 export class EmployeeService {

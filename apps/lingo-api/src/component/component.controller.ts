@@ -1,4 +1,4 @@
-import type { ComponentService } from '@hbo-ict/data-access';
+import { ComponentService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type {
   CreateComponentDto,

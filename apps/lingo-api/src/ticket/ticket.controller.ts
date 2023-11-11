@@ -1,4 +1,4 @@
-import type { TicketService } from '@hbo-ict/data-access';
+import { TicketService } from '@hbo-ict/data-access';
 import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
 import type {
   CreateTicketDto,

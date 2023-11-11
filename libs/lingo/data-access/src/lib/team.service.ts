@@ -1,4 +1,4 @@
-import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import { PrismaService } from '@hbo-ict/lingo-prisma-client';
 import { Injectable } from '@nestjs/common';
 import type { Prisma, Team } from '@prisma/client/lingo';
 
