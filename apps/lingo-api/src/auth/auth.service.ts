@@ -11,8 +11,8 @@ import { AuthError } from '@supabase/supabase-js';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly supabaseService: SupabaseService,
     private readonly configService: NestAppConfig<ConfSchemType>,
+    private readonly supabaseService: SupabaseService,
   ) {}
 
   async signIn(payload: SignInDto) {
@@ -121,7 +121,7 @@ export class AuthService {
   async signOut(jwt: string) {
     const client = await this.supabaseService.getAdminClient();
 
-    const { data, error } = await client.signOut(jwt, 'global');
+    const { data: _data, error } = await client.signOut(jwt, 'global');
 
     if (error instanceof AuthError) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
