@@ -1,3 +1,14 @@
+import { Public, ZodValidate } from '@hbo-ict/lingo-utils';
+import type {
+  ResetPasswordDto,
+  SignInDto,
+  SignUpDto,
+} from '@hbo-ict/lingo/types';
+import {
+  SignInSchema,
+  SignUpSchema,
+  resetPasswordSchema,
+} from '@hbo-ict/lingo/types';
 import {
   Body,
   Controller,
@@ -8,19 +19,10 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import {
-  SignInSchema,
-  SignInDto,
-  SignUpDto,
-  SignUpSchema,
-  ResetPasswordDto,
-  resetPasswordSchema,
-} from '@hbo-ict/lingo/types';
-import { Request, Response } from 'express';
-import { Public, ZodValidate } from '@hbo-ict/lingo-utils';
+import type { User } from '@supabase/supabase-js';
+import type { Request, Response } from 'express';
 import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
-import { User } from '@supabase/supabase-js';
+import type { AuthService } from './auth.service';
 
 /**
  * The auth controller.

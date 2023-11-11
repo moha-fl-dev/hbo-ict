@@ -1,12 +1,13 @@
-import { Logger, NestApplicationOptions } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { AppModule } from './app/app.module';
 import { NestAppConfig } from '@hbo-ict/config';
-import { ConfSchemType } from '@hbo-ict/lingo-utils';
+import type { ConfSchemType } from '@hbo-ict/lingo-utils';
+import type { NestApplicationOptions } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AppModule } from './app/app.module';
 
 /**
  * The main function of the app.

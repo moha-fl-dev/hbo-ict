@@ -1,10 +1,6 @@
 import { z } from 'zod';
-import {
-  Prisma,
-  SeverityEnum,
-  TicketActionTypeEnum,
-  TicketStatusEnum,
-} from '@prisma/client/lingo';
+import type { Prisma, TicketActionTypeEnum } from '@prisma/client/lingo';
+import { SeverityEnum, TicketStatusEnum } from '@prisma/client/lingo';
 
 export type {
   Team,

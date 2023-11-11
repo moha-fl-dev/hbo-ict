@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Comment } from '@prisma/client/lingo';
-import { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import { ICommentService } from '../interfaces/comment.interface';
-import { DefaultArgs } from '@prisma/client/lingo/runtime/library';
+import type { Prisma, Comment } from '@prisma/client/lingo';
+import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import type { ICommentService } from '../interfaces/comment.interface';
+import type { DefaultArgs } from '@prisma/client/lingo/runtime/library';
 
 @Injectable()
 export class CommentService implements ICommentService {

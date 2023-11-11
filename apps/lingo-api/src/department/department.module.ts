@@ -1,6 +1,6 @@
+import { DepartmentService } from '@hbo-ict/data-access';
 import { Module } from '@nestjs/common';
 import { DepartmentController } from './department.controller';
-import { DepartmentService } from '@hbo-ict/data-access';
 
 @Module({
   imports: [],

@@ -15,8 +15,8 @@ import {
 import { ScrollArea } from '../components/scroll-area';
 import { Button } from '../components/button';
 import { useForm } from 'react-hook-form';
+import type { CreateComponentDto } from '@hbo-ict/lingo/types';
 import {
-  CreateComponentDto,
   SingleNameFieldDto,
   SingleNameFieldSchema,
   createComponentSchema,

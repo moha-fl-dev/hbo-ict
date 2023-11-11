@@ -1,8 +1,10 @@
-import { ComponentService } from '@hbo-ict/data-access';
+import type { ComponentService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
-import {
+import type {
   CreateComponentDto,
   SingleNameFieldDto,
+} from '@hbo-ict/lingo/types';
+import {
   SingleNameFieldSchema,
   createComponentSchema,
 } from '@hbo-ict/lingo/types';

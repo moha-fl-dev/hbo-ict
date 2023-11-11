@@ -1,4 +1,4 @@
-import { TicketHistory } from '@hbo-ict/lingo/types';
+import type { TicketHistory } from '@hbo-ict/lingo/types';
 import { formatDateWithRelativeTime } from '../utils';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';

@@ -1,4 +1,5 @@
-import { Prisma, Ticket, TicketNumber } from '@prisma/client/lingo';
+import type { Prisma, Ticket } from '@prisma/client/lingo';
+import { TicketNumber } from '@prisma/client/lingo';
 
 export interface ITicketService {
   create(ticketData: Prisma.TicketCreateInput): Promise<Ticket>;

@@ -1,5 +1,5 @@
+import type { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
-  CreateTicketDto,
   SeverityEnum,
   TicketStatusEnum,
   createTicketSchema,

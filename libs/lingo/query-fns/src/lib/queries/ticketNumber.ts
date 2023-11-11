@@ -1,4 +1,7 @@
-import { TicketNumbeFindUniqueArgs, TicketNumber } from '@hbo-ict/lingo/types';
+import type {
+  TicketNumbeFindUniqueArgs,
+  TicketNumber,
+} from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
 
 async function create(): Promise<TicketNumber> {

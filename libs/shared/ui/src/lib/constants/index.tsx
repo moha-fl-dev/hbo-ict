@@ -1,4 +1,4 @@
-import { WorkspaceMenu } from '../types';
+import type { WorkspaceMenu } from '../types';
 
 import {
   DashboardIcon,

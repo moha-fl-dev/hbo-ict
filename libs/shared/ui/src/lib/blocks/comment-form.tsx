@@ -11,7 +11,8 @@ import {
 } from '../components/form';
 import { Button } from '../components/button';
 import { PaperPlaneIcon } from '@radix-ui/react-icons';
-import { CreateCommentDto, createCommentSchema } from '@hbo-ict/lingo/types';
+import type { CreateCommentDto } from '@hbo-ict/lingo/types';
+import { createCommentSchema } from '@hbo-ict/lingo/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Api } from '@hbo-ict/query-fns';
 import { useRouter } from 'next/router';

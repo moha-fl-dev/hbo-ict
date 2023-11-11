@@ -1,7 +1,7 @@
-import { NestAppConfig } from '@hbo-ict/config';
-import { ConfSchemType } from '@hbo-ict/lingo-utils';
-import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
-import { SupabaseService } from '@hbo-ict/supabase-auth';
+import type { NestAppConfig } from '@hbo-ict/config';
+import type { ConfSchemType } from '@hbo-ict/lingo-utils';
+import type { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
+import type { SupabaseService } from '@hbo-ict/supabase-auth';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthError } from '@supabase/supabase-js';
 

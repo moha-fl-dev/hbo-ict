@@ -1,12 +1,12 @@
-import { TicketService } from '@hbo-ict/data-access';
+import type { TicketService } from '@hbo-ict/data-access';
 import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
-import {
+import type {
   CreateTicketDto,
   TicketFindUniqueArgs,
-  createTicketSchema,
 } from '@hbo-ict/lingo/types';
+import { createTicketSchema } from '@hbo-ict/lingo/types';
 import { Controller, Get, Post, Query, Req } from '@nestjs/common';
-import { Prisma } from '@prisma/client/lingo';
+import type { Prisma } from '@prisma/client/lingo';
 
 type Delta<T, S> = {
   [P in keyof T]?: T[P] | S;

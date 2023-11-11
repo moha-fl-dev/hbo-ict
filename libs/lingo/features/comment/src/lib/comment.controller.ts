@@ -1,14 +1,17 @@
 import { Controller, Get, Inject, Post, Query, Req } from '@nestjs/common';
 import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
-import { createCommentSchema, CreateCommentDto } from '@hbo-ict/lingo/types';
-import { User } from '@supabase/supabase-js';
-import {
-  COMMENT_SERVICE_TOKEN,
+import type { CreateCommentDto } from '@hbo-ict/lingo/types';
+import { createCommentSchema } from '@hbo-ict/lingo/types';
+import type { User } from '@supabase/supabase-js';
+import type {
   ICommentService,
   ITicketAggregatorService,
+} from '@hbo-ict/lingo/aggregators';
+import {
+  COMMENT_SERVICE_TOKEN,
   TICKET_AGGREGATOR_TOKEN,
 } from '@hbo-ict/lingo/aggregators';
-import { Prisma } from '@prisma/client/lingo';
+import type { Prisma } from '@prisma/client/lingo';
 
 @Controller('comment')
 export class CommentController {

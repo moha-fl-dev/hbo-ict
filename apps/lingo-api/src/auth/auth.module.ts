@@ -1,17 +1,17 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { ConfigModule, NestAppConfig } from '@hbo-ict/config';
+import type { ConfSchemType } from '@hbo-ict/lingo-utils';
 import {
   GlobalGuard,
   SupabaseAuthModule,
   SupabaseStrategy,
 } from '@hbo-ict/supabase-auth';
+import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfSchemType } from '@hbo-ict/lingo-utils';
+import { PassportModule } from '@nestjs/passport';
 import { TokensGuard } from 'libs/lingo/auth/src/lib/guard/tokens.guard';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [

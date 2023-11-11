@@ -1,5 +1,6 @@
 import { TicketStatusEnum } from '@hbo-ict/lingo/types';
-import { VariantProps, cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import React from 'react';
 import { cn } from '../utils';
 import { CheckIcon } from '@radix-ui/react-icons';

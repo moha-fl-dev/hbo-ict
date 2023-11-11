@@ -1,5 +1,5 @@
 import { useFindComment } from '@hbo-ict/hooks';
-import { CommentDefaultReturn } from '@hbo-ict/lingo/types';
+import type { CommentDefaultReturn } from '@hbo-ict/lingo/types';
 import { useRouter } from 'next/router';
 import { formatDate, formatDateWithRelativeTime } from '../utils';
 

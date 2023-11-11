@@ -1,6 +1,7 @@
-import { TeamService } from '@hbo-ict/data-access';
+import type { TeamService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
-import { CreateTeamDto, createTeamSchema } from '@hbo-ict/lingo/types';
+import type { CreateTeamDto } from '@hbo-ict/lingo/types';
+import { createTeamSchema } from '@hbo-ict/lingo/types';
 import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 
 @Controller('team')

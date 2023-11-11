@@ -27,9 +27,9 @@
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript", "plugin:prettier/recommended"],
       "rules": {
-        "@typescript-eslint/consistent-type-imports": "error",
+        "@typescript-eslint/consistent-type-imports": "warn",
         "no-unused-vars": [
-          "error",
+          "warn",
           { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }
         ]
       }

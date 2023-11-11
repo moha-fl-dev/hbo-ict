@@ -1,4 +1,5 @@
-import { PipeTransform, ArgumentMetadata, Injectable } from '@nestjs/common';
+import type { PipeTransform, ArgumentMetadata } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class QueryBooleanPipe<T> implements PipeTransform {

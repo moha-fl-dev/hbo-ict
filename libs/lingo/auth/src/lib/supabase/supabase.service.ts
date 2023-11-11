@@ -1,12 +1,13 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
-import { Request } from 'express';
+import type { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 import { ExtractJwt } from 'passport-jwt';
-import { NestAppConfig } from '@hbo-ict/config';
-import { ConfSchemType } from '@hbo-ict/lingo-utils';
+import type { NestAppConfig } from '@hbo-ict/config';
+import type { ConfSchemType } from '@hbo-ict/lingo-utils';
 
 /**
  * A service that provides access to the supabase client.

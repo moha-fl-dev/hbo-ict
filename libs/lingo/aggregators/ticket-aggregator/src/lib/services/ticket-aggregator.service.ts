@@ -4,15 +4,20 @@ import {
   TICKET_NUMBER_SERVICE_TOKEN,
   TICKET_SERVICE_TOKEN,
 } from '../tokens';
-import {
+import type {
   ICommentService,
   ITicketAggregatorService,
   ITicketNumberService,
   ITicketService,
 } from '../interfaces';
-import { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import { Prisma, Ticket, TicketNumber, Comment } from '@prisma/client/lingo';
-import { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
+import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import type {
+  Prisma,
+  Ticket,
+  TicketNumber,
+  Comment,
+} from '@prisma/client/lingo';
+import type { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
 
 @Injectable()
 export class TicketAggregatorService implements ITicketAggregatorService {

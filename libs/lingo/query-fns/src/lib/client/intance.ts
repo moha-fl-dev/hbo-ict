@@ -1,5 +1,5 @@
+import type { InternalAxiosRequestConfig } from 'axios';
 import axios, {
-  InternalAxiosRequestConfig,
   type AxiosError,
   type AxiosRequestConfig,
   type AxiosResponse,

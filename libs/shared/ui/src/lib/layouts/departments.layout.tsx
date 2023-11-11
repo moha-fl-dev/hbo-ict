@@ -15,10 +15,8 @@ import {
 import { ScrollArea } from '../components/scroll-area';
 import { Button } from '../components/button';
 import { useForm } from 'react-hook-form';
-import {
-  SingleNameFieldDto,
-  SingleNameFieldSchema,
-} from '@hbo-ict/lingo/types';
+import type { SingleNameFieldDto } from '@hbo-ict/lingo/types';
+import { SingleNameFieldSchema } from '@hbo-ict/lingo/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '../hooks/use-toast';
 import {

@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { WorkspaceService } from './workspace.service';
+import type { WorkspaceService } from './workspace.service';
 
 @Controller('workspace')
 export class WorkspaceController {

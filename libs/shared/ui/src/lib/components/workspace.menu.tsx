@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { WORKSPACE_MENU } from '../constants';
 import { ListItem } from './listItem';
-import { WorkspaceMenu } from '../types';
+import type { WorkspaceMenu } from '../types';
 import { useRouter } from 'next/router';
 
 export function WorkspaceMenu() {

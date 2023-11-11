@@ -1,5 +1,6 @@
-import { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
-import { Prisma, Ticket, TicketNumber, Comment } from '@prisma/client/lingo';
+import type { CreateCommentDto, CreateTicketDto } from '@hbo-ict/lingo/types';
+import type { Ticket, TicketNumber, Comment } from '@prisma/client/lingo';
+import { Prisma } from '@prisma/client/lingo';
 
 export interface ITicketAggregatorService {
   createTicketWithNumber(

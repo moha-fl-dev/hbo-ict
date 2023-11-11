@@ -1,4 +1,7 @@
-import { Department, StrictTeamWithDepartment } from '@hbo-ict/lingo/types';
+import type {
+  Department,
+  StrictTeamWithDepartment,
+} from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 

@@ -1,9 +1,6 @@
-import {
-  CreateTicketDto,
-  SeverityEnum,
-  TicketStatusEnum,
-} from '@hbo-ict/lingo/types';
-import { MinimalFormProps } from '../types';
+import type { CreateTicketDto } from '@hbo-ict/lingo/types';
+import { SeverityEnum, TicketStatusEnum } from '@hbo-ict/lingo/types';
+import type { MinimalFormProps } from '../types';
 import {
   FormControl,
   FormField,

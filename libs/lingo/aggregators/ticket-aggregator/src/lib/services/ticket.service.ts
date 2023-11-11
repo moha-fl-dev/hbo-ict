@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, TicketNumber, Ticket } from '@prisma/client/lingo';
-import { PrismaService } from '@hbo-ict/lingo-prisma-client';
-import { ITicketService } from '../interfaces/ticket.interface';
+import type { Prisma, Ticket } from '@prisma/client/lingo';
+import { TicketNumber } from '@prisma/client/lingo';
+import type { PrismaService } from '@hbo-ict/lingo-prisma-client';
+import type { ITicketService } from '../interfaces/ticket.interface';
 import { TicketDefaultReturn } from '@hbo-ict/lingo/types';
 
 @Injectable()

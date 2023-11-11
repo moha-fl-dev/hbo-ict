@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
+import type { ReactElement } from 'react';
+import type { FieldValues, UseFormReturn } from 'react-hook-form';
 
 /**
  * MinimalFormProps

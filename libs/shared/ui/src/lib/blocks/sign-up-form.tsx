@@ -1,4 +1,4 @@
-import { SignUpDto } from '@hbo-ict/lingo/types';
+import type { SignUpDto } from '@hbo-ict/lingo/types';
 
 import {
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from '../components/form';
 import { Button } from '../components/button';
 import { Input } from '../components/input';
-import { MinimalFormProps } from '../types';
+import type { MinimalFormProps } from '../types';
 
 /**
  * reusable form for signing up. takes a form and a submit handler.

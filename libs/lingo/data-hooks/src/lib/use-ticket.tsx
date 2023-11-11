@@ -1,10 +1,11 @@
-import {
-  Ticket,
+import type {
   TicketFindManyArgs,
   TicketFindUniqueArgs,
 } from '@hbo-ict/lingo/types';
+import { Ticket } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
-import { QueryKey, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { QueryKey } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';
 import { useWithTicketNumber } from './use-ticket-number';
 

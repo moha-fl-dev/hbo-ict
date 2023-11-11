@@ -1,14 +1,16 @@
 import { TransformInclude, ZodValidate } from '@hbo-ict/lingo-utils';
-import {
+import type {
   CreateTicketDto,
   TicketFindUniqueArgs,
-  createTicketSchema,
 } from '@hbo-ict/lingo/types';
+import { createTicketSchema } from '@hbo-ict/lingo/types';
 import { Controller, Get, Inject, Post, Query, Req } from '@nestjs/common';
-import { Prisma } from '@prisma/client/lingo';
-import {
+import type { Prisma } from '@prisma/client/lingo';
+import type {
   ITicketAggregatorService,
   ITicketService,
+} from '@hbo-ict/lingo/aggregators';
+import {
   TICKET_AGGREGATOR_TOKEN,
   TICKET_SERVICE_TOKEN,
 } from '@hbo-ict/lingo/aggregators';

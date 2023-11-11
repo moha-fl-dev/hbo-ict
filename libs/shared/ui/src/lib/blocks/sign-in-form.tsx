@@ -9,8 +9,9 @@ import {
 import { Button } from '../components/button';
 import { Input } from '../components/input';
 import { Checkbox } from '../components/check-box';
-import { SignInDto, SignUpDto } from '@hbo-ict/lingo/types';
-import { MinimalFormProps } from '../types';
+import type { SignInDto } from '@hbo-ict/lingo/types';
+import { SignUpDto } from '@hbo-ict/lingo/types';
+import type { MinimalFormProps } from '../types';
 
 /**
  * reusable form for signing in takes a form and a submit handler.

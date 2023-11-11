@@ -1,8 +1,6 @@
-import {
-  ITicketNumberService,
-  TICKET_NUMBER_SERVICE_TOKEN,
-} from '@hbo-ict/lingo/aggregators';
-import { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
+import type { ITicketNumberService } from '@hbo-ict/lingo/aggregators';
+import { TICKET_NUMBER_SERVICE_TOKEN } from '@hbo-ict/lingo/aggregators';
+import type { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 
 @Controller('ticket-number')

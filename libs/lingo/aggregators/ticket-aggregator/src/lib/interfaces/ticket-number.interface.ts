@@ -1,5 +1,5 @@
-import { TicketNumber } from '@hbo-ict/lingo/types';
-import { Prisma } from '@prisma/client/lingo';
+import type { TicketNumber } from '@hbo-ict/lingo/types';
+import type { Prisma } from '@prisma/client/lingo';
 
 export interface ITicketNumberService {
   createTicketNumber(): Promise<TicketNumber | null>;

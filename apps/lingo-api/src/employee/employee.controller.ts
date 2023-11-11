@@ -1,10 +1,11 @@
-import { EmployeeService } from '@hbo-ict/data-access';
+import type { EmployeeService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
-import { AccountDto, accountSchema } from '@hbo-ict/lingo/types';
+import type { AccountDto } from '@hbo-ict/lingo/types';
+import { accountSchema } from '@hbo-ict/lingo/types';
 import { Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { Prisma } from '@prisma/client/lingo';
-import { User } from '@supabase/supabase-js';
-import { Request } from 'express';
+import type { Prisma } from '@prisma/client/lingo';
+import type { User } from '@supabase/supabase-js';
+import type { Request } from 'express';
 
 @Controller('employee')
 export class EmployeeController {

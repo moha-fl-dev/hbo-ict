@@ -20,7 +20,8 @@ import {
 import { ScrollArea } from '../components/scroll-area';
 import { Button } from '../components/button';
 import { useForm } from 'react-hook-form';
-import { createTeamSchema, CreateTeamDto } from '@hbo-ict/lingo/types';
+import type { CreateTeamDto } from '@hbo-ict/lingo/types';
+import { createTeamSchema } from '@hbo-ict/lingo/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '../hooks/use-toast';
 import {

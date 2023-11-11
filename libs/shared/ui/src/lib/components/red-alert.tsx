@@ -1,6 +1,6 @@
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Alert, AlertDescription, AlertTitle } from './alert';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 type WithNoTitleProps = {
   description: string;

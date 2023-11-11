@@ -1,5 +1,6 @@
-import { VariantProps, cva } from 'class-variance-authority';
-import { FC } from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type { FC } from 'react';
 import { cn } from '../utils';
 import Link from 'next/link';
 

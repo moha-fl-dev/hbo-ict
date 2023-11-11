@@ -1,10 +1,10 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { NestAppConfig } from '@hbo-ict/config';
-import { ConfSchemType } from '@hbo-ict/lingo-utils';
-import { SupabaseService } from '../supabase.service';
-import { Request } from 'express';
+import type { NestAppConfig } from '@hbo-ict/config';
+import type { ConfSchemType } from '@hbo-ict/lingo-utils';
+import type { SupabaseService } from '../supabase.service';
+import type { Request } from 'express';
 
 /**
  * A strategy that checks if the user is authenticated. *

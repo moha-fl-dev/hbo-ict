@@ -1,4 +1,5 @@
-import { TicketDefaultReturn, TicketHistory } from '@hbo-ict/lingo/types';
+import type { TicketDefaultReturn } from '@hbo-ict/lingo/types';
+import { TicketHistory } from '@hbo-ict/lingo/types';
 import {
   Sheet,
   SheetClose,

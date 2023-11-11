@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client/lingo';
+import type { Prisma, PrismaClient } from '@prisma/client/lingo';
 
 @Injectable()
 export class CommentService {

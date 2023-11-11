@@ -1,4 +1,4 @@
-import { CommentFindManyArgs } from '@hbo-ict/lingo/types';
+import type { CommentFindManyArgs } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';

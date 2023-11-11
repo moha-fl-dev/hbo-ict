@@ -1,16 +1,11 @@
 import { IS_PUBLIC_KEY } from '@hbo-ict/lingo-utils';
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  Scope,
-  UnauthorizedException,
-} from '@nestjs/common';
+import type { CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, Scope, UnauthorizedException } from '@nestjs/common';
 
-import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
-import { SupabaseService } from '../supabase/supabase.service';
-import { User } from '@supabase/supabase-js';
+import type { Reflector } from '@nestjs/core';
+import type { Request } from 'express';
+import type { SupabaseService } from '../supabase/supabase.service';
+import type { User } from '@supabase/supabase-js';
 
 /**
  * Global guard that checks if the user is authenticated

@@ -1,4 +1,5 @@
-import { AccountDto, Employee, ExtendedEmployee } from '@hbo-ict/lingo/types';
+import type { AccountDto, ExtendedEmployee } from '@hbo-ict/lingo/types';
+import { Employee } from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
 
 async function upsert(payload: AccountDto) {
