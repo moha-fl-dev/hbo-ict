@@ -87,8 +87,8 @@ export class TicketAggregatorService implements ITicketAggregatorService {
       const updateData: Prisma.TicketUpdateArgs = {
         data: {
           // assignee: { update: { id: payload.assigneeId } },
-          team: { update: { id: payload.teamId } },
-          component: { update: { id: payload.componentId } },
+          team: { connect: { id: payload.teamId } },
+          component: { connect: { id: payload.componentId } },
           status: payload.status,
           severity: payload.severity,
           description: payload.description,
