@@ -2,6 +2,7 @@ import { useComponent, useTeam } from '@hbo-ict/hooks';
 import {
   Button,
   ComponentsLayout,
+  ScrollArea,
   Separator,
   SummaryLink,
   WorkspaceRootLayout,
@@ -15,112 +16,11 @@ import {
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Jul',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Aug',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Sep',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Oct',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Nov',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Dec',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-];
 
 export default function ManageComponents() {
-  const [barData, setBarData] = useState(data);
-
   const router = useRouter();
 
   const componentId = router.query.component as string;
-
-  useEffect(() => {
-    setBarData(
-      data.map((item) => {
-        return {
-          ...item,
-          total: Math.floor(Math.random() * 5000) + 1000,
-          uv: Math.floor(Math.random() * 5000) + 1000,
-          pv: Math.floor(Math.random() * 5000) + 1000,
-        };
-      }),
-    );
-  }, [componentId]);
 
   const { component } = useComponent(componentId);
 
@@ -230,37 +130,16 @@ export default function ManageComponents() {
           )}&team=${encodeURIComponent(team.id)}`}
         />
       </div>
-      {router.query.department && (
-        <ResponsiveContainer
-          height={350}
-          width={'100%'}
-          className="lg:block hidden"
-        >
-          <LineChart data={barData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="name"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
-      )}
     </div>
   );
 }
 
-ManageComponents.getLayout = function getLayout(page: JSX.Element) {
+ManageComponents.getLayout = function getLayout(_page: JSX.Element) {
   return (
     <WorkspaceRootLayout>
-      <ComponentsLayout>{page}</ComponentsLayout>
+      <ScrollArea className="max-h-[90vh] h-[90vh] min-h[90vh]">
+        <ComponentsLayout />
+      </ScrollArea>
     </WorkspaceRootLayout>
   );
 };
