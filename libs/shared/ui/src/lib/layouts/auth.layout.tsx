@@ -1,8 +1,6 @@
-import Image from 'next/image';
-import { Logo } from '../components/logo';
-import SideImage from '/public/auth-pages-bg.png';
-import Router from 'next/router';
 import { useCurrentUser } from '@hbo-ict/hooks';
+import Router from 'next/router';
+import { Logo } from '../components/logo';
 
 /**
  * layout for the auth pages. can also be used for the landing page. returns a grid with 2 columns.
@@ -17,22 +15,10 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="h-screen md:grid md:grid-cols-3">
-      <div className="bg-secondary  col-span-2 hidden md:flex md:justify-center md:items-center">
-        <Image
-          src={SideImage}
-          alt=""
-          priority
-          width={500}
-          height={500}
-          className={'object-cover w-1/2 '}
-        />
-      </div>
-      <div className=" p-4 md:col-span-1 col-span-1 flex items-center justify-center">
-        <div className="flex flex-col w-full md:w-11/12 ">
-          <Logo variant="default" asLink />
-          <div className="mt-2">{children}</div>
-        </div>
+    <div className="flex justify-center items-center h-screen bg-slate-100/30">
+      <div className="w-full bg-white rounded p-4 shadow-md border xl:max-w-md md:max-w-2xl">
+        <Logo variant="default" asLink />
+        <div className="mt-2">{children}</div>
       </div>
     </div>
   );
