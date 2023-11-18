@@ -143,11 +143,11 @@ export default function ManageTeams() {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select the team that owns this component" />
+                              <SelectValue placeholder="Select the department that owns this component" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <ScrollArea className="max-h-[400px]">
+                            <ScrollArea className="max-h-[400px] h-[400px]">
                               {departments?.map((department) => (
                                 <SelectItem
                                   className={`hover:bg-slate-50 transition-colors ${

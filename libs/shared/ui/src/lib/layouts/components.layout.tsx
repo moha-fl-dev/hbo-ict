@@ -147,7 +147,7 @@ export function ComponentsLayout({ children }: { children: React.ReactNode }) {
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    <ScrollArea className="max-h-[400px]">
+                                    <ScrollArea className="max-h-[400px] h-[400px]">
                                       {teams?.map((team) => (
                                         <SelectItem
                                           className={`hover:bg-slate-50 transition-colors ${
