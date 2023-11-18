@@ -24,7 +24,24 @@ export class DepartmentService {
   }
 
   async all(): Promise<Department[]> {
-    const departments = await this.prisma.department.findMany();
+    const departments = await this.prisma.department.findMany({
+      include: {
+        teams: {
+          include: {
+            _count: {
+              select: {
+                Tickets: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            teams: true,
+          },
+        },
+      },
+    });
 
     return departments;
   }

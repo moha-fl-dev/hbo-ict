@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { format, formatDistanceToNow } from 'date-fns';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * cn
@@ -48,11 +48,14 @@ export function formatDateWithRelativeTime(date: Date | string) {
   // Format the date as 'dd-MMM-yy HH:mm:ss'
   const formattedDateTime = () => `${formattedDate()} ${formattedTime()}`;
 
+  const formatMonthAndYear = () => format(dateObject, 'L-yyy');
+
   return {
     formattedDate,
     relativeTime,
     formattedTime,
     formattedDateTime,
+    formatMonthAndYear,
   };
 }
 

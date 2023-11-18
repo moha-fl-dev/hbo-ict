@@ -1,5 +1,15 @@
 import type { TicketDefaultReturn } from '@hbo-ict/lingo/types';
-import { TicketHistory } from '@hbo-ict/lingo/types';
+import {
+  CopyIcon,
+  Cross2Icon,
+  InfoCircledIcon,
+  Share1Icon,
+} from '@radix-ui/react-icons';
+import Link from 'next/link';
+import { Avatar, AvatarFallback } from '../components/avatar';
+import { Badge } from '../components/badge';
+import { Button } from '../components/button';
+import { ScrollArea } from '../components/scroll-area';
 import {
   Sheet,
   SheetClose,
@@ -10,19 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '../components/sheet';
-import {
-  InfoCircledIcon,
-  Cross2Icon,
-  CopyIcon,
-  Share1Icon,
-  CalendarIcon,
-} from '@radix-ui/react-icons';
-import Link from 'next/link';
-import { Badge } from '../components/badge';
-import { Button } from '../components/button';
 import { formatDateWithRelativeTime, getInitials } from '../utils';
-import { Avatar, AvatarFallback } from '../components/avatar';
-import { ScrollArea } from '../components/scroll-area';
 import { TimeLine } from './time-line';
 
 export function QuikViewTicket(ticket: TicketDefaultReturn) {
@@ -153,7 +151,7 @@ type CommentProps = {
   createdAt: Date;
 };
 
-function RecentComment({ authorName, content, createdAt }: CommentProps) {
+function _RecentComment({ authorName, content, createdAt }: CommentProps) {
   return (
     <div className="grid grid-rows-3 grid-flow-col">
       <div className="row-span-3 ">

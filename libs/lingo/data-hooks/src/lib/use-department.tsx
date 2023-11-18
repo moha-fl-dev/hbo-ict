@@ -1,12 +1,13 @@
 import type {
   Department,
+  DepartmentWithTeamsCount,
   StrictTeamWithDepartment,
 } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useDepartments() {
-  const { data, isError } = useQuery<Department[]>({
+  const { data, isError } = useQuery<DepartmentWithTeamsCount[]>({
     queryKey: ['departments'],
     queryFn: Api.department.getAll,
   });

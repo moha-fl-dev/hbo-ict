@@ -1,7 +1,25 @@
 import {
-  DepartmentsLayout,
+  Button,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   ScrollArea,
-  SummaryLink,
+  Separator,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetOverlay,
+  SheetTitle,
+  SheetTrigger,
   Table,
   TableBody,
   TableCaption,
@@ -9,242 +27,194 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  WorkspaceRootLayout,
-} from '@hbo-ict/ui';
-import {
-  Link1Icon,
-  LinkNone1Icon,
-  LockClosedIcon,
-  LockOpen1Icon,
-} from '@radix-ui/react-icons';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  WorkspaceRootLayout,
+  formatDateWithRelativeTime,
+  toast,
+} from '@hbo-ict/ui';
 
-import { useDepartment, useTeamsWithDepartment } from '@hbo-ict/hooks';
-import { TicketStatusEnum } from '@hbo-ict/lingo/types';
-
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jul',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Aug',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Sep',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Oct',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Nov',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Dec',
-    total: Math.floor(Math.random() * 5000) + 1000,
-    uv: Math.floor(Math.random() * 5000) + 1000,
-    pv: Math.floor(Math.random() * 5000) + 1000,
-  },
-];
+import { useDepartments } from '@hbo-ict/hooks';
+import type { Department, SingleNameFieldDto } from '@hbo-ict/lingo/types';
+import { SingleNameFieldSchema, TicketStatusEnum } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function ManageDepartments() {
-  const [barData, setBarData] = React.useState(data);
-  const router = useRouter();
+  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
 
-  const departmentId = router.query.department as string;
+  const queryClient = useQueryClient();
 
-  const { department } = useDepartment(departmentId);
+  const form = useForm<SingleNameFieldDto>({
+    resolver: zodResolver(SingleNameFieldSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
 
-  const { teams } = useTeamsWithDepartment(departmentId);
+  const { mutate } = useMutation({
+    mutationKey: ['create-department'],
+    mutationFn: Api.department.create,
+    onSuccess(data) {
+      queryClient.invalidateQueries(['departments']);
+      toast({
+        description: `${data?.name} department has been created.`,
+      });
+      setSheetOpen(() => false);
+    },
+  });
 
-  useEffect(() => {
-    setBarData(
-      data.map((item) => {
-        return {
-          ...item,
-          total: Math.floor(Math.random() * 5000) + 1000,
-          uv: Math.floor(Math.random() * 5000) + 1000,
-          pv: Math.floor(Math.random() * 5000) + 1000,
-        };
-      }),
-    );
-  }, [departmentId]);
-
-  if (!departmentId) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Select a department</span>
-      </div>
-    );
+  function onSubmit(values: SingleNameFieldDto) {
+    mutate(values);
   }
 
-  if (!department) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Department not found</span>
-      </div>
-    );
-  }
+  const { departments } = useDepartments();
 
   return (
-    <div className="col-span-4 h-full">
-      <div className="grid grid-flow-col gap-4  grid-cols-3">
-        <div className="bg-slate-50 col-span-1">
-          <ScrollArea className="max-h-[80vh] h-[80vh] min-h[80vh]">
-            <Table>
-              <TableCaption>End of teams list</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="">
-                    <span>Teams</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {teams?.map((team, i) => (
-                  <TableRow key={i} className="">
-                    <TableCell key={i}>
-                      <Link
-                        href={`/workspace/manage/teams/?team=${encodeURIComponent(
-                          team.id,
-                        )}`}
-                        className="w-full block"
-                      >
-                        <span>{team.name}</span>
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </div>
-        <div className="col-span-2">
-          <div className="flex flex-col justify-between items-center h-full">
-            <h1 className="font-bold text-3xl text-slate-400">
-              {department.name}
-            </h1>
-            <div className="grid grid-cols-2 gap-2">
-              <SummaryLink
-                max={100}
-                min={10}
-                icon={<LockOpen1Icon />}
-                label={'Total open'}
-                href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id,
-                )}&ticket_status=${TicketStatusEnum.OPEN}`}
-              />
+    <div className="container flex flex-col gap-4 mt-4">
+      <div className="flex flex-rw justify-between">
+        <h1>Departments #{departments?.length}</h1>
 
-              <SummaryLink
-                max={100}
-                min={10}
-                icon={<LockClosedIcon />}
-                label={'Total closed'}
-                href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id,
-                )}&ticket_status=${TicketStatusEnum.CLOSED}`}
-              />
-              <SummaryLink
-                max={100}
-                min={10}
-                icon={<Link1Icon />}
-                label={'Total assigned'}
-                href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id,
-                )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
-              />
-              <SummaryLink
-                max={100}
-                min={10}
-                icon={<LinkNone1Icon />}
-                label={'Total unassigned'}
-                href={`/workspace/tickets?department=${encodeURIComponent(
-                  department.id,
-                )}&ticket_status=${TicketStatusEnum.HOLD}`}
-              />
+        <Sheet open={sheetOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant={'workspace'}
+              className="flex flex-row gap-2 content-center"
+              onClick={() => setSheetOpen(() => true)}
+            >
+              <PlusIcon />
+              <span>New</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side={'right'} className="p-0 md:max-w-xl sm:max-w-xl">
+            <SheetHeader>
+              <SheetTitle className="p-4">Add new Department</SheetTitle>
+              <Separator />
+            </SheetHeader>
+            <div className="flex flex-col justify-between ">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex flex-col gap-4 p-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Department name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Engineering"
+                            {...field}
+                            type="text"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This is the public display name for the department.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button variant={'workspace'} type="submit">
+                    Create department
+                  </Button>
+                </form>
+              </Form>
+              <div>
+                <Separator />
+                <div className="flex flex-row gap-2 content-end items-end justify-end p-4">
+                  <SheetClose asChild>
+                    <Button
+                      variant={'outline'}
+                      onClick={() => setSheetOpen(() => false)}
+                    >
+                      Cancel
+                    </Button>
+                  </SheetClose>
+                </div>
+              </div>
             </div>
-            <ResponsiveContainer height={350} width={'100%'}>
-              <LineChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="name"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+          </SheetContent>
+          <SheetOverlay onClick={() => setSheetOpen(() => false)} />
+        </Sheet>
       </div>
+      <Table>
+        <TableCaption>End of departments list</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <InfoCircledIcon />
+            </TableHead>
+            <TableHead>Department</TableHead>
+            <TableHead>Created</TableHead>
+            <TableHead>Tickets</TableHead>
+            <TableHead className="text-right">Teams</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {departments?.map((department, i) => {
+            const totalTickets = department.teams.reduce(
+              (sum, team) => sum + team._count.Tickets,
+              0,
+            );
+            return (
+              <TableRow key={i} className={`${i % 2 === 0 && 'bg-muted/50'}`}>
+                <TableCell>
+                  <DepartmentPopover department={department} />
+                </TableCell>
+                <TableCell>
+                  <span>{department.name}</span>
+                </TableCell>
+                <TableCell>
+                  <span>
+                    {formatDateWithRelativeTime(
+                      department.createdAt,
+                    ).formatMonthAndYear()}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={`/workspace/tickets?department=${encodeURIComponent(
+                      department.id,
+                    )}`}
+                  >
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span>{totalTickets}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>View tickets</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Link>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Link href={`/workspace/manage/departments/${department.id}`}>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span>{department._count.teams}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>View teams</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -252,7 +222,79 @@ export default function ManageDepartments() {
 ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
   return (
     <WorkspaceRootLayout>
-      <DepartmentsLayout>{page}</DepartmentsLayout>
+      <Head>
+        <title>Departments</title>
+      </Head>
+      <ScrollArea className="max-h-[90vh] h-[90vh] min-h[90vh]">
+        {page}
+      </ScrollArea>
     </WorkspaceRootLayout>
   );
 };
+
+function DepartmentPopover({ department }: { department: Department }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <InfoCircledIcon className="cursor-pointer" />
+      </PopoverTrigger>
+      <PopoverContent className="triangle-top">
+        <div className="flex flex-col gap-1">
+          <span className="text-lg">{department.name}</span>
+          <span className="text-xs text-muted-foreground">Quick links</span>
+        </div>
+        <div className="grid gap-2 mt-2">
+          <Button variant={'outline'} asChild size={'sm'}>
+            <Link
+              href={`/workspace/tickets?department=${encodeURIComponent(
+                department.id,
+              )}&ticket_status=${TicketStatusEnum.OPEN}`}
+            >
+              Open tickets
+            </Link>
+          </Button>
+
+          <Button variant={'outline'} asChild size={'sm'}>
+            <Link
+              href={`/workspace/tickets?department=${encodeURIComponent(
+                department.id,
+              )}&ticket_status=${TicketStatusEnum.CLOSED}`}
+            >
+              Closed tickets
+            </Link>
+          </Button>
+
+          <Button variant={'outline'} asChild size={'sm'}>
+            <Link
+              href={`/workspace/tickets?department=${encodeURIComponent(
+                department.id,
+              )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
+            >
+              Assigned tickets
+            </Link>
+          </Button>
+
+          <Button variant={'outline'} asChild size={'sm'}>
+            <Link
+              href={`/workspace/tickets?department=${encodeURIComponent(
+                department.id,
+              )}&ticket_status=${TicketStatusEnum.HOLD}`}
+            >
+              Tickets on hold
+            </Link>
+          </Button>
+
+          <Button variant={'outline'} asChild size={'sm'}>
+            <Link
+              href={`/workspace/tickets?department=${encodeURIComponent(
+                department.id,
+              )}&ticket_status=${TicketStatusEnum.CLOSED}`}
+            >
+              Unassigned tickets
+            </Link>
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

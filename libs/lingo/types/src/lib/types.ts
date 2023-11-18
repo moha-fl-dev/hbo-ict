@@ -1,21 +1,21 @@
-import { z } from 'zod';
 import type { Prisma, TicketActionTypeEnum } from '@prisma/client/lingo';
 import { SeverityEnum, TicketStatusEnum } from '@prisma/client/lingo';
+import { z } from 'zod';
 
+export {
+  SeverityEnum,
+  TicketActionTypeEnum,
+  TicketStatusEnum,
+} from '@prisma/client/lingo';
 export type {
-  Team,
+  Comment as CommentType,
   Component,
   Department,
   Employee,
-  TicketNumber,
+  Team,
   Ticket,
-  Comment as CommentType,
   TicketHistory,
-} from '@prisma/client/lingo';
-export {
-  TicketStatusEnum,
-  TicketActionTypeEnum,
-  SeverityEnum,
+  TicketNumber,
 } from '@prisma/client/lingo';
 
 /**
@@ -215,5 +215,24 @@ export type CommentDefaultReturn = Prisma.CommentGetPayload<{
   include: {
     ticket: true;
     author: true;
+  };
+}>;
+
+export type DepartmentWithTeamsCount = Prisma.DepartmentGetPayload<{
+  include: {
+    _count: {
+      select: {
+        teams: true;
+      };
+    };
+    teams: {
+      include: {
+        _count: {
+          select: {
+            Tickets: true;
+          };
+        };
+      };
+    };
   };
 }>;
