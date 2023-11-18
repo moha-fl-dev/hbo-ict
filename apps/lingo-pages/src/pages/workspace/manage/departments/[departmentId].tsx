@@ -22,7 +22,7 @@ export default function Department() {
           <strong className="text-muted-foreground">{department?.name}</strong>{' '}
           department
         </h1>
-        <div className="grid xl:grid-cols-3 grid-cols-1 gap-2">
+        <div className="grid xl:grid-cols-5 grid-cols-1 gap-2">
           {teams?.map((team) => <SingleTeam key={team.id} team={team} />)}
         </div>
       </div>
@@ -34,7 +34,7 @@ function SingleTeam({ team }: { team: Pick<Team, 'name' | 'id'> }) {
   return (
     <Link
       href={`/workspace/manage/teams/${team.id}`}
-      className="flex flex-row items-center rounded justify-between bg-gray-100 p-2 hover:bg-gray-50 transition-colors group"
+      className="flex flex-row items-center rounded justify-between bg-gray-200 p-2 hover:bg-gray-100 transition-colors group border"
     >
       <span>{team.name}</span>
       <ChevronRightIcon className="transform group-hover:translate-x-1 transition-transform duration-200" />
