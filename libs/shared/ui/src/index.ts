@@ -170,3 +170,6 @@ export {
   PopoverContent,
   PopoverTrigger,
 } from './lib/components/pop-over';
+
+export { QuickLinksPopover } from './lib/components/quick-links-popover';
+export { SingleItemLinkWithChevronRightIcon } from './lib/components/single-item-link';

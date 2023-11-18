@@ -1,9 +1,10 @@
 import { useDepartment, useTeamsWithDepartment } from '@hbo-ict/hooks';
-import type { Team } from '@hbo-ict/lingo/types';
-import { ScrollArea, WorkspaceRootLayout } from '@hbo-ict/ui';
-import { ChevronRightIcon } from '@radix-ui/react-icons';
+import {
+  ScrollArea,
+  SingleItemLinkWithChevronRightIcon,
+  WorkspaceRootLayout,
+} from '@hbo-ict/ui';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function Department() {
@@ -23,22 +24,15 @@ export default function Department() {
           department
         </h1>
         <div className="grid xl:grid-cols-5 grid-cols-1 gap-2">
-          {teams?.map((team) => <SingleTeam key={team.id} team={team} />)}
+          {teams?.map((team) => (
+            <SingleItemLinkWithChevronRightIcon
+              key={team.id}
+              item={{ ...team, href: `/workspace/manage/teams/${team.id}` }}
+            />
+          ))}
         </div>
       </div>
     </div>
-  );
-}
-
-function SingleTeam({ team }: { team: Pick<Team, 'name' | 'id'> }) {
-  return (
-    <Link
-      href={`/workspace/manage/teams/${team.id}`}
-      className="flex flex-row items-center rounded justify-between bg-gray-200 p-2 hover:bg-gray-100 transition-colors group border"
-    >
-      <span>{team.name}</span>
-      <ChevronRightIcon className="transform group-hover:translate-x-1 transition-transform duration-200" />
-    </Link>
   );
 }
 

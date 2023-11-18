@@ -236,3 +236,17 @@ export type DepartmentWithTeamsCount = Prisma.DepartmentGetPayload<{
     };
   };
 }>;
+
+export type TeamWithTicketsAndComponentsCount = Prisma.TeamGetPayload<{
+  include: {
+    _count: {
+      select: {
+        Tickets: true;
+        components: true;
+        members: true;
+      };
+    };
+    members: true;
+    components: true;
+  };
+}>;

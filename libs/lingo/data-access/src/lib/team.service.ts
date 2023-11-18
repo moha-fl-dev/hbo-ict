@@ -13,7 +13,19 @@ export class TeamService {
   }
 
   all(): Promise<Team[]> {
-    return this.prisma.team.findMany();
+    return this.prisma.team.findMany({
+      include: {
+        _count: {
+          select: {
+            Tickets: true,
+            components: true,
+            members: true,
+          },
+        },
+        members: true,
+        components: true,
+      },
+    });
   }
 
   async get({ where, include }: Prisma.TeamFindUniqueArgs): Promise<Team> {

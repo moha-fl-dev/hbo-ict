@@ -8,9 +8,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  QuickLinksPopover,
   ScrollArea,
   Separator,
   Sheet,
@@ -37,8 +35,8 @@ import {
 } from '@hbo-ict/ui';
 
 import { useDepartments } from '@hbo-ict/hooks';
-import type { Department, SingleNameFieldDto } from '@hbo-ict/lingo/types';
-import { SingleNameFieldSchema, TicketStatusEnum } from '@hbo-ict/lingo/types';
+import type { SingleNameFieldDto } from '@hbo-ict/lingo/types';
+import { SingleNameFieldSchema } from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
@@ -80,7 +78,7 @@ export default function ManageDepartments() {
 
   return (
     <div className="container flex flex-col gap-4 mt-4">
-      <div className="flex flex-rw justify-between">
+      <div className="flex flex-row justify-between items-center content-center">
         <h1>Departments #{departments?.length}</h1>
 
         <Sheet open={sheetOpen}>
@@ -170,7 +168,12 @@ export default function ManageDepartments() {
             return (
               <TableRow key={i} className={`${i % 2 === 0 && 'bg-muted/50'}`}>
                 <TableCell>
-                  <DepartmentPopover department={department} />
+                  <QuickLinksPopover
+                    feature={{
+                      ...department,
+                      baseHref: '/workspace/tickets?department',
+                    }}
+                  />
                 </TableCell>
                 <TableCell>
                   <span>{department.name}</span>
@@ -231,70 +234,3 @@ ManageDepartments.getLayout = function getLayout(page: JSX.Element) {
     </WorkspaceRootLayout>
   );
 };
-
-function DepartmentPopover({ department }: { department: Department }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <InfoCircledIcon className="cursor-pointer" />
-      </PopoverTrigger>
-      <PopoverContent className="triangle-top">
-        <div className="flex flex-col gap-1">
-          <span className="text-lg">{department.name}</span>
-          <span className="text-xs text-muted-foreground">Quick links</span>
-        </div>
-        <div className="grid gap-2 mt-2">
-          <Button variant={'outline'} asChild size={'sm'}>
-            <Link
-              href={`/workspace/tickets?department=${encodeURIComponent(
-                department.id,
-              )}&ticket_status=${TicketStatusEnum.OPEN}`}
-            >
-              Open tickets
-            </Link>
-          </Button>
-
-          <Button variant={'outline'} asChild size={'sm'}>
-            <Link
-              href={`/workspace/tickets?department=${encodeURIComponent(
-                department.id,
-              )}&ticket_status=${TicketStatusEnum.CLOSED}`}
-            >
-              Closed tickets
-            </Link>
-          </Button>
-
-          <Button variant={'outline'} asChild size={'sm'}>
-            <Link
-              href={`/workspace/tickets?department=${encodeURIComponent(
-                department.id,
-              )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
-            >
-              Assigned tickets
-            </Link>
-          </Button>
-
-          <Button variant={'outline'} asChild size={'sm'}>
-            <Link
-              href={`/workspace/tickets?department=${encodeURIComponent(
-                department.id,
-              )}&ticket_status=${TicketStatusEnum.HOLD}`}
-            >
-              Tickets on hold
-            </Link>
-          </Button>
-
-          <Button variant={'outline'} asChild size={'sm'}>
-            <Link
-              href={`/workspace/tickets?department=${encodeURIComponent(
-                department.id,
-              )}&ticket_status=${TicketStatusEnum.CLOSED}`}
-            >
-              Unassigned tickets
-            </Link>
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}

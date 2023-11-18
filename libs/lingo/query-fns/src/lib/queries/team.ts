@@ -1,9 +1,10 @@
 import type {
   SingleNameFieldDto,
   StrictTeamWithDepartment,
+  TeamWithTicketsAndComponentsCount,
 } from '@hbo-ict/lingo/types';
-import { axiosInstance } from '../client/intance';
 import type { Team } from '@prisma/client/lingo';
+import { axiosInstance } from '../client/intance';
 
 async function create(payload: SingleNameFieldDto) {
   const res = await axiosInstance.post<Team>('team/create', payload);
@@ -12,7 +13,9 @@ async function create(payload: SingleNameFieldDto) {
 }
 
 async function getAll() {
-  const res = await axiosInstance.get<Team[]>('team');
+  const res = await axiosInstance.get<TeamWithTicketsAndComponentsCount[]>(
+    'team',
+  );
 
   return res.data;
 }

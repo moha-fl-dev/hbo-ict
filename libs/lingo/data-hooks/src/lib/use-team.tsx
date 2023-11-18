@@ -1,9 +1,13 @@
-import type { StrictTeamWithDepartment, Team } from '@hbo-ict/lingo/types';
+import type {
+  StrictTeamWithDepartment,
+  Team,
+  TeamWithTicketsAndComponentsCount,
+} from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useTeams() {
-  const { data, isError } = useQuery<Team[]>({
+  const { data, isError } = useQuery<TeamWithTicketsAndComponentsCount[]>({
     queryKey: ['teams'],
     queryFn: Api.team.getAll,
   });

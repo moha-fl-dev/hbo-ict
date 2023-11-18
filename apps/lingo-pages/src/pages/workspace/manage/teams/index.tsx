@@ -1,228 +1,296 @@
-import { useDepartment, useTeam } from '@hbo-ict/hooks';
+import { useDepartments, useTeams } from '@hbo-ict/hooks';
+import type { CreateTeamDto } from '@hbo-ict/lingo/types';
+import { createTeamSchema } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   Button,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  QuickLinksPopover,
+  ScrollArea,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Separator,
-  SummaryLink,
-  TeamsLayout,
-  WorkspaceRootLayout,
-} from '@hbo-ict/ui';
-import { TicketStatusEnum } from '@prisma/client/lingo';
-import {
-  Link1Icon,
-  LinkNone1Icon,
-  LockClosedIcon,
-  LockOpen1Icon,
-} from '@radix-ui/react-icons';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetOverlay,
+  SheetTitle,
+  SheetTrigger,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Jul',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Aug',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Sep',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Oct',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Nov',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-  {
-    name: 'Dec',
-    total: Math.floor(Math.random() * 50) + 100,
-    uv: Math.floor(Math.random() * 50) + 100,
-    pv: Math.floor(Math.random() * 50) + 100,
-  },
-];
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  WorkspaceRootLayout,
+  formatDateWithRelativeTime,
+  toast,
+} from '@hbo-ict/ui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function ManageTeams() {
-  const router = useRouter();
-  const [chartData, setChartData] = useState(data);
+  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
 
-  const teamId = router.query.team as string;
+  const { isError: _isTeamsError, teams } = useTeams();
+  const { departments, isError: _isDepartmentsError } = useDepartments();
+  const queryClient = useQueryClient();
 
-  const { team } = useTeam(teamId);
+  const form = useForm<CreateTeamDto>({
+    resolver: zodResolver(createTeamSchema),
+    defaultValues: {
+      name: '',
+      department: {
+        id: '',
+      },
+    },
+  });
 
-  const departmentId = team?.departmentId as string;
+  const { mutate } = useMutation({
+    mutationKey: ['create-team'],
+    mutationFn: Api.team.create,
+    onSuccess(data) {
+      queryClient.invalidateQueries(['teams']);
+      toast({
+        description: `${data.name} team has been created.`,
+      });
+      setSheetOpen(() => false);
+      form.reset();
+    },
+  });
 
-  const { department } = useDepartment(departmentId);
-
-  useEffect(() => {
-    setChartData(
-      data.map((item) => {
-        return {
-          ...item,
-          total: Math.floor(Math.random() * 50) + 100,
-          uv: Math.floor(Math.random() * 50) + 100,
-          pv: Math.floor(Math.random() * 50) + 100,
-        };
-      }),
-    );
-  }, [teamId]);
-
-  if (!teamId) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Select a team</span>
-      </div>
-    );
-  }
-
-  if (!team || !department) {
-    return (
-      <div className="col-span-4 bg-slate-50/50 flex flex-col items-center justify-center">
-        <span className="text-slate-200">Team not found</span>
-      </div>
-    );
+  function onSubmit(values: CreateTeamDto) {
+    mutate(values);
   }
 
   return (
-    <div className="col-span-4 bg-slate-50/50 flex flex-col justify-around items-center gap-2 p-4">
-      <div className="flex flex-col items-center">
-        <Button
-          asChild
-          variant={'link'}
-          className="font-bold text-3xl text-slate-400"
-        >
-          <Link
-            href={`/workspace/manage/departments/?department=${encodeURIComponent(
-              department.id,
-            )}`}
-          >
-            {department.name}
-          </Link>
-        </Button>
-        <Separator orientation="vertical" />
-        <span className="font-bold text-3xl text-slate-400">{team.name}</span>
-        <Separator orientation="vertical" />
+    <div className="container flex flex-col gap-4 mt-4">
+      <div className="flex flex-row justify-between items-center content-center">
+        <span>Teams #{teams?.length}</span>
+        <Sheet open={sheetOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant={'workspace'}
+              onClick={() => setSheetOpen(() => true)}
+            >
+              <div className="flex flex-row gap-2 items-center">
+                <PlusIcon fontSize={10} />
+                <span>New</span>
+              </div>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side={'right'} className="p-0 md:max-w-xl sm:max-w-xl">
+            <SheetHeader>
+              <SheetTitle className="p-4">Add new team</SheetTitle>
+              <Separator />
+            </SheetHeader>
+            <div className="flex flex-col justify-between ">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex flex-col gap-4 p-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Team name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Engineering"
+                            {...field}
+                            type="text"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This is the public display name for the team.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="department.id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Department</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select the team that owns this component" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <ScrollArea className="max-h-[400px]">
+                              {departments?.map((department) => (
+                                <SelectItem
+                                  className={`hover:bg-slate-50 transition-colors ${
+                                    field.value === department.id &&
+                                    'bg-slate-100'
+                                  }`}
+                                  key={department.id}
+                                  value={department.id}
+                                >
+                                  {department.name}
+                                </SelectItem>
+                              ))}
+                            </ScrollArea>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          You can manage departments in{' '}
+                          <Link href="/workspace/manage/departments">
+                            <em>department settings</em>
+                          </Link>
+                          .
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button variant={'workspace'} type="submit">
+                    Create team
+                  </Button>
+                </form>
+              </Form>
+              <div>
+                <Separator />
+                <div className="flex flex-row gap-2 content-end items-end justify-end p-4">
+                  <SheetClose asChild>
+                    <Button
+                      variant={'outline'}
+                      onClick={() => setSheetOpen(() => false)}
+                    >
+                      Cancel
+                    </Button>
+                  </SheetClose>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+          <SheetOverlay onClick={() => setSheetOpen(() => false)} />
+        </Sheet>
       </div>
-      <div className="grid grid-cols-2 gap-2 mt-10">
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LockOpen1Icon />}
-          label={'Total open'}
-          href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id,
-          )}&ticket_status=${TicketStatusEnum.OPEN}`}
-        />
+      <Table>
+        <TableCaption>End of teams list</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <InfoCircledIcon />
+            </TableHead>
+            <TableHead>Team</TableHead>
+            <TableHead>Created</TableHead>
+            <TableHead className="text-right">Tickets</TableHead>
+            <TableHead className="text-right">Components</TableHead>
+            <TableHead className="text-right">Members</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {teams?.map((team, i) => {
+            const componentIds = team.components.reduce(
+              (acc, cur) => {
+                acc.id = cur.id;
+                return acc;
+              },
+              { id: '' },
+            );
 
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LockClosedIcon />}
-          label={'Total closed'}
-          href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id,
-          )}&ticket_status=${TicketStatusEnum.CLOSED}`}
-        />
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<Link1Icon />}
-          label={'Total assigned'}
-          href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id,
-          )}&ticket_status=${TicketStatusEnum.ACTIVE}`}
-        />
-        <SummaryLink
-          max={100}
-          min={10}
-          icon={<LinkNone1Icon />}
-          label={'Total unassigned'}
-          href={`/workspace/tickets?team=${encodeURIComponent(
-            team.id,
-          )}&ticket_status=${TicketStatusEnum.HOLD}`}
-        />
-      </div>
-      <ResponsiveContainer
-        height={350}
-        width={'100%'}
-        className="lg:block hidden"
-      >
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="name"
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        </LineChart>
-      </ResponsiveContainer>
+            return (
+              <TableRow key={i} className={`${i % 2 === 0 && 'bg-muted/50'}`}>
+                <TableCell>
+                  <QuickLinksPopover
+                    feature={{ ...team, baseHref: '/workspace/tickets?team' }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <span>{team.name}</span>
+                </TableCell>
+                <TableCell>
+                  <span>
+                    {formatDateWithRelativeTime(
+                      team.createdAt,
+                    ).formatMonthAndYear()}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Link
+                    href={`/workspace/tickets?team=${encodeURIComponent(
+                      team.id,
+                    )}`}
+                  >
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span>{team._count.Tickets}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>View ticket</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Link>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Link
+                    href={`/workspace/manage/components/${encodeURIComponent(
+                      componentIds.id,
+                    )}`}
+                  >
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span>{team._count.components}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>View components</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Link>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Link
+                    href={`/workspace/manage/teams/${encodeURIComponent(
+                      team.id,
+                    )}`}
+                  >
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span>{team._count.members}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>View team members</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -230,7 +298,12 @@ export default function ManageTeams() {
 ManageTeams.getLayout = function getLayout(page: JSX.Element) {
   return (
     <WorkspaceRootLayout>
-      <TeamsLayout>{page}</TeamsLayout>
+      <Head>
+        <title>Teams</title>
+      </Head>
+      <ScrollArea className="max-h-[90vh] h-[90vh] min-h[90vh]">
+        {page}
+      </ScrollArea>
     </WorkspaceRootLayout>
   );
 };
