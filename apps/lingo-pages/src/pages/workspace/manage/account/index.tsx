@@ -183,7 +183,7 @@ export default function ManageAccount() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <ScrollArea className="max-h-[400px]">
+                        <ScrollArea className="max-h-[400px] h-[400px]">
                           {departments?.map((department) => (
                             <SelectItem
                               className={`hover:bg-slate-50 transition-colors ${
@@ -232,7 +232,7 @@ export default function ManageAccount() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <ScrollArea className="max-h-[400px]">
+                        <ScrollArea className="max-h-[400px] h-[400px]">
                           {teams?.map((team) => (
                             <SelectItem
                               className={`hover:bg-slate-50 transition-colors ${
