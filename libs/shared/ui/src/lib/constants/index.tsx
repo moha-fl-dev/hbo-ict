@@ -1,21 +1,14 @@
 import type { WorkspaceMenu } from '../types';
 
 import {
-  DashboardIcon,
-  ListBulletIcon,
+  DiscIcon,
   GearIcon,
   GroupIcon,
+  ListBulletIcon,
   MixIcon,
-  DiscIcon,
 } from '@radix-ui/react-icons';
 
 export const WORKSPACE_MENU: WorkspaceMenu[] = [
-  {
-    name: 'Workspace',
-    path: '/workspace',
-    icon: <DashboardIcon />,
-    active: true,
-  },
   {
     name: 'Tickets',
     path: '/workspace/tickets',
