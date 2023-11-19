@@ -52,4 +52,14 @@ export class EmployeeService {
 
     return employee;
   }
+
+  async getEmployeesByTeamId({ teamId }: { teamId: string }) {
+    const employees = await this.prisma.employee.findMany({
+      where: {
+        teamId,
+      },
+    });
+
+    return employees;
+  }
 }

@@ -2,7 +2,7 @@ import { EmployeeService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { AccountDto } from '@hbo-ict/lingo/types';
 import { accountSchema } from '@hbo-ict/lingo/types';
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import type { Prisma } from '@prisma/client/lingo';
 import type { User } from '@supabase/supabase-js';
 import type { Request } from 'express';
@@ -53,6 +53,15 @@ export class EmployeeController {
   @Get('/all')
   async getAll() {
     const employees = await this.employeeService.all();
+
+    return employees;
+  }
+
+  @Get(':teamId/allWithTeam')
+  async getAllWithTeam(@Param('teamId') teamId: string) {
+    const employees = await this.employeeService.getEmployeesByTeamId({
+      teamId,
+    });
 
     return employees;
   }

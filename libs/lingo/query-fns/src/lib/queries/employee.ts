@@ -1,5 +1,8 @@
-import type { AccountDto, ExtendedEmployee } from '@hbo-ict/lingo/types';
-import { Employee } from '@hbo-ict/lingo/types';
+import type {
+  AccountDto,
+  Employee,
+  ExtendedEmployee,
+} from '@hbo-ict/lingo/types';
 import { axiosInstance } from '../client/intance';
 
 async function upsert(payload: AccountDto) {
@@ -16,7 +19,16 @@ async function userProfileExtended(): Promise<ExtendedEmployee> {
   return res.data;
 }
 
+async function allEmployeesByTeam({ teamId }: { teamId: string }) {
+  const res = await axiosInstance.get<Employee[]>(
+    `employee/${teamId}/allWithTeam`,
+  );
+
+  return res.data;
+}
+
 export const employee = {
   upsert,
   userProfileExtended,
+  allEmployeesByTeam,
 };

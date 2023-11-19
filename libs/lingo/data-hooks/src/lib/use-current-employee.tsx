@@ -14,3 +14,19 @@ export function useCurrentEmployeeExtendedDetails() {
     isErrorCurrentEmployeeExtendedDetails: isError,
   };
 }
+
+export function useTeamMembers({ teamId }: { teamId: string }) {
+  const { data, isLoading, isError } = useQuery(
+    ['employeesByteam', teamId],
+    () => Api.employee.allEmployeesByTeam({ teamId }),
+    {
+      enabled: !!teamId,
+    },
+  );
+
+  return {
+    employeesByteam: data,
+    isLoadingEmployeesByteam: isLoading,
+    isErrorEmployeesByteam: isError,
+  };
+}

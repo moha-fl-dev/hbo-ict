@@ -1,4 +1,4 @@
-import { useTeam } from '@hbo-ict/hooks';
+import { useTeam, useTeamMembers } from '@hbo-ict/hooks';
 import {
   ScrollArea,
   SingleItemLinkWithChevronRightIcon,
@@ -13,6 +13,12 @@ export default function Team() {
 
   const { team, isError: _isTeamError } = useTeam(teamId);
 
+  const {
+    employeesByteam,
+    isErrorEmployeesByteam: _isErrorEmployeesByteam,
+    isLoadingEmployeesByteam: _isLoadingEmployeesByteam,
+  } = useTeamMembers({ teamId });
+
   return (
     <div className="container mt-4">
       {team && (
@@ -22,12 +28,15 @@ export default function Team() {
             <strong className="text-muted-foreground">{team.name}</strong> team
           </h1>
           <div className="grid xl:grid-cols-5 grid-cols-1 gap-2">
-            <SingleItemLinkWithChevronRightIcon
-              item={{
-                ...team,
-                href: `/workspace/manage/teams/${teamId}`,
-              }}
-            />
+            {employeesByteam?.map((employee) => (
+              <SingleItemLinkWithChevronRightIcon
+                key={employee.id}
+                item={{
+                  name: String(employee.name),
+                  href: `/workspace/manage/teams/${team.id}`,
+                }}
+              />
+            ))}
           </div>
         </div>
       )}
