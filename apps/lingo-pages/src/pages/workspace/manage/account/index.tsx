@@ -36,6 +36,7 @@ import {
 } from '@hbo-ict/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -320,5 +321,12 @@ export default function ManageAccount() {
 }
 
 ManageAccount.getLayout = function getLayout(page: JSX.Element) {
-  return <WorkspaceRootLayout>{page}</WorkspaceRootLayout>;
+  return (
+    <WorkspaceRootLayout>
+      <Head>
+        <title>Manage account</title>
+      </Head>
+      {page}
+    </WorkspaceRootLayout>
+  );
 };
