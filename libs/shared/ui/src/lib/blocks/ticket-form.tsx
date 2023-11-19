@@ -1,9 +1,30 @@
+import {
+  useComponentsWithTeamId,
+  useCreateTicket,
+  useEmployees,
+  useTeams,
+} from '@hbo-ict/hooks';
 import type { CreateTicketDto } from '@hbo-ict/lingo/types';
 import {
   SeverityEnum,
   TicketStatusEnum,
   createTicketSchema,
 } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { useEffect, useReducer, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '../components/button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '../components/command';
 import {
   Form,
   FormControl,
@@ -12,15 +33,12 @@ import {
   FormLabel,
   FormMessage,
 } from '../components/form';
-import {
-  useTeams,
-  useComponentsWithTeamId,
-  useCreateTicket,
-} from '@hbo-ict/hooks';
-import { Dispatch, useEffect, useReducer, useState } from 'react';
-import { Button } from '../components/button';
 import { Input } from '../components/input';
-import { Textarea } from '../components/textarea';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../components/pop-over';
 import { ScrollArea } from '../components/scroll-area';
 import {
   Select,
@@ -29,12 +47,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/select';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Api } from '@hbo-ict/query-fns';
-import { useRouter } from 'next/router';
+import { Textarea } from '../components/textarea';
 import { useToast } from '../hooks/use-toast';
+import { cn } from '../utils';
 
 type FormAction = 'CREATE' | 'UPDATE';
 
@@ -96,6 +111,8 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
     enabled: shouldFetchTicketNumber,
   });
 
+  const { employees } = useEmployees();
+
   useEffect(() => {
     if (defaultValues?.teamId) {
       setSelectedTeamId(defaultValues.teamId);
@@ -103,13 +120,11 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
 
     if (defaultValues?.ticketNumber) {
       ticketForm.setValue('ticketNumber', defaultValues?.ticketNumber);
+      ticketForm.setValue('callerId', defaultValues?.callerId);
+      ticketForm.setValue('assigneeId', defaultValues?.assigneeId);
       dispatch({ type: 'UPDATE' });
     }
   }, [defaultValues]);
-
-  useEffect(() => {
-    console.log({ state });
-  }, [state]);
 
   useEffect(() => {
     if (isSuccess && ticket_number && state.mode === 'CREATE') {
@@ -232,17 +247,72 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
             <FormField
               control={ticketForm.control}
               name="callerId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex flex-row items-center justify-between">
-                    <span>Caller</span>
-                    <FormMessage />
-                  </FormLabel>
-                  <FormControl className="flex-1">
-                    <Input placeholder="Jane" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel className="flex flex-row items-center justify-between">
+                      <span>Caller</span>
+                      <FormMessage />
+                    </FormLabel>
+                    <FormControl className="flex-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                'w-full justify-between',
+                                !field.value && 'text-muted-foreground',
+                              )}
+                            >
+                              {field.value
+                                ? employees?.find(
+                                    (employee) => employee.id === field.value,
+                                  )?.name
+                                : 'Select caller'}
+                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search employees..."
+                              className="h-9"
+                            />
+                            <CommandEmpty>No employee found.</CommandEmpty>
+                            <CommandGroup>
+                              {employees?.map((employee) => (
+                                <CommandItem
+                                  value={employee.name!}
+                                  key={employee.id}
+                                  onSelect={() => {
+                                    ticketForm.setValue(
+                                      'callerId',
+                                      employee.id!,
+                                    );
+                                  }}
+                                >
+                                  {employee.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      'ml-auto h-4 w-4',
+                                      employee.id === field.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0',
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={ticketForm.control}
@@ -254,7 +324,60 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
                     <FormMessage />
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="john" {...field} />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'w-full justify-between',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            {field.value
+                              ? employees?.find(
+                                  (employee) => employee.id === field.value,
+                                )?.name
+                              : 'Select assignee'}
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search employees..."
+                            className="h-9"
+                          />
+                          <CommandEmpty>No employee found.</CommandEmpty>
+                          <CommandGroup>
+                            {employees?.map((employee) => (
+                              <CommandItem
+                                value={employee.name!}
+                                key={employee.id}
+                                onSelect={() => {
+                                  ticketForm.setValue(
+                                    'assigneeId',
+                                    employee.id!,
+                                  );
+                                }}
+                              >
+                                {employee.name}
+                                <CheckIcon
+                                  className={cn(
+                                    'ml-auto h-4 w-4',
+                                    employee.id === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0',
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </FormControl>
                 </FormItem>
               )}
@@ -287,7 +410,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <ScrollArea className="max-h-[400px]">
+                      <ScrollArea className="max-h-[400px] h-[400px]">
                         {teams?.map((team) => (
                           <SelectItem
                             className={`hover:bg-slate-50 transition-colors ${
@@ -325,7 +448,7 @@ export function TicketForm({ defaultValues, action }: TicketFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <ScrollArea className="max-h-[400px]">
+                      <ScrollArea className="max-h-[400px] h-[400px]">
                         {components?.map((component) => (
                           <SelectItem
                             className={`hover:bg-slate-50 transition-colors ${

@@ -5,6 +5,7 @@ import {
   TicketsLayout,
   WorkspaceRootLayout,
 } from '@hbo-ict/ui';
+import Head from 'next/head';
 
 export default function CreateTicket() {
   //
@@ -36,6 +37,9 @@ export default function CreateTicket() {
 CreateTicket.getLayout = function getLayout(page: JSX.Element) {
   return (
     <WorkspaceRootLayout>
+      <Head>
+        <title>Create Ticket</title>
+      </Head>
       <TicketsLayout>{page}</TicketsLayout>
     </WorkspaceRootLayout>
   );

@@ -8,6 +8,7 @@ export {
 } from './lib/use-component';
 export {
   useCurrentEmployeeExtendedDetails,
+  useEmployees,
   useTeamMembers,
 } from './lib/use-current-employee';
 export { useCurrentUser } from './lib/use-current-user';

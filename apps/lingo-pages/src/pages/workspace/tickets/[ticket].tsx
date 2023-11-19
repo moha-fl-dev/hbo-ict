@@ -28,9 +28,9 @@ export default function FindTicket() {
     description: ticket?.description || '',
     status: ticket?.status || 'OPEN',
     ticketNumber: ticket?.ticketNumber.number || '',
-    assigneeId: ticket?.assignee?.name || '',
+    assigneeId: ticket?.assignee?.id || '',
     severity: ticket?.severity || 'LOW',
-    callerId: ticket?.caller?.name || '',
+    callerId: ticket?.caller?.id || '',
     componentId: ticket?.component.id || '',
     teamId: ticket?.team?.id || '',
   };

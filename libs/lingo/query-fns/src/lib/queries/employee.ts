@@ -27,8 +27,15 @@ async function allEmployeesByTeam({ teamId }: { teamId: string }) {
   return res.data;
 }
 
+async function all() {
+  const res = await axiosInstance.get<Employee[]>('employee/all');
+
+  return res.data;
+}
+
 export const employee = {
   upsert,
   userProfileExtended,
   allEmployeesByTeam,
+  all,
 };

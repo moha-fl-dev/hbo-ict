@@ -171,5 +171,16 @@ export {
   PopoverTrigger,
 } from './lib/components/pop-over';
 
+export {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from './lib/components/command';
 export { QuickLinksPopover } from './lib/components/quick-links-popover';
 export { SingleItemLinkWithChevronRightIcon } from './lib/components/single-item-link';

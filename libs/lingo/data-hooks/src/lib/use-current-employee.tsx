@@ -30,3 +30,17 @@ export function useTeamMembers({ teamId }: { teamId: string }) {
     isErrorEmployeesByteam: isError,
   };
 }
+
+export function useEmployees() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['employees'],
+    queryFn: Api.employee.all,
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours
+  });
+
+  return {
+    employees: data,
+    isLoadingEmployees: isLoading,
+    isErrorEmployees: isError,
+  };
+}
