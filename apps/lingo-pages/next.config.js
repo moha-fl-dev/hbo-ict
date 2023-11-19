@@ -20,6 +20,11 @@ const nextConfig = {
         destination: '/workspace/tickets',
         permanent: true,
       },
+      {
+        source: '/',
+        destination: '/sign-in',
+        permanent: true,
+      },
     ];
   },
 };

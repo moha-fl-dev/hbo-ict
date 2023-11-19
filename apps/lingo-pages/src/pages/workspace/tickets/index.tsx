@@ -25,6 +25,7 @@ import {
 import type { TicketStatusEnum } from '@prisma/client/lingo';
 import { DotsVerticalIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useQueryClient } from '@tanstack/react-query';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -288,6 +289,9 @@ export default function TicketsRoot() {
 TicketsRoot.getLayout = function getLayout(page: JSX.Element) {
   return (
     <WorkspaceRootLayout>
+      <Head>
+        <title>Tickets</title>
+      </Head>
       <TicketsLayout key={'many-tickets'}>{page}</TicketsLayout>
     </WorkspaceRootLayout>
   );

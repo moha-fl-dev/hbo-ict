@@ -1,8 +1,8 @@
 import type { VariantProps } from 'class-variance-authority';
 import { cva } from 'class-variance-authority';
+import Link from 'next/link';
 import type { FC } from 'react';
 import { cn } from '../utils';
-import Link from 'next/link';
 
 const LogoVariants = cva('text-slate-700 uppercase inline-flex', {
   variants: {
@@ -39,7 +39,7 @@ const Logo: FC<LogoProps> = ({
 }) => {
   if (asLink) {
     return (
-      <Link href={path || '/'}>
+      <Link href={path || ''}>
         <h1
           className={cn(LogoVariants({ variant, size, className }))}
           {...props}
