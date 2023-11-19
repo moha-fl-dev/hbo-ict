@@ -33,7 +33,15 @@ export class ComponentService {
   }
 
   async all() {
-    const components = await this.prisma.component.findMany();
+    const components = await this.prisma.component.findMany({
+      include: {
+        _count: {
+          select: {
+            Ticket: true,
+          },
+        },
+      },
+    });
 
     return components;
   }

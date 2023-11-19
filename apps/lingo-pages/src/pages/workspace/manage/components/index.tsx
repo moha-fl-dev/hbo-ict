@@ -1,134 +1,231 @@
-import { useComponent, useTeam } from '@hbo-ict/hooks';
+import { useComponents, useTeams } from '@hbo-ict/hooks';
+import type {
+  ComponentWithTicketsCount,
+  CreateComponentDto,
+} from '@hbo-ict/lingo/types';
+import { createComponentSchema } from '@hbo-ict/lingo/types';
+import { Api } from '@hbo-ict/query-fns';
 import {
   Badge,
   Button,
-  ComponentsLayout,
-  SummaryLink,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  QuickLinksPopover,
+  ScrollArea,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Separator,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetOverlay,
+  SheetTitle,
+  SheetTrigger,
   WorkspaceRootLayout,
+  toast,
 } from '@hbo-ict/ui';
-import { TicketStatusEnum } from '@prisma/client/lingo';
-import {
-  ChevronRightIcon,
-  Link1Icon,
-  LinkNone1Icon,
-  LockClosedIcon,
-  LockOpen1Icon,
-} from '@radix-ui/react-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function ManageComponents() {
-  const router = useRouter();
+  const _router = useRouter();
+  const [openSheet, setOpenSheet] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
-  const componentId = router.query.component as string;
+  const form = useForm<CreateComponentDto>({
+    resolver: zodResolver(createComponentSchema),
+    defaultValues: {
+      name: '',
+      team: {
+        id: '',
+      },
+    },
+  });
 
-  const { component } = useComponent(componentId);
+  const { components } = useComponents();
 
-  const teamId = component?.teamId as string;
+  const { teams } = useTeams();
 
-  const { team } = useTeam(teamId);
+  const { mutate } = useMutation({
+    mutationKey: ['create-component'],
+    mutationFn: Api.component.create,
+    onSuccess(data) {
+      queryClient.invalidateQueries(['components']);
+      toast({
+        description: `${data.name} component has been created.`,
+      });
+      setOpenSheet(false);
+    },
+  });
 
-  if (!componentId) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <span className="text-slate-300">Select a component</span>
-      </div>
-    );
-  }
-
-  if (!component || !team) {
-    return (
-      <div className="bg-slate-50/50 flex flex-col items-center justify-center h-full">
-        <span className="text-slate-200">Component not found</span>
-      </div>
-    );
+  function onSubmit(values: CreateComponentDto) {
+    mutate(values);
   }
 
   return (
-    <div className="h-[80vh]">
-      <div className="border-b">
-        <div className="flex flex-row justify-between items-center p-2">
-          <div className="flex flex-row items-center p-2">
-            <Button variant={'ghost'} asChild>
-              <Link
-                href={`/workspace/manage/departments?department=${team.Department.id}`}
-                className="flex flex-row items-center text-gray-600 hover:text-gray-800 transition-colors"
+    <div className="container flex flex-col gap-4 mt-4">
+      <div className="flex flex-row justify-between items-center content-center">
+        <h1>Comonents #{components?.length}</h1>
+        <div className="flex flex-row gap-4">
+          <Sheet open={openSheet}>
+            <SheetTrigger asChild>
+              <Button
+                variant={'workspace'}
+                className="w-full"
+                onClick={() => setOpenSheet(true)}
               >
-                <span>{team.Department.name}</span>
-                <ChevronRightIcon />
-              </Link>
-            </Button>
-            <Button variant={'ghost'} asChild>
-              <Link
-                href={`/workspace/manage/teams?team=${team.id}`}
-                className="flex flex-row gap-1 items-center text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <span>{team.name}</span>
-                <ChevronRightIcon />
-              </Link>
-            </Button>
-            <Button variant={'ghost'}>{component.name}</Button>
-          </div>
-          <div className="px-2">
-            <Badge>Operational</Badge>
-          </div>
+                <div className="flex flex-row gap-2 items-center">
+                  <PlusIcon fontSize={10} />
+                  <span>New</span>
+                </div>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side={'right'}
+              className="p-0 md:max-w-xl sm:max-w-xl"
+            >
+              <SheetHeader>
+                <SheetTitle className="p-4">Add new Component</SheetTitle>
+                <Separator />
+              </SheetHeader>
+              <div className="flex flex-col justify-between ">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col gap-4 p-4"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Component name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="CMS" {...field} type="text" />
+                          </FormControl>
+                          <FormDescription>
+                            This is the public display name for the component.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="team.id"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Team</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select the team that owns this component" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <ScrollArea className="max-h-[400px] h-[400px]">
+                                {teams?.map((team) => (
+                                  <SelectItem
+                                    className={`hover:bg-slate-50 transition-colors ${
+                                      field.value === team.id && 'bg-slate-100'
+                                    }`}
+                                    key={team.id}
+                                    value={team.id}
+                                  >
+                                    {team.name}
+                                  </SelectItem>
+                                ))}
+                              </ScrollArea>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            You can manage teams in{' '}
+                            <Link href="/workspace/manage/teams">
+                              team setting
+                            </Link>
+                            .
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button variant={'workspace'} type="submit">
+                      Create component
+                    </Button>
+                  </form>
+                </Form>
+                <div>
+                  <Separator />
+                  <div className="flex flex-row gap-2 content-end items-end justify-end p-4">
+                    <Button
+                      variant={'outline'}
+                      onClick={() => setOpenSheet(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+            <SheetOverlay
+              onClick={() => setOpenSheet(false)}
+              className="backdrop-blur-0 "
+            />
+          </Sheet>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="grid grid-cols-2 gap-2">
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LockOpen1Icon />}
-            label={'Total open'}
-            href={`/workspace/tickets?component=${encodeURIComponent(
-              component.id,
-            )}&ticket_status=${
-              TicketStatusEnum.OPEN
-            }&department=${encodeURIComponent(
-              team.Department.id,
-            )}&team=${encodeURIComponent(team.id)}`}
-          />
+      <div className="grid xl:grid-cols-4 grid-cols-1 gap-2">
+        {components?.map((component) => (
+          <Component key={component.id} component={component} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LockClosedIcon />}
-            label={'Total closed'}
-            href={`/workspace/tickets?component=${encodeURIComponent(
-              component.id,
-            )}&ticket_status=${
-              TicketStatusEnum.CLOSED
-            }&department=${encodeURIComponent(
-              team.Department.id,
-            )}&team=${encodeURIComponent(team.id)}`}
-          />
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<Link1Icon />}
-            label={'Total assigned'}
-            href={`/workspace/tickets?component=${encodeURIComponent(
-              component.id,
-            )}&ticket_status=${
-              TicketStatusEnum.ACTIVE
-            }&department=${encodeURIComponent(
-              team.Department.id,
-            )}&team=${encodeURIComponent(team.id)}`}
-          />
-          <SummaryLink
-            max={100}
-            min={10}
-            icon={<LinkNone1Icon />}
-            label={'Total unassigned'}
-            href={`/workspace/tickets?component=${encodeURIComponent(
-              component.id,
-            )}&ticket_status=${
-              TicketStatusEnum.HOLD
-            }&department=${encodeURIComponent(
-              team.Department.id,
-            )}&team=${encodeURIComponent(team.id)}`}
+function Component({ component }: { component: ComponentWithTicketsCount }) {
+  return (
+    <div className="bg-accent/20 shadow-sm border rounded ">
+      <div className="flex flex-col  ">
+        <div className="flex flex-row justify-between items-center p-2">
+          <div className="flex flex-row gap-2 items-center">
+            <span>{component.name}</span>
+          </div>
+          <Badge variant={'LOW'} className="rounded-full">
+            Operational
+          </Badge>
+        </div>
+        <Separator />
+        <div className="flex flex-row justify-between items-center text-xs content-center p-2 bg-accent/50">
+          <Link
+            href={`/workspace/tickets?component=${component.id}`}
+            className="hover:cursor-pointer text-primary"
+          >
+            <span>Tickets: #{component._count.Ticket}</span>
+          </Link>
+          <QuickLinksPopover
+            feature={{
+              ...component,
+              baseHref: '/workspace/tickets?component',
+            }}
           />
         </div>
       </div>
@@ -142,7 +239,9 @@ ManageComponents.getLayout = function getLayout(page: JSX.Element) {
       <Head>
         <title>Manage components</title>
       </Head>
-      <ComponentsLayout>{page}</ComponentsLayout>
+      <ScrollArea className="max-h-[90vh] h-[90vh] min-h[90vh]">
+        {page}
+      </ScrollArea>
     </WorkspaceRootLayout>
   );
 };

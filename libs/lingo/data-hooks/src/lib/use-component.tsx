@@ -1,9 +1,12 @@
-import type { Component } from '@hbo-ict/lingo/types';
+import type {
+  Component,
+  ComponentWithTicketsCount,
+} from '@hbo-ict/lingo/types';
 import { Api } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useComponents() {
-  const { data, isError } = useQuery<Component[]>({
+  const { data, isError } = useQuery<ComponentWithTicketsCount[]>({
     queryKey: ['components'],
     queryFn: Api.component.getAll,
   });

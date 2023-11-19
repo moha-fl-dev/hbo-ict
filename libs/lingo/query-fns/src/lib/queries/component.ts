@@ -1,6 +1,9 @@
-import type { SingleNameFieldDto } from '@hbo-ict/lingo/types';
-import { axiosInstance } from '../client/intance';
+import type {
+  ComponentWithTicketsCount,
+  SingleNameFieldDto,
+} from '@hbo-ict/lingo/types';
 import type { Component } from '@prisma/client/lingo';
+import { axiosInstance } from '../client/intance';
 
 async function create(payload: SingleNameFieldDto) {
   const res = await axiosInstance.post<Component>('component/create', payload);
@@ -9,7 +12,7 @@ async function create(payload: SingleNameFieldDto) {
 }
 
 async function getAll() {
-  const res = await axiosInstance.get<Component[]>('component');
+  const res = await axiosInstance.get<ComponentWithTicketsCount[]>('component');
 
   return res.data;
 }

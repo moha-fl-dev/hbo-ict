@@ -250,3 +250,13 @@ export type TeamWithTicketsAndComponentsCount = Prisma.TeamGetPayload<{
     components: true;
   };
 }>;
+
+export type ComponentWithTicketsCount = Prisma.ComponentGetPayload<{
+  include: {
+    _count: {
+      select: {
+        Ticket: true;
+      };
+    };
+  };
+}>;
