@@ -1,8 +1,8 @@
 import type { TicketHistory } from '@hbo-ict/lingo/types';
-import { formatDateWithRelativeTime } from '../utils';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { Button } from '../components/button';
+import { formatDateWithRelativeTime } from '../utils';
 
 export function TimeLine() {
   const timeline: TicketHistory = {
@@ -33,9 +33,13 @@ export function TimeLine() {
 }
 
 function TimeLineItem({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   actionType,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   createdAt,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   oldValue,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newValue,
 }: TicketHistory) {
   const date = formatDateWithRelativeTime(

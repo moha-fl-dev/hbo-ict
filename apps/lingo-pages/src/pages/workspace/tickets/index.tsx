@@ -6,7 +6,6 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-  QuikViewTicket,
   Table,
   TableBody,
   TableCaption,
@@ -209,7 +208,7 @@ export default function TicketsRoot() {
           {tickets?.map((ticket, index) => (
             <TableRow key={index} className={` border-none h-14 group`}>
               <TableCell className="text-center ">
-                <QuikViewTicket {...ticket} />
+                {/* <QuikViewTicket {...ticket} /> */}
               </TableCell>
               <TableCell className="hover:bg-muted transition-colors">
                 <Link href={`/workspace/tickets/${ticket.ticketNumber.number}`}>
