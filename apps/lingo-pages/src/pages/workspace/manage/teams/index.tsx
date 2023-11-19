@@ -213,14 +213,6 @@ export default function ManageTeams() {
         </TableHeader>
         <TableBody>
           {teams?.map((team, i) => {
-            const componentIds = team.components.reduce(
-              (acc, cur) => {
-                acc.id = cur.id;
-                return acc;
-              },
-              { id: '' },
-            );
-
             return (
               <TableRow key={i} className={`${i % 2 === 0 && 'bg-muted/50'}`}>
                 <TableCell>
@@ -255,20 +247,7 @@ export default function ManageTeams() {
                   </Link>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Link
-                    href={`/workspace/manage/components/${encodeURIComponent(
-                      componentIds.id,
-                    )}`}
-                  >
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span>{team._count.components}</span>
-                        </TooltipTrigger>
-                        <TooltipContent>View components</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </Link>
+                  <span>{team._count.components}</span>
                 </TableCell>
                 <TableCell className="text-right">
                   <Link
