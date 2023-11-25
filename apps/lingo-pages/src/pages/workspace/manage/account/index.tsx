@@ -1,6 +1,5 @@
 import {
   useCurrentEmployeeExtendedDetails,
-  useCurrentUser,
   useDepartments,
   usePerformSignOut,
   useTeamsWithDepartment,
@@ -51,7 +50,6 @@ export default function ManageAccount() {
   const { toast } = useToast();
 
   const { departments } = useDepartments();
-  const { currentUser } = useCurrentUser();
   const { currentEmployeeExtendedDetails } =
     useCurrentEmployeeExtendedDetails();
   const { signOut } = usePerformSignOut();
@@ -85,7 +83,7 @@ export default function ManageAccount() {
         currentEmployeeExtendedDetails.Team?.departmentId!,
       );
     }
-  }, [currentEmployeeExtendedDetails, form.setValue]);
+  }, [currentEmployeeExtendedDetails, form.setValue, form]);
 
   const { teams } = useTeamsWithDepartment(selectedDepartmentId as string);
 
@@ -93,7 +91,7 @@ export default function ManageAccount() {
     if (teams) {
       setSelectedTeamId(currentEmployeeExtendedDetails!.teamId!);
     }
-  }, [teams]);
+  }, [teams, currentEmployeeExtendedDetails]);
 
   const accountForm = useForm<ResetPasswordDto>({
     resolver: zodResolver(resetPasswordSchema),
@@ -142,7 +140,9 @@ export default function ManageAccount() {
           <Form {...form} key={'account-form'}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <Label className="text-slate-600 space-y-4">
-                {(currentUser && currentUser.email) || '....'}
+                {(currentEmployeeExtendedDetails &&
+                  currentEmployeeExtendedDetails.email) ||
+                  '....'}
               </Label>
               <FormField
                 control={form.control}
