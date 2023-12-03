@@ -12,7 +12,6 @@ import { SupabaseService } from '@hbo-ict/supabase-auth';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
-import { WorkspaceModule } from '../workspace/workspace.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -31,7 +30,6 @@ import { AppService } from './app.service';
       expandVariables: true,
     }),
     AuthModule,
-    WorkspaceModule,
     DepartmentModule,
     TeamModule,
     ComponentModule,
