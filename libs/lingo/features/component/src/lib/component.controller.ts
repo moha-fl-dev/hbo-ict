@@ -1,4 +1,3 @@
-import { ComponentService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type {
   CreateComponentDto,
@@ -8,11 +7,16 @@ import {
   SingleNameFieldSchema,
   createComponentSchema,
 } from '@hbo-ict/lingo/types';
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
+import { IComponentService } from './interfaces/component.interface';
+import { COMPONENT_SERVICE_TOKEN } from './tokens/component.token';
 
 @Controller('component')
 export class ComponentController {
-  constructor(private readonly componentService: ComponentService) {}
+  constructor(
+    @Inject(COMPONENT_SERVICE_TOKEN)
+    private readonly componentService: IComponentService,
+  ) {}
 
   @Post('/create')
   @ZodValidate<CreateComponentDto>(createComponentSchema)

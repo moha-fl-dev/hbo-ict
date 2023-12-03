@@ -45,6 +45,9 @@
       "@hbo-ict/lingo/features/comment": [
         "libs/lingo/features/comment/src/index.ts"
       ],
+      "@hbo-ict/lingo/features/component": [
+        "libs/lingo/features/component/src/index.ts"
+      ],
       "@hbo-ict/lingo/features/department": [
         "libs/lingo/features/department/src/index.ts"
       ],
