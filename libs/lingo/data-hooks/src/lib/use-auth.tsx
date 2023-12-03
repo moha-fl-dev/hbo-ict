@@ -1,12 +1,12 @@
+import { auth } from '@hbo-ict/query-fns';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Api } from '@hbo-ict/query-fns';
 
 export function usePerformSignOut() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationKey: ['logout'],
-    mutationFn: Api.auth.signOut,
+    mutationFn: auth.signOut,
 
     onSettled: () => {
       queryClient.clear();

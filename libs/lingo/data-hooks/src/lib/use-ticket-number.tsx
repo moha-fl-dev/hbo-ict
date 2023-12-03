@@ -1,12 +1,12 @@
 import type { TicketNumbeFindUniqueArgs } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
+import { ticketNumber } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 import { clauseHasProperty } from './utils';
 
 export function useCreateTicket({ enabled }: { enabled: boolean }) {
   const { data, isError, isSuccess } = useQuery({
     queryKey: ['ticketNumber'],
-    queryFn: Api.ticketNumber.create,
+    queryFn: ticketNumber.create,
     enabled,
   });
 
@@ -23,7 +23,7 @@ export function useWithTicketNumber({
 }: TicketNumbeFindUniqueArgs) {
   const { data, isError } = useQuery(
     ['ticket-number', where],
-    () => Api.ticketNumber.find({ where, include }),
+    () => ticketNumber.find({ where, include }),
     {
       enabled: clauseHasProperty<TicketNumbeFindUniqueArgs['where']>(where),
     },

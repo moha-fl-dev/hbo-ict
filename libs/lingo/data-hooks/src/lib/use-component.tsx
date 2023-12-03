@@ -2,13 +2,13 @@ import type {
   Component,
   ComponentWithTicketsCount,
 } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
+import { component } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useComponents() {
   const { data, isError } = useQuery<ComponentWithTicketsCount[]>({
     queryKey: ['components'],
-    queryFn: Api.component.getAll,
+    queryFn: component.getAll,
   });
 
   return {
@@ -20,7 +20,7 @@ export function useComponents() {
 export function useComponent(componentId: string) {
   const { data, isError } = useQuery<Component>(
     ['component', componentId],
-    () => Api.component.getById(componentId),
+    () => component.getById(componentId),
     { enabled: !!componentId },
   );
 
@@ -33,7 +33,7 @@ export function useComponent(componentId: string) {
 export function useComponentsWithTeamId(teamId: string) {
   const { data, isError } = useQuery<Component[]>(
     ['components-by-team', teamId],
-    () => Api.component.getComponentsByTeamId(teamId),
+    () => component.getComponentsByTeamId(teamId),
     { enabled: !!teamId },
   );
 
@@ -46,7 +46,7 @@ export function useComponentsWithTeamId(teamId: string) {
 // export function useComponentWithTeams(componentId: string) {
 //   const { data, isError } = useQuery<Component>(
 //     ['component-teams', componentId],
-//     () => Api.component.getByIdWithTeams(componentId),
+//     () => component.getByIdWithTeams(componentId),
 //     { enabled: !!componentId }
 //   );
 

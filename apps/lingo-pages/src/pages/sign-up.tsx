@@ -1,6 +1,6 @@
 import type { SignUpDto } from '@hbo-ict/lingo/types';
 import { SignUpSchema } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
+import { auth } from '@hbo-ict/query-fns';
 import {
   AuthLayout,
   Button,
@@ -20,7 +20,7 @@ export default function SignUp() {
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: Api.auth.signUp,
+    mutationFn: auth.signUp,
     onError: () => {
       setServerError(true);
     },

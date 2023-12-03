@@ -1,10 +1,10 @@
-import { Api } from '@hbo-ict/query-fns';
+import { employee } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useCurrentEmployeeExtendedDetails() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['currentEmployeeExtendedDetails'],
-    queryFn: Api.employee.userProfileExtended,
+    queryFn: employee.userProfileExtended,
     staleTime: 1000 * 60 * 60 * 24,
   });
 
@@ -18,7 +18,7 @@ export function useCurrentEmployeeExtendedDetails() {
 export function useTeamMembers({ teamId }: { teamId: string }) {
   const { data, isLoading, isError } = useQuery(
     ['employeesByteam', teamId],
-    () => Api.employee.allEmployeesByTeam({ teamId }),
+    () => employee.allEmployeesByTeam({ teamId }),
     {
       enabled: !!teamId,
     },
@@ -34,7 +34,7 @@ export function useTeamMembers({ teamId }: { teamId: string }) {
 export function useEmployees() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['employees'],
-    queryFn: Api.employee.all,
+    queryFn: employee.all,
     staleTime: 1000 * 60 * 60 * 24, // 24 hours
   });
 

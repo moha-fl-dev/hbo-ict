@@ -3,13 +3,13 @@ import type {
   DepartmentWithTeamsCount,
   StrictTeamWithDepartment,
 } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
+import { department, team } from '@hbo-ict/query-fns';
 import { useQuery } from '@tanstack/react-query';
 
 export function useDepartments() {
   const { data, isError } = useQuery<DepartmentWithTeamsCount[]>({
     queryKey: ['departments'],
-    queryFn: Api.department.getAll,
+    queryFn: department.getAll,
   });
 
   return {
@@ -21,7 +21,7 @@ export function useDepartments() {
 export function useDepartment(departmentId: string) {
   const { data, isError } = useQuery<Department>(
     ['department', departmentId],
-    () => Api.department.getById(departmentId),
+    () => department.getById(departmentId),
     { enabled: !!departmentId },
   );
 
@@ -34,7 +34,7 @@ export function useDepartment(departmentId: string) {
 export function useDepartmentWithTeams(departmentId: string) {
   const { data, isError } = useQuery<StrictTeamWithDepartment>(
     ['department-teams', departmentId],
-    () => Api.team.getTeamsByDepartmentId(departmentId),
+    () => team.getTeamsByDepartmentId(departmentId),
     { enabled: !!departmentId },
   );
 

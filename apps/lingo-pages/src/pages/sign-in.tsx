@@ -1,5 +1,6 @@
 import { SignInSchema, type SignInDto } from '@hbo-ict/lingo/types';
-import { Api } from '@hbo-ict/query-fns';
+import { auth } from '@hbo-ict/query-fns';
+
 import {
   AuthLayout,
   Button,
@@ -20,7 +21,7 @@ export default function SignIn() {
 
   const { mutate } = useMutation({
     mutationKey: ['auth'],
-    mutationFn: Api.auth.signIn,
+    mutationFn: auth.signIn,
     onError: () => {
       setServerError(true);
     },
