@@ -1,12 +1,15 @@
-import { TeamService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { CreateTeamDto } from '@hbo-ict/lingo/types';
 import { createTeamSchema } from '@hbo-ict/lingo/types';
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
+import { ITeamService } from './interfaces/team.interface';
+import { TEAM_SERVICE_TOKEN } from './tokens/team.token';
 
 @Controller('team')
 export class TeamController {
-  constructor(private readonly teamService: TeamService) {}
+  constructor(
+    @Inject(TEAM_SERVICE_TOKEN) private readonly teamService: ITeamService,
+  ) {}
 
   @Post('/create')
   @ZodValidate<CreateTeamDto>(createTeamSchema)

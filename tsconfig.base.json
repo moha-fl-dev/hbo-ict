@@ -54,6 +54,9 @@
       "@hbo-ict/lingo/features/employee": [
         "libs/lingo/features/employee/src/index.ts"
       ],
+      "@hbo-ict/lingo/features/team": [
+        "libs/lingo/features/team/src/index.ts"
+      ],
       "@hbo-ict/lingo/features/ticket": [
         "libs/lingo/features/ticket/src/index.ts"
       ],

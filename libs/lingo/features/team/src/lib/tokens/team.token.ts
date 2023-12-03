@@ -1,0 +1,1 @@
+export const TEAM_SERVICE_TOKEN = Symbol('TEAM_SERVICE_TOKEN');
