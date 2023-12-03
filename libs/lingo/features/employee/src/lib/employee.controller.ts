@@ -1,15 +1,27 @@
-import { EmployeeService } from '@hbo-ict/data-access';
 import { ZodValidate } from '@hbo-ict/lingo-utils';
 import type { AccountDto } from '@hbo-ict/lingo/types';
 import { accountSchema } from '@hbo-ict/lingo/types';
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import type { Prisma } from '@prisma/client/lingo';
 import type { User } from '@supabase/supabase-js';
 import type { Request } from 'express';
+import { IEmployeesService } from './interfaces/employee.interface';
+import { EMPLOYEE_SERVICE_TOKEN } from './tokens/employee.token';
 
 @Controller('employee')
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(
+    @Inject(EMPLOYEE_SERVICE_TOKEN)
+    private readonly employeeService: IEmployeesService,
+  ) {}
 
   @Post()
   @ZodValidate<AccountDto>(accountSchema)
