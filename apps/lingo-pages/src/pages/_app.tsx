@@ -4,6 +4,7 @@ import {
   QueryClientProvider,
   useIsFetching,
 } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AxiosError } from 'axios';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
@@ -85,7 +86,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <LoadingSpinner />
         <main>
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <ReactQueryDevtools initialIsOpen={false} />
           {<Toaster />}
           {getLayout(<Component {...pageProps} />)}
         </main>
