@@ -124,8 +124,10 @@ Dit is de laatste stap om de ontwikkelingsservers op te starten, waarna je de Li
 
 Nu kun je de Lingo applicatie in je browser bekijken door naar `http://localhost:4200` te gaan en de API is bereikbaar via `https://localhost:3002`.
 
+---
+
 ### Belangrijke Opmerking: Gebruik in Incognito Modus
 
-Het is belangrijk op te merken dat de Lingo applicatie **niet** gebruikt kan worden in de incognitomodus van de browser. Dit komt door de beperkingen van browsers met betrekking tot het gebruik van ondertekende cookies, vooral wanneer de API en de front-end niet onder hetzelfde topniveau domein draaien.
+Houd er rekening mee dat de Lingo applicatie **niet** gebruikt kan worden in de incognitomodus van de browser. Dit is een gevolg van de beslissing om ondertekende cookies te gebruiken, genomen voordat de beperkingen van deze benadering volledig bekend waren. Deze beperkingen zijn vooral merkbaar in browsers wanneer de API en de front-end niet op hetzelfde topniveau domein draaien.
 
-Het gebruik van ondertekende cookies vereist een consistente state van de browser, iets wat in de incognitomodus vaak wordt beperkt. Daarom, voor een optimale ervaring en correcte werking van de applicatie, open en gebruik de Lingo applicatie in de normale (niet-incognito) modus van je browser.
+In retrospect, had ik geweten over deze beperking, dan had ik wellicht gekozen voor het gebruik van lokale opslag (local storage) voor de JWT aan de kant van de client (Next.js). Het gebruik van ondertekende cookies vereist een consistente state van de browser, iets wat vaak beperkt wordt in de incognitomodus. Om deze reden wordt aanbevolen om de Lingo applicatie in de normale modus van de browser te gebruiken voor een optimale ervaring en correcte werking.
